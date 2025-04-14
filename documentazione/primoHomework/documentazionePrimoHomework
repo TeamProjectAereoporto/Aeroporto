@@ -1,1 +1,26 @@
-asbullamaledetto
+Nome del progetto: Creazione di un sistema informativo aeroportuale
+Componenti del gruppo: Leonardi Karol & Mauro Salvatore
+
+Obiettivo del progetto:
+L'obiettivo è quello di realizzare un sistema informativo che sia compatibile con le richieste espresse dalla traccia numero 3 che
+riguarda l'aeroporto di Napoli.
+
+Dalla traccia si evince che gli utenti finali del sistema saranno divisi in 2 tipi
+ -Utenti generici: i quali hanno la possibilità di prenotare
+i voli e consultare la propria area personale;
+ -Admin: che inseriscono all'interno del sistema nuovi voli programmati, aggiornano le informazioni dei voli preesistenti e assegnano
+i gate ai relativi voli.
+
+ queste due classi derivano da una generalizzazione di una superclasse chiamata Utente. La classe utente porta con sé due informazioni fondamentali:
+ -il login;
+ -la password.
+
+ Questi due attributi saranno comuni alle sottoclassi che poi potranno svilupparsi nelle loro specializzazioni. Tutti gli utenti, admin o generici che siano
+ hanno la possibilità di vedere tutti i voli programmati disponibili, dunque anche l'implementazione del metodo per visualizzare i voli
+ apparterrà alla superclasse.
+
+ Il sistema dovrà:
+  -Gestire il login degli utenti identificandoli come utenti generici o amministratori(admin);
+  -Gestire i voli in partenza e in arrivo all'aeroporto;
+  -Gestire i gate di imbarco identificati da numeri, assegnadoli ai voli in partenza;
+  -Consentire agli utenti di visualizzare tutti gli aggiornamenti disponibili sui voli programmati all'interno di una propria area personale;
