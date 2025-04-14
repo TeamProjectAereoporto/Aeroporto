@@ -20,6 +20,7 @@ Il seguente diagramma rappresenta le classi principali del sistema e le loro rel
 ![Diagramma UML](../../images/uml.png)
 
 ## Scelte progettuali
+
 ## Utenti
 Possiamo considerare 2 tipologie di utenti principali:
 * **Utenti generici**: i quali hanno la possibilità di prenotare
@@ -35,6 +36,24 @@ Questi due attributi saranno comuni alle sottoclassi che poi potranno sviluppars
 Tutti gli utenti, admin o generici che siano hanno la possibilità di vedere tutti i voli programmati disponibili, dunque anche l'implementazione del metodo per visualizzare i voli
 apparterrà alla superclasse.
 
+## Gestione della "Prenotazione":
+La classe **Prenotazione** rappresenta un bilietto acquistato e contiene:
+* **Numero biglietto**: identificativo per verificare la validità dello stesso;
+* **Posto assegnato**;
+* **Stato prenotazione**: rappresentato come un _enumerativo_ a cui sarà assegnato un valore per ogni stato della prenotazione(confermata, in attesa, cancellata);
+
+## Passeggero
+Non è detto che un utente generico prenoti un volo per sé stesso. Dunque al momento della prenotazione sarà necessario inserire i dati di chi effettivamente usufruirà del volo. 
+è necessaria dunque, una nuova classe chiamata _"Passeggero"_ per identificare dunque la persona che effettivamente prenderà il volo.
+Questa classe ha diversi attributi: 
+* **Nome del passeggero**; 
+* **Cognome del passeggero**; 
+* **Numero del documento del passeggero**; 
+
+## checkIn
+L'operazione del **checkIn** è rappresentata come una _classe associativa_ in quanto ha validità solo nel momento in cui un passeggero deve salire a bordo del volo
+e effettuare un checkIn, senza passeggero o senza prenotazione(biglietto valido), il checkIn non può essere effettuato.
+
 ## Volo
 Il concetto di **volo** è rappresentato da una classe composta da diversi attributi come:
 * **codice univoco**: necessario ad identificare il volo;
@@ -46,24 +65,16 @@ Il concetto di **volo** è rappresentato da una classe composta da diversi attri
 * **Stato del volo**: rappresentato come un tipo _enumerativo_ per qualificare ogni stato del volo(decollato, programmato, in ritardo, atterrato, cancellato)
 
 Per quanto riguarda gli aerei che partono da e arrivano a Napoli, c'è da specificare il valore che l'attributo aeroporto di origine/destinazione assumerà:
+
+
 Per i voli in partenza da Napoli:
-* **Aeroporto di origine**: Napoli;
-  Per i voli in arrivo a Napoli:
-* **Aeroporto di destinazione**: Napoli;
+* **Aeroporto di origine**: Napoli.
 
-## Gestione della "Prenotazione":
-La classe **Prenotazione** rappresenta un bilietto acquistato e contiene:
-* **Numero biglietto**: identificativo per verificare la validità dello stesso;
-* **Posto assegnato**;
-* **Stato prenotazione**: rappresentato come un _enumerativo_ a cui sarà assegnato un valore per ogni stato della prenotazione(confermata, in attesa, cancellata);
-
-## checkIn
-L'operazione del **checkIn** è rappresentata come una _classe associativa_ in quanto ha validità solo nel momento in cui un passeggero deve salire a bordo del volo
-e effettuare un checkIn, senza passeggero o senza prenotazione(biglietto valido), il checkIn non può essere effettuato.
+Per i voli in arrivo a Napoli:
+* **Aeroporto di destinazione**: Napoli.
 
 
 
-a
 
 
 
