@@ -61,7 +61,7 @@ La classe **Prenotazione** rappresenta un bilietto acquistato e contiene:
 L'operazione del **checkIn** è rappresentata come una _classe associativa_ in quanto ha validità solo nel momento in cui un passeggero deve salire a bordo del volo 
 e effettuare un checkIn, senza passeggero o senza prenotazione(biglietto valido), il checkIn non può essere effettuato.
 
-
+a
 
 
 
