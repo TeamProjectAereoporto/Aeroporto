@@ -19,7 +19,7 @@ Il seguente diagramma rappresenta le classi principali del sistema e le loro rel
 
 ![Diagramma UML](../../images/uml.png)
 
-## Scelte progettuali
+## Scelte progettuali per le classi
 
 ## Utenti
 Possiamo considerare 2 tipologie di utenti principali:
@@ -54,6 +54,9 @@ Questa classe ha diversi attributi:
 L'operazione del **checkIn** è rappresentata come una _classe associativa_ in quanto ha validità solo nel momento in cui un passeggero deve salire a bordo del volo
 e effettuare un checkIn, senza passeggero o senza prenotazione(biglietto valido), il checkIn non può essere effettuato.
 
+## Gate
+Ogni Gate è associato a diversi Voli nel corso di una giornata. **La gestione dei gate è riservata all’Admin**, che attraverso l’operazione _assegnaGate()_ può collegare un gate a un volo specifico.
+
 ## Volo
 Il concetto di **volo** è rappresentato da una classe composta da diversi attributi come:
 * **codice univoco**: necessario ad identificare il volo;
@@ -65,7 +68,6 @@ Il concetto di **volo** è rappresentato da una classe composta da diversi attri
 * **Stato del volo**: rappresentato come un tipo _enumerativo_ per qualificare ogni stato del volo(decollato, programmato, in ritardo, atterrato, cancellato)
 
 Per quanto riguarda gli aerei che partono da e arrivano a Napoli, c'è da specificare il valore che l'attributo aeroporto di origine/destinazione assumerà:
-
 
 Per i voli in partenza da Napoli:
 * **Aeroporto di origine**: Napoli.
