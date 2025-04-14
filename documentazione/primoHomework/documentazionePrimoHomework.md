@@ -24,3 +24,8 @@ i gate ai relativi voli.
   -Gestire i voli in partenza e in arrivo all'aeroporto;
   -Gestire i gate di imbarco identificati da numeri, assegnadoli ai voli in partenza;
   -Consentire agli utenti di visualizzare tutti gli aggiornamenti disponibili sui voli programmati all'interno di una propria area personale;
+## Diagramma UML
+
+Il seguente diagramma rappresenta le classi principali del sistema e le loro relazioni:
+
+![Diagramma UML](images/uml.png)
