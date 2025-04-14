@@ -17,7 +17,7 @@ riguarda l'aeroporto di Napoli.
 
 Il seguente diagramma rappresenta le classi principali del sistema e le loro relazioni:
 
-![Diagramma UML](../images/uml.png)
+![Diagramma UML](../../images/uml.png)
 
 ## Scelte progettuali
 ## Utenti
