@@ -71,7 +71,7 @@ Per i voli in partenza da Napoli:
 * **Aeroporto di origine**: Napoli.
 
 Per i voli in arrivo a Napoli:
-* **Aeroporto di destinazione**: Napoli.
+* **Aeroporto di destinazione**: Napoli
 
 
 
