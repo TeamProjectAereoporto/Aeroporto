@@ -56,7 +56,9 @@ e effettuare un checkIn, senza passeggero o senza prenotazione(biglietto valido)
 
 ## Gate
 Ogni Gate è associato a diversi Voli nel corso di una giornata. **La gestione dei gate è riservata all’Admin**, che attraverso l’operazione _assegnaGate()_ può collegare un gate a un volo specifico.
-
+Gli attributi del gate sono: 
+* Codice identificativo del gate;
+* Il volo a cui il gate è stato assegnato. 
 ## Volo
 Il concetto di **volo** è rappresentato da una classe composta da diversi attributi come:
 * **codice univoco**: necessario ad identificare il volo;
