@@ -25,7 +25,7 @@ public class Volo {
         }
     }
 
-    Volo(int codiceVolo, String compagniaAerea,float orarioArrivo, int ritardo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+   public Volo(int codiceVolo, String compagniaAerea,float orarioArrivo, int ritardo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
      this.codiceVolo = codiceVolo;
      this.compagniaAerea = compagniaAerea;
      this.orarioArrivo = orarioArrivo;

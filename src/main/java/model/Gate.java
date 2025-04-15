@@ -6,7 +6,7 @@ public class Gate {
     String codiceGate;
     VoloPartenza voloAssegnato;
 
-    Gate(String coGate){
+    public Gate(String coGate){
         codiceGate = coGate;
         voloAssegnato = null;
     }
