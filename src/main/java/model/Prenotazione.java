@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+
 public class Prenotazione {
     public int numeroBiglietto;
     public String postoAssegnato;

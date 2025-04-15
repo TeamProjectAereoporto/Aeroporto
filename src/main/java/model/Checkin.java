@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Checkin {
+
     public Passeggero passeggero;
     public Prenotazione biglietto;
     public Boolean controlloBiglietto(int numeroBiglietto, ArrayList<Prenotazione> biglietto){

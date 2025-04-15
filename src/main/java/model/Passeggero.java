@@ -1,6 +1,7 @@
 package model;
 
 public class Passeggero {
+
     String nome;
     String cognome;
     String numeroDocumento;

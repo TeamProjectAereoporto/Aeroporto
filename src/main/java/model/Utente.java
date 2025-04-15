@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Utente {
+
     //attributi della superclasse Utente
     String nomeUtente;
     String psw;

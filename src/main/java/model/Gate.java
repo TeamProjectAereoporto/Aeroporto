@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Gate {
+
     String codiceGate;
     VoloPartenza voloAssegnato;
 
