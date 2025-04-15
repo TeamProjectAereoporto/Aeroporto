@@ -6,7 +6,7 @@ public class Volo {
     String aeroportoOrigine;
     String aeroportoDestinazione;
     float orarioArrivo;
-    int ritardo; //non so se cancellarlo in quanto è presente anche come enum ed è considerato nello stato del volo.
+    int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
     public statoVolo stato;
 
     public enum statoVolo{

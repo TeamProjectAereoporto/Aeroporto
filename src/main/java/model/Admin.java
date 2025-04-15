@@ -1,23 +1,30 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Admin  extends Utente{
     //Un admin in quanto tale riceve un codice di accesso univoco
     String codAdmin;
+    public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     Admin(String log, String ps, String code){
         super(log,ps);
         codAdmin = code;
     }
 
-    //implementazione dei metodi specifici per l'utente
-    public static void aggiungiVoli(){
-        //la definizione del metodo sarà fatta quando saranno implementate tutte le classi
+    //implementazione dei metodi specifici per l'utente Admin
+    public void aggiungiVoli(Volo voloDaInserire){
+        voliGestiti.add(voloDaInserire);
     }
-    public static void aggiornaVoli(){
-
+    public void aggiornaVoli(){
+        for(Volo v : voliGestiti){
+            System.out.println(v);
+        }
     }
 
-    public static void assegnaGate(){
-
+    public void assegnaGate(Gate e, VoloPartenza v){
+       v.setGate(e);
+       e.assegnaVolo(v);
+       System.out.println("il gate"+ e.codiceGate +" è stato assegnato al volo "+ v.codiceVolo);
     }
 }
