@@ -77,6 +77,72 @@ Per i voli in partenza da Napoli:
 Per i voli in arrivo a Napoli:
 * **Aeroporto di destinazione**: Napoli.
 
+## Molteplicità utilizzate nel diagramma
+
+Passeggero ↔ Prenotazione.
+1 Passeggero → può avere 0 o più Prenotazioni (*).
+Ogni Prenotazione → è associata a 1 solo Passeggero.
+
+Molteplicità:
+Lato Passeggero: 1.
+Lato Prenotazione: *.
+
+-----------------------------------------------------------
+
+Prenotazione ↔ Volo
+Ogni Prenotazione → è riferita a 1 solo Volo.
+Ogni Volo → può avere 0 o più Prenotazioni.
+
+Molteplicità:
+Lato Prenotazione: *.
+Lato Volo: 1.
+
+-----------------------------------------------------------
+
+Prenotazione ↔ Gate
+Ogni Prenotazione → è associata a 1 solo Gate.
+Ogni Gate → può essere associato a 0 o più Prenotazioni.
+
+ Molteplicità:
+Lato Prenotazione: *.
+Lato Gate: 1.
+
+-----------------------------------------------------------
+
+UtenteGenerico ↔ Prenotazione
+Ogni Prenotazione → è fatta da 1 solo UtenteGenerico.
+Ogni UtenteGenerico → può fare 0 o più Prenotazioni.
+
+Molteplicità:
+Lato Prenotazione: 1
+Lato UtenteGenerico: *
+
+-----------------------------------------------------------
+
+UtenteGenerico ↔ Volo
+Ogni UtenteGenerico → può interagire con 0 o più Voli.
+Ogni Volo → può essere gestito da 0 o più UtentiGenerici.
+
+Molteplicità:
+Lato UtenteGenerico: *
+Lato Volo: *
+
+-----------------------------------------------------------
+
+Volo ↔ voliPartenza / voliArrivo (generalizzazione)
+Ogni voliPartenza / voliArrivo → è una specializzazione di Volo.
+Un Volo è o una partenza o un arrivo.
+
+Molteplicità:
+Lato Volo: 1
+Lato voliPartenza/voliArrivo: 1
+
+-----------------------------------------------------------
+
+Checkin ↔ Prenotazione (dipendenza)
+Relazione tratteggiata, non rappresenta un'associazione con molteplicità.
+Usata per indicare una dipendenza funzionale (uso del metodo checkin()
+
 
 
 
