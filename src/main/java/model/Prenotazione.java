@@ -6,7 +6,6 @@ public class Prenotazione {
     public StatoPrenotazione stato;
     public ArrayList<Prenotazione> numeroBiglietti = new ArrayList<>();
 
-
     public enum StatoPrenotazione {
         CONFERMATA(1),
         IN_ATTESA(2),
