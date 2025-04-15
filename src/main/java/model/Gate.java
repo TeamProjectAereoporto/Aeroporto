@@ -19,7 +19,7 @@ public class Gate {
         return voloAssegnato;
     }
 
-    public String getCodiceGate(){
+    public String getCodiceGate( ){
         return codiceGate;
     }
 }
