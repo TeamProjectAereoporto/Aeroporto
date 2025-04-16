@@ -5,7 +5,7 @@ public class Prenotazione {
     public int numeroBiglietto;
     public String postoAssegnato;
     public StatoPrenotazione stato;
-    public ArrayList<Prenotazione> numeroBiglietti = new ArrayList<>();
+
 
     public enum StatoPrenotazione {
         CONFERMATA(1),

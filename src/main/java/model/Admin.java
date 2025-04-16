@@ -7,7 +7,7 @@ public class Admin  extends Utente{
     String codAdmin;
     public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
-    Admin(String log, String ps, String code){
+    public Admin(String log, String ps, String code){
         super(log,ps);
         codAdmin = code;
     }
@@ -16,15 +16,10 @@ public class Admin  extends Utente{
     public void aggiungiVoli(Volo voloDaInserire){
         voliGestiti.add(voloDaInserire);
     }
-    public void aggiornaVoli(){
-        for(Volo v : voliGestiti){
-            System.out.println(v);
-        }
-    }
 
     public void assegnaGate(Gate e, VoloPartenza v){
        v.setGate(e);
        e.assegnaVolo(v);
-       System.out.println("il gate"+ e.codiceGate +" è stato assegnato al volo "+ v.codiceVolo);
+       System.out.println("il gate "+ e.codiceGate +" è stato assegnato al volo "+ v.codiceVolo);
     }
 }

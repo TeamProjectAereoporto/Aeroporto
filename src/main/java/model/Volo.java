@@ -13,8 +13,9 @@ public class Volo {
         DECOLLATO(1),
         PROGRAMMATO(2),
         INRITARDO(3),
-        ATTERRATO(4),
-        CANCELLATO(5);
+        INORARIO(4),
+        ATTERRATO(5),
+        CANCELLATO(6);
 
         private final int codice;
         private statoVolo(int codice){
@@ -34,5 +35,22 @@ public class Volo {
      this.aeroportoOrigine = aeroportoOrigine;
      this.aeroportoDestinazione = aeroportoDestinazione;
     }
+
+    public Volo(int codiceVolo, String compagniaAerea,float orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+        this.codiceVolo = codiceVolo;
+        this.compagniaAerea = compagniaAerea;
+        this.orarioArrivo = orarioArrivo;
+        this.stato = stato;
+        this.aeroportoOrigine = aeroportoOrigine;
+        this.aeroportoDestinazione = aeroportoDestinazione;
+    }
+
+    @Override
+    public String toString() {
+        return "Volo " + codiceVolo + " da " + aeroportoOrigine + " a " + aeroportoDestinazione +
+                " con arrivo previsto alle " + orarioArrivo + " (" + stato + ")";
+    }
+
+
 
 }
