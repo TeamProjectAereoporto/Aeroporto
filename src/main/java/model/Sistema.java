@@ -15,8 +15,6 @@ public class Sistema {
         tantiAdmin.add(a);
     }
 
-    public void aggiungiBiglietto(Prenotazione )
-
     public boolean verificaUtenteG(String login, String psw){
            for(int i = 0; i < utentiGenerici.size(); i++){
                if(login.equals(utentiGenerici.get(i).nomeUtente) && psw.equals(utentiGenerici.get(i).psw)){
