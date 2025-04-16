@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Admin  extends Utente{
     //Un admin in quanto tale riceve un codice di accesso univoco
     String codAdmin;
-    public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     Admin(String log, String ps, String code){
         super(log,ps);
@@ -16,12 +15,6 @@ public class Admin  extends Utente{
     public void aggiungiVoli(Volo voloDaInserire){
         voliGestiti.add(voloDaInserire);
     }
-    public void aggiornaVoli(){
-        for(Volo v : voliGestiti){
-            System.out.println(v);
-        }
-    }
-
     public void assegnaGate(Gate e, VoloPartenza v){
        v.setGate(e);
        e.assegnaVolo(v);
