@@ -8,7 +8,7 @@ public class Admin  extends Utente{
     public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     public Admin(String log, String ps, String code){
-        super(log,ps);
+        super(log,ps, "admin");
         codAdmin = code;
     }
 

@@ -4,14 +4,16 @@ import java.util.ArrayList;
 
 public class Utente {
     //attributi della superclasse Utente
-    String nomeUtente;
-    String psw;
+    public String nomeUtente;
+    public String psw;
+    public String ruolo;
     public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     //costruttore di Utente
-    Utente(String l, String p){
+    public Utente(String l, String p, String ruolo){
         nomeUtente = l;
         psw = p;
+        this.ruolo=ruolo;
     }
     //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
     public void visualizzaVoli(){

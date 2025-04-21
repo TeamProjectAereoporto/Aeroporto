@@ -1,5 +1,40 @@
+import model.Sistema;
+import model.Utente;
+import model.Volo;
+import model.VoloPartenza;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        //simulazione dati inseriti per login
+        Utente utente = new Utente("Karol","password","Utente");
+        Sistema sistema = new Sistema();
+        //inserisce 3 utenti nel arraylist utenti in sistema
+        for(int i=0; i<3; i++){
+            System.out.printf("%ninserisci il nome utente del %d utente:",i+1);
+            String nomeUtente = scanner.next();
+            System.out.printf("%ninserisci la password del %d utente:",i+1);
+            String psw = scanner.next();
+            System.out.printf("%ninserisci il ruolo del %d utente:",i+1);
+            String ruolo = scanner.next();
+            Utente utenteprova= new Utente(nomeUtente,psw,ruolo);
+            sistema.aggiungiUtente(utenteprova);
+        }
+        //stampa utenti
+        for(Utente p : sistema.utenti){
+            System.out.printf("%nnome: %s, password: %s, ruolo:%s",p.nomeUtente,p.psw,p.ruolo);
+        }
+        //prova per controllare login
+        boolean verifica = sistema.verificaUtente(utente.nomeUtente, utente.psw, utente.ruolo);
+        if(verifica){
+            System.out.printf("Accesso effettuato correttamente come %s",utente.ruolo);
 
+        }else{
+            System.out.printf("utente non trovato");
+        }
+        if(utente.ruolo=="Utente"){
+
+        }
     }
 }
