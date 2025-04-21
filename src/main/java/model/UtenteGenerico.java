@@ -5,7 +5,7 @@ public class UtenteGenerico extends Utente {
 
     //costruttore per l'utente generico.
     public UtenteGenerico(String l, String p){
-        super(l,p);
+        super(l,p, "utenteGenerico");
     }
     //metodo per acquistare un biglietto
     public void prenotaVolo(ArrayList<Prenotazione> biglietti, int numeroBiglietto, String postoAssegnato){
