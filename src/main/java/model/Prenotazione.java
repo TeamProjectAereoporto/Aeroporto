@@ -1,7 +1,9 @@
-package model;
 
+package model;
+import java.util.ArrayList;
+import java.util.Random;
 public class Prenotazione {
-    public int numeroBiglietto;
+    public long numeroBiglietto;
     public String postoAssegnato;
     public StatoPrenotazione stato;
 
@@ -22,7 +24,7 @@ public class Prenotazione {
         }
     }
     //Costruttore
-    public Prenotazione(int numeroBiglietto, String postoAssegnato, StatoPrenotazione stato) {
+    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato) {
         this.numeroBiglietto = numeroBiglietto;
         this.postoAssegnato = postoAssegnato;
         this.stato = stato;
@@ -44,11 +46,12 @@ public class Prenotazione {
         this.postoAssegnato = postoAssegnato;
     }
     //get numeroBiglietto
-    public int getNumeroBiglietto(){
+    public long getNumeroBiglietto(){
         return numeroBiglietto;
     }
     //set numeroBiglietto
-    public void setNumeroBiglietto(int numeroBiglietto){
+    public void setNumeroBiglietto(long numeroBiglietto){
         this.numeroBiglietto=numeroBiglietto;
     }
+
 }

@@ -1,5 +1,7 @@
+
 package model;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Sistema {
     public ArrayList<UtenteGenerico> utentiGenerici = new ArrayList<>();
@@ -19,12 +21,12 @@ public class Sistema {
     }
 
     public boolean verificaUtenteG(String login, String psw){
-           for(int i = 0; i < utentiGenerici.size(); i++){
-               if(login.equals(utentiGenerici.get(i).nomeUtente) && psw.equals(utentiGenerici.get(i).psw)){
-                   System.out.println("Credenziali riconosciute, accesso consentito come utente generico");
-                   return true;
-               }
-           }
+        for(int i = 0; i < utentiGenerici.size(); i++){
+            if(login.equals(utentiGenerici.get(i).nomeUtente) && psw.equals(utentiGenerici.get(i).psw)){
+                System.out.println("Credenziali riconosciute, accesso consentito come utente generico");
+                return true;
+            }
+        }
         System.out.println("Accesso negato, nome utente o password errati");
         return false;
     }
@@ -47,5 +49,28 @@ public class Sistema {
         }
         return false;
     }
-
+    //crea il numero biglietto
+    public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
+        Random casuale = new Random();
+        boolean controllo = true;
+        long min = 1000000000L;
+        long max = 9999999999L;
+        long numeroCasuale=0;
+        while(controllo) {
+            numeroCasuale = min + ((long) (casuale.nextDouble() * (max - min + 1)));
+            if(controlloNumeroBigliettoEsistenti(biglietti,numeroCasuale)){
+                controllo=false;
+            }
+        }
+        return  numeroCasuale;
+    }
+    //controllo numeroBiglietti durante la creazione
+    public boolean controlloNumeroBigliettoEsistenti(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
+        for (Prenotazione p : biglietti){
+            if(p.numeroBiglietto== numeroBiglietto){
+                return false;
+            }
+        }
+        return  true;
+    }
 }

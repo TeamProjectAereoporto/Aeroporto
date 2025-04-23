@@ -7,8 +7,9 @@ public class UtenteGenerico extends Utente {
     public UtenteGenerico(String l, String p){
         super(l,p, "utenteGenerico");
     }
+
     //metodo per acquistare un biglietto
-    public void prenotaVolo(ArrayList<Prenotazione> biglietti, int numeroBiglietto, String postoAssegnato){
+    public void prenotaVolo(ArrayList<Prenotazione> biglietti, long numeroBiglietto, String postoAssegnato){
         Prenotazione biglietto = new Prenotazione(numeroBiglietto, postoAssegnato, Prenotazione.StatoPrenotazione.CONFERMATA);
         biglietti.add(biglietto);
     }
@@ -20,7 +21,7 @@ public class UtenteGenerico extends Utente {
             biglietto.stato=Prenotazione.StatoPrenotazione.IN_ATTESA;
         }
     }
-    public Prenotazione cercaBiglietto(ArrayList<Prenotazione> biglietti, int numBiglietto, String numDocumento){
+    public Prenotazione cercaBiglietto(ArrayList<Prenotazione> biglietti, long numBiglietto){
         for(Prenotazione p: biglietti){
             if(p.numeroBiglietto==numBiglietto){
                 return p;
