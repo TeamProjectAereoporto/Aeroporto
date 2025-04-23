@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Sistema {
     public ArrayList<UtenteGenerico> utentiGenerici = new ArrayList<>();
@@ -47,5 +48,28 @@ public class Sistema {
         }
         return false;
     }
-
+    //crea il numero biglietto
+    public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
+        Random casuale = new Random();
+        boolean controllo = true;
+        long min = 1000000000L;
+        long max = 9999999999L;
+        long numeroCasuale=0;
+        while(controllo) {
+            numeroCasuale = min + ((long) (casuale.nextDouble() * (max - min + 1)));
+            if(controlloNumeroBigliettoEsistenti(biglietti,numeroCasuale)){
+                controllo=false;
+            }
+        }
+        return  numeroCasuale;
+    }
+    //controllo numeroBiglietti durante la creazione
+    public boolean controlloNumeroBigliettoEsistenti(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
+        for (Prenotazione p : biglietti){
+            if(p.numeroBiglietto== numeroBiglietto){
+                return false;
+            }
+        }
+        return  true;
+    }
 }
