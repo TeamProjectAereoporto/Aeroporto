@@ -1,11 +1,10 @@
-import model.Sistema;
-import model.Utente;
-import model.Volo;
-import model.VoloPartenza;
+import model.*;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
+        /*
         Scanner scanner = new Scanner(System.in);
         //simulazione dati inseriti per login
         Utente utente = new Utente("Karol","password","Utente");
@@ -36,5 +35,15 @@ public class Main {
         if(utente.ruolo=="Utente"){
 
         }
+         */
+        Admin adminProva = new Admin("Admin", "Password", "AB1526");
+        Gate g = new Gate("A1");
+        VoloPartenza volo1 = new VoloPartenza(4679, "ItaAirways", 14,0, Volo.statoVolo.INORARIO, "Malpensa");
+        adminProva.aggiungiVoli(volo1);
+        adminProva.visualizzaVoli();
+        adminProva.aggiornaTuttoVolo(4679, "Fiumicino",15, Volo.statoVolo.INRITARDO);
+        adminProva.visualizzaVoli();
+
+
     }
 }

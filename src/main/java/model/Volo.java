@@ -51,6 +51,27 @@ public class Volo {
                 " con arrivo previsto alle " + orarioArrivo + " (" + stato + ")";
     }
 
+    public void setCodiceVolo(int nuovoCodiceVolo){
+        this.codiceVolo = nuovoCodiceVolo;
+    }
+    public void setCompagniaAerea(String nuovaCompagniaAerea){
+        this.compagniaAerea = nuovaCompagniaAerea;
+    }
+    public void setAeroportoOrigine(String nuovoAeroportoOrigine){
+        this.aeroportoOrigine = nuovoAeroportoOrigine;
+    }
+    public void setAeroportoDestinazione(String nuovoAeroportoDestinazione){
+        this.aeroportoDestinazione = nuovoAeroportoDestinazione;
+    }
+    public void setOrarioArrivo(float nuovoOrarioArrivo){
+        this.orarioArrivo = nuovoOrarioArrivo;
+    }
+    public void setStatoVolo(statoVolo nuovoStatoVolo){
+        this.stato = nuovoStatoVolo;
+    }
+    public void setRitardo(int nuovoRitardo){
+        this.ritardo = nuovoRitardo;
+    }
 
 
 }

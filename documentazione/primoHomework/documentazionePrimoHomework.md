@@ -141,7 +141,8 @@ Lato voliPartenza/voliArrivo: 1
 
 Checkin ↔ Prenotazione (dipendenza)
 Relazione tratteggiata, non rappresenta un'associazione con molteplicità.
-Usata per indicare una dipendenza funzionale (uso del metodo checkin()
+Usata per indicare una dipendenza funzionale (uso del metodo checkin());
+
 
 
 
