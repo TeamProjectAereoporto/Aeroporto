@@ -1,7 +1,7 @@
-import model.Sistema;
-import model.Utente;
-import model.Volo;
-import model.VoloPartenza;
+import model.*;
+
+import java.awt.desktop.PrintFilesEvent;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -21,19 +21,35 @@ public class Main {
             Utente utenteprova= new Utente(nomeUtente,psw,ruolo);
             sistema.aggiungiUtente(utenteprova);
         }
-        //stampa utenti
-        for(Utente p : sistema.utenti){
-            System.out.printf("%nnome: %s, password: %s, ruolo:%s",p.nomeUtente,p.psw,p.ruolo);
-        }
+
         //prova per controllare login
-        boolean verifica = sistema.verificaUtente(utente.nomeUtente, utente.psw, utente.ruolo);
+        boolean verifica = sistema.verificaUtente(utente.getNomeUtente(), utente.getPsw(), utente.getRuolo());
         if(verifica){
-            System.out.printf("Accesso effettuato correttamente come %s",utente.ruolo);
+            System.out.printf("Accesso effettuato correttamente come %s",utente.getRuolo());
 
         }else{
             System.out.printf("utente non trovato");
         }
-        if(utente.ruolo=="Utente"){
+        if(utente.getRuolo().equals("Utente")){
+            UtenteGenerico user = new UtenteGenerico(utente.getNomeUtente(), utente.getPsw());
+            ArrayList<Prenotazione> biglietti = new ArrayList<>();
+            System.out.printf("%nBentornato nell'Aereoporto digitale di napoli %s",utente.getNomeUtente());
+
+                long numeroBiglietto= sistema.creaNumeroBiglietto(biglietti);
+                user.prenotaVolo(biglietti,numeroBiglietto,"A2");
+                numeroBiglietto= sistema.creaNumeroBiglietto(biglietti);
+                user.prenotaVolo(biglietti,numeroBiglietto,"A3");
+                numeroBiglietto= sistema.creaNumeroBiglietto(biglietti);
+                user.prenotaVolo(biglietti,numeroBiglietto,"A3");
+            for(Prenotazione v : biglietti){
+                System.out.printf("Numero biglietto: %s %n Posto assegnato: %s %n Stato Prenotazione: %s %n",v.getNumeroBiglietto(), v.getPostoAssegnato(),v.getStato());
+            }
+                Prenotazione biglietto = user.cercaBiglietto(biglietti, numeroBiglietto);
+                System.out.printf("biglietto: %n Numero biglietto: %s %n Posto assegnato %s %n Stato Prenotazione %s %n", biglietto.getNumeroBiglietto(), biglietto.getPostoAssegnato(), biglietto.getStato());
+            System.out.printf("biglietto prima di essere modificato: %n Numero biglietto: %s %n Posto assegnato %s %n Stato Prenotazione %s %n", biglietti.get(1).getNumeroBiglietto(), biglietti.get(1).getPostoAssegnato(), biglietti.get(1).getStato());
+            user.modificaBiglietto(biglietti.get(1), "A4", 2 );
+                System.out.printf("biglietto modificato: %n Numero biglietto: %s %n Posto assegnato %s %n Stato Prenotazione %s %n", biglietti.get(1).getNumeroBiglietto(), biglietti.get(1).getPostoAssegnato(), biglietti.get(1).getStato());
+
 
         }
     }

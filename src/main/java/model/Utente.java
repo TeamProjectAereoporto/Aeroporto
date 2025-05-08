@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Utente {
     //attributi della superclasse Utente
-    public String nomeUtente;
-    public String psw;
-    public String ruolo;
+    private String nomeUtente;
+    private String psw;
+    private String ruolo;
     public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     //costruttore di Utente
@@ -20,5 +20,30 @@ public class Utente {
         for(Volo v : voliGestiti){
             System.out.println(v);
         }
+    }
+    //getter
+    public String getNomeUtente() {
+        return nomeUtente;
+    }
+
+    public String getPsw() {
+        return psw;
+    }
+
+    public String getRuolo() {
+        return ruolo;
+    }
+    //setter
+
+    public void setNomeUtente(String nomeUtente) {
+        this.nomeUtente = nomeUtente;
+    }
+
+    public void setPsw(String psw) {
+        this.psw = psw;
+    }
+
+    public void setRuolo(String ruolo) {
+        this.ruolo = ruolo;
     }
 }

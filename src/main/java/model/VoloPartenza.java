@@ -7,7 +7,7 @@ public class VoloPartenza extends Volo{
     }
 
 
-    public Gate gateAssegnato;
+    private Gate gateAssegnato;
 
     public void setGate(Gate g) {
         this.gateAssegnato = g;

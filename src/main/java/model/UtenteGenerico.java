@@ -14,16 +14,16 @@ public class UtenteGenerico extends Utente {
         biglietti.add(biglietto);
     }
     public void modificaBiglietto(Prenotazione biglietto, String postoAssegnato, int stato){
-        biglietto.postoAssegnato=postoAssegnato;
+        biglietto.setPostoAssegnato(postoAssegnato);
         if(stato==1){
-            biglietto.stato=Prenotazione.StatoPrenotazione.CONFERMATA;
+            biglietto.setStato(Prenotazione.StatoPrenotazione.CONFERMATA);
         }else{
-            biglietto.stato=Prenotazione.StatoPrenotazione.IN_ATTESA;
+            biglietto.setStato(Prenotazione.StatoPrenotazione.IN_ATTESA);
         }
     }
     public Prenotazione cercaBiglietto(ArrayList<Prenotazione> biglietti, long numBiglietto){
         for(Prenotazione p: biglietti){
-            if(p.numeroBiglietto==numBiglietto){
+            if(p.getNumeroBiglietto()==numBiglietto){
                 return p;
             }
         }

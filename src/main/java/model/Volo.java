@@ -1,13 +1,13 @@
 package model;
 
 public class Volo {
-    int codiceVolo;
-    String compagniaAerea;
-    String aeroportoOrigine;
-    String aeroportoDestinazione;
-    float orarioArrivo;
-    int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
-    public statoVolo stato;
+    private int codiceVolo;
+    private String compagniaAerea;
+    private String aeroportoOrigine;
+    private String aeroportoDestinazione;
+    private float orarioArrivo;
+    private int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
+    private statoVolo stato;
 
     public enum statoVolo{
         DECOLLATO(1),
@@ -25,8 +25,66 @@ public class Volo {
             return codice;
         }
     }
+    //getter
 
-   public Volo(int codiceVolo, String compagniaAerea,float orarioArrivo, int ritardo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+    public int getCodiceVolo() {
+        return codiceVolo;
+    }
+
+    public float getOrarioArrivo() {
+        return orarioArrivo;
+    }
+
+    public int getRitardo() {
+        return ritardo;
+    }
+
+    public statoVolo getStato() {
+        return stato;
+    }
+
+    public String getAeroportoDestinazione() {
+        return aeroportoDestinazione;
+    }
+
+    public String getAeroportoOrigine() {
+        return aeroportoOrigine;
+    }
+
+    public String getCompagniaAerea() {
+        return compagniaAerea;
+    }
+    //setter
+    public void setAeroportoDestinazione(String aeroportoDestinazione) {
+        this.aeroportoDestinazione = aeroportoDestinazione;
+    }
+
+    public void setAeroportoOrigine(String aeroportoOrigine) {
+        this.aeroportoOrigine = aeroportoOrigine;
+    }
+
+    public void setCodiceVolo(int codiceVolo) {
+        this.codiceVolo = codiceVolo;
+    }
+
+    public void setCompagniaAerea(String compagniaAerea) {
+        this.compagniaAerea = compagniaAerea;
+    }
+
+    public void setOrarioArrivo(float orarioArrivo) {
+        this.orarioArrivo = orarioArrivo;
+    }
+
+    public void setRitardo(int ritardo) {
+        this.ritardo = ritardo;
+    }
+
+    public void setStato(statoVolo stato) {
+        this.stato = stato;
+    }
+
+
+    public Volo(int codiceVolo, String compagniaAerea, float orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
      this.codiceVolo = codiceVolo;
      this.compagniaAerea = compagniaAerea;
      this.orarioArrivo = orarioArrivo;

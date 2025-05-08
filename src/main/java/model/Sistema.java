@@ -3,12 +3,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Sistema {
-    public ArrayList<UtenteGenerico> utentiGenerici = new ArrayList<>();
-    public ArrayList<Admin> tantiAdmin = new ArrayList<>();
-    public ArrayList<Utente> utenti = new ArrayList<>();
+    public ArrayList<UtenteGenerico> utentiGenerici;
+    public ArrayList<Admin> tantiAdmin;
+    public ArrayList<Utente> utenti;
 
 
-    public Sistema(){}
+    public Sistema(){
+        utentiGenerici = new ArrayList<>();
+        tantiAdmin = new ArrayList<>();
+        utenti = new ArrayList<>();
+    }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
@@ -21,7 +25,7 @@ public class Sistema {
 
     public boolean verificaUtenteG(String login, String psw){
            for(int i = 0; i < utentiGenerici.size(); i++){
-               if(login.equals(utentiGenerici.get(i).nomeUtente) && psw.equals(utentiGenerici.get(i).psw)){
+               if(login.equals(utentiGenerici.get(i).getNomeUtente()) && psw.equals(utentiGenerici.get(i).getPsw())){
                    System.out.println("Credenziali riconosciute, accesso consentito come utente generico");
                    return true;
                }
@@ -32,7 +36,7 @@ public class Sistema {
 
     public boolean verificaAdmin(String login, String psw, String codAdmin){
         for(int i = 0; i < tantiAdmin.size(); i++){
-            if(login.equals(tantiAdmin.get(i).nomeUtente) && psw.equals(tantiAdmin.get(i).psw) && codAdmin.equals(tantiAdmin.get(i).codAdmin)){
+            if(login.equals(tantiAdmin.get(i).getNomeUtente()) && psw.equals(tantiAdmin.get(i).getPsw()) && codAdmin.equals(tantiAdmin.get(i).getCodAdmin())){
                 System.out.println("Accesso consentito come admin");
                 return true;
             }
@@ -42,7 +46,7 @@ public class Sistema {
     }
     public boolean verificaUtente(String login, String psw, String ruolo) {
         for(Utente p : utenti){
-            if(p.nomeUtente.equals(login) && p.psw.equals(psw) && p.ruolo.equals(ruolo)){
+            if(p.getNomeUtente().equals(login) && p.getPsw().equals(psw) && p.getRuolo().equals(ruolo)){
                 return true;
             }
         }
@@ -66,7 +70,7 @@ public class Sistema {
     //controllo numeroBiglietti durante la creazione
     public boolean controlloNumeroBigliettoEsistenti(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
         for (Prenotazione p : biglietti){
-            if(p.numeroBiglietto== numeroBiglietto){
+            if(p.getNumeroBiglietto()== numeroBiglietto){
                 return false;
             }
         }

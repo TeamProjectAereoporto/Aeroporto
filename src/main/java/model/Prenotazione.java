@@ -2,9 +2,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 public class Prenotazione {
-    public long numeroBiglietto;
-    public String postoAssegnato;
-    public StatoPrenotazione stato;
+    private long numeroBiglietto;
+    private String postoAssegnato;
+    private StatoPrenotazione stato;
 
 
     public enum StatoPrenotazione {
