@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Sistema {
-    public ArrayList<UtenteGenerico> utentiGenerici = new ArrayList<>();
-    public ArrayList<Admin> tantiAdmin = new ArrayList<>();
-    public ArrayList<Utente> utenti = new ArrayList<>();
+    public ArrayList<UtenteGenerico> utentiGenerici;
+    public ArrayList<Admin> tantiAdmin;
+    public ArrayList<Utente> utenti;
 
-
-    public Sistema(){}
+    public Sistema(){
+        utentiGenerici = new ArrayList<>();
+        tantiAdmin = new ArrayList<>();
+        utenti = new ArrayList<>();
+    }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
