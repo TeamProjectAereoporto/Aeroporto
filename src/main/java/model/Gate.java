@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Gate {
 
-    String codiceGate;
-    VoloPartenza voloAssegnato;
+    private String codiceGate;
+    private VoloPartenza voloAssegnato;
 
     public Gate(String coGate){
         codiceGate = coGate;

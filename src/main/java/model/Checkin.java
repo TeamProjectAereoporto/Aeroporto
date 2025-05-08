@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Checkin {
 
-    public Passeggero passeggero;
+    private Passeggero passeggero;
     public ArrayList<Prenotazione> biglietti;
 
     public Checkin(Passeggero passeggero) {
