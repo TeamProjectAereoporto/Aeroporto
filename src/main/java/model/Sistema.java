@@ -13,6 +13,7 @@ public class Sistema {
         tantiAdmin = new ArrayList<>();
         utenti = new ArrayList<>();
     }
+
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
