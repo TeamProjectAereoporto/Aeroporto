@@ -23,6 +23,7 @@ public class Sistema {
     public void setAdmin(Admin admin){
         this.admin=admin;
     }
+
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
