@@ -10,7 +10,6 @@ public class AdminPage {
     private JPanel principale;
     private JLabel adminTitle;
     private JButton aggiungiVoloButton;
-    private JButton modificaVoloButton;
     private JButton eliminaVoloButton;
     private JPanel voliPanel;
     private JLabel voliLable;
