@@ -5,6 +5,7 @@ public class Prenotazione {
     private long numeroBiglietto;
     private String postoAssegnato;
     private StatoPrenotazione stato;
+    private Passeggero passeggero;
 
 
     public enum StatoPrenotazione {
@@ -23,10 +24,11 @@ public class Prenotazione {
         }
     }
     //Costruttore
-    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato) {
+    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero) {
         this.numeroBiglietto = numeroBiglietto;
         this.postoAssegnato = postoAssegnato;
         this.stato = stato;
+        this.passeggero=passeggero;
     }
     //get statoPrenotazione
     public StatoPrenotazione getStato() {
@@ -51,6 +53,13 @@ public class Prenotazione {
     //set numeroBiglietto
     public void setNumeroBiglietto(long numeroBiglietto){
         this.numeroBiglietto=numeroBiglietto;
+    }
+    //set passeggero
+    public void setPasseggero(Passeggero passeggero){
+        this.passeggero=passeggero;
+    }
+    public Passeggero getPasseggero(){
+        return passeggero;
     }
 
 }

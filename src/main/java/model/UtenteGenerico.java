@@ -3,17 +3,15 @@ import java.util.ArrayList;
 //questa classe è un'estensione della superclasse Utente
 public class UtenteGenerico extends Utente {
     public ArrayList<Prenotazione> biglietti;
-    public ArrayList<Passeggero> passeggeri;
     //costruttore per l'utente generico.
     public UtenteGenerico(String l, String p){
         super(l,p, "utenteGenerico");
         biglietti = new ArrayList<>();
-        passeggeri = new ArrayList<>();
     }
 
     //metodo per acquistare un biglietto
     public void prenotaVolo(long numeroBiglietto, String postoAssegnato){
-        Prenotazione biglietto = new Prenotazione(numeroBiglietto, postoAssegnato, Prenotazione.StatoPrenotazione.CONFERMATA);
+        Prenotazione biglietto = new Prenotazione(numeroBiglietto, postoAssegnato, Prenotazione.StatoPrenotazione.CONFERMATA, new Passeggero("karol", "leonardi", "NKOPOP"));
         biglietti.add(biglietto);
     }
     public void modificaBiglietto(Prenotazione biglietto, String postoAssegnato, int stato){
@@ -34,12 +32,13 @@ public class UtenteGenerico extends Utente {
         return null;
     }
     //ricerca per nome
-    public ArrayList<Prenotazione> cercaBiglietto(Passeggero passeggero){
-        for(Passeggero p : passeggeri){
-            if(p.getNome().equals(passeggero.getNome())){
-                return p.bigliettiAcquistati;
+    public ArrayList<Prenotazione> cercaBiglietto(String nome){
+        ArrayList<Prenotazione> bigliettiTrovati = new ArrayList<>();
+        for(Prenotazione p : biglietti){
+            if(p.getPasseggero().getNome()==nome){
+                bigliettiTrovati.add(p);
             }
         }
-        return null;
+        return bigliettiTrovati;
     }
 }

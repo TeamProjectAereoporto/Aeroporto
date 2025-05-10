@@ -21,17 +21,17 @@ public class Main {
         }
         //stampa utenti
         for (Utente p : sistema.utenti) {
-            System.out.printf("%nnome: %s, password: %s, ruolo:%s", p.nomeUtente, p.psw, p.ruolo);
+            System.out.printf("%nnome: %s, password: %s, ruolo:%s", p.getNomeUtente(), p.getPsw(), p.getRuolo());
         }
         //prova per controllare login
-        boolean verifica = sistema.verificaUtente(utente.nomeUtente, utente.psw, utente.ruolo);
+        boolean verifica = sistema.verificaUtente(utente.getNomeUtente(), utente.getPsw(), utente.getRuolo());
         if (verifica) {
-            System.out.printf("Accesso effettuato correttamente come %s", utente.ruolo);
+            System.out.printf("Accesso effettuato correttamente come %s", utente.getRuolo());
 
         } else {
             System.out.printf("utente non trovato");
         }
-        if (utente.ruolo == "Utente") {
+        if (utente.getRuolo() == "Utente") {
 
         }
 
@@ -40,7 +40,7 @@ public class Main {
         VoloPartenza volo1 = new VoloPartenza(4679, "ItaAirways", 14, 0, Volo.statoVolo.INORARIO, "Malpensa");
         adminProva.aggiungiVoli(volo1);
         adminProva.visualizzaVoli();
-        adminProva.aggiornaTuttoVolo(4679, "Fiumicino", 15, Volo.statoVolo.INRITARDO);
+        //adminProva.aggiornaTuttoVolo(4679, "Fiumicino", 15, Volo.statoVolo.INRITARDO);
         adminProva.visualizzaVoli();
     }
 }
