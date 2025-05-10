@@ -1,4 +1,9 @@
-package model;
+package controller;
+import model.Admin;
+import model.Prenotazione;
+import model.Utente;
+import model.UtenteGenerico;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,6 +18,7 @@ public class Sistema {
         tantiAdmin = new ArrayList<>();
         utenti = new ArrayList<>();
     }
+
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
