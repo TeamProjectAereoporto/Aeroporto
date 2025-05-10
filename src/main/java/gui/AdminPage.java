@@ -32,9 +32,6 @@ public class AdminPage {
             voliPanel.repaint();
         }
 
-        model.addRow(new Object[]{"AZ123", "Alitalia", "FCO", "JFK", "10:00", "0 min", "In orario"});
-        model.addRow(new Object[]{"LH456", "Lufthansa", "MUC", "FCO", "12:30", "15 min", "In ritardo"});
-
         aggiungiVoloButton.addActionListener(e -> {
             AggiungiVolo aggiungiVolo = new AggiungiVolo(model);
             JFrame finestra = new JFrame("Aggiungi Volo");
