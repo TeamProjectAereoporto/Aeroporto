@@ -69,7 +69,7 @@ public class AdminPage {
         frame.setContentPane(new AdminPage().principale);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(700,400);
+        frame.setSize(800,400);
         frame.setLocation(400,300);
         frame.setVisible(true);
     }

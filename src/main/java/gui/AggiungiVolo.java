@@ -22,6 +22,8 @@ public class AggiungiVolo {
     private JPanel principale;
     private JButton salvaVoloButton;
     private JButton annullaButton;
+    private JLabel gateLabel;
+    private JTextField gateField;
     private DefaultTableModel tableModel;
 
     public JPanel getPrincipale(){
@@ -41,7 +43,7 @@ public class AggiungiVolo {
     }
 
     public static void main(String[] args) {
-        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Stato"};
+        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo","Gate", "Stato"};
         DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
         AggiungiVolo av = new AggiungiVolo(modelloFinto);
         JFrame frame = new JFrame("Aggiungi Volo");
