@@ -3,6 +3,9 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The type Aggiungi volo.
+ */
 public class AggiungiVolo {
     private JLabel aggiungiVoloLable;
     private JLabel codiceVoloLable;
@@ -26,14 +29,24 @@ public class AggiungiVolo {
     private JTextField gateField;
     private DefaultTableModel tableModel;
 
+    /**
+     * Get principale j panel.
+     *
+     * @return the j panel
+     */
     public JPanel getPrincipale(){
         return principale;
     }
 
+    /**
+     * Instantiates a new Aggiungi volo.
+     *
+     * @param tableModel the table model
+     */
     public AggiungiVolo(DefaultTableModel tableModel) {
         this.tableModel = tableModel;
         salvaVoloButton.addActionListener(e -> salvaVolo());
-        annullaButton.addActionListener(e -> {
+        annullaButton.addActionListener(e -> {//button annulla
             JFrame finestra = (JFrame) principale.getTopLevelAncestor();
             if (finestra != null) {
                 finestra.dispose();
@@ -42,6 +55,11 @@ public class AggiungiVolo {
 
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo","Gate", "Stato"};
         DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
@@ -55,7 +73,7 @@ public class AggiungiVolo {
         frame.setVisible(true);
     }
 
-
+    //aggiunge volo alla tabella !!!INCOMPLETO AGGIUNGERE VOLO ALL'ARRAYLIST
     private void salvaVolo(){
         String codiceVolo = codiceVoloField.getText();
         String compagniaAerea = compagniaAereaField.getText();

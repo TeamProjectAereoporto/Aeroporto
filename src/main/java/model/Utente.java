@@ -16,10 +16,15 @@ public class Utente {
         this.ruolo=ruolo;
     }
     //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
-    public void visualizzaVoli(){
-        for(Volo v : voliGestiti){
-            System.out.println(v);
-        }
+    public ArrayList<Volo> visualizzaVoli(){
+        Volo volo1 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
+        Volo volo2 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
+        Volo volo3 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
+        voliGestiti.add(volo1);
+        voliGestiti.add(volo2);
+        voliGestiti.add(volo3);
+
+        return voliGestiti;
     }
     //getter
     public String getNomeUtente() {

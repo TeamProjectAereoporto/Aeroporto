@@ -7,12 +7,13 @@ public class Passeggero {
     private String nome;
     private String cognome;
     private String numeroDocumento;
-    public ArrayList<Prenotazione> bigliettiAcquistati = new ArrayList<>();
+    public ArrayList<Prenotazione> bigliettiAcquistati;
 
     Passeggero(String nome, String cognome, String numeroDocumento){
         this.nome=nome;
         this.cognome=cognome;
         this.numeroDocumento=numeroDocumento;
+        bigliettiAcquistati = new ArrayList<>();
     }
     //getters
     public String getCognome() {

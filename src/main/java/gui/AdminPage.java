@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Admin page.
+ */
 public class AdminPage {
     private JPanel principale;
     private JLabel adminTitle;
@@ -15,8 +18,12 @@ public class AdminPage {
     private JLabel voliLable;
     private JTable tabellaVoli;
     private JButton gateButton;
+    public static JFrame frame;
 
-    public AdminPage(){
+    /**
+     * Instantiates a new Admin page.
+     */
+    public AdminPage(JFrame frameChiamante){
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo"};
         DefaultTableModel model = new DefaultTableModel(colonne,0);
@@ -59,18 +66,20 @@ public class AdminPage {
                         JOptionPane.WARNING_MESSAGE);
             }
         });
-
-
-    }
-
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("AdminDashboard");
-        frame.setContentPane(new AdminPage().principale);
+        frame = new JFrame("AdminDashboard");
+        frame.setContentPane(principale);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(800,400);
         frame.setLocation(400,300);
         frame.setVisible(true);
+
     }
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
 }
