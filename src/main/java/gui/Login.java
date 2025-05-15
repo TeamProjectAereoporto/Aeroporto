@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The type Login.
+ * The type finestraPrincipale.
  */
 public class Login {
 
     private controller.Sistema controller;
-    private JPanel Login;
+    private  JPanel finestraPrincipale;
     private JTextField campoUsername;
     private JLabel username;
     private JButton invioButton;
@@ -22,7 +22,8 @@ public class Login {
      */
     public static JFrame frame;
 
-    public Login() {
+    public Login(JFrame frame) {
+        this.frame=frame;
         controller = new Sistema();
         invioButton.addActionListener(new ActionListener() {
             @Override
@@ -49,21 +50,8 @@ public class Login {
             }
         });
     }
-
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    public static void main(String[] args) {
-        frame = new JFrame("MainGUI");
-        frame.setContentPane(new Login().Login);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(300,300);
-        frame.setResizable(false);
-        frame.setLocation(200,200);
-        frame.setVisible(true);
+    public JPanel getLogin() {
+        return finestraPrincipale;
     }
 
 }
