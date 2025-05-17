@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -104,6 +106,28 @@ public class HomeUtente {
         frame.setResizable(false);
         frame.setLocation(200,200);
         frame.setVisible(true);
+        tabellaVoli.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount()==2){
+                    Object[]valori;
+                    int row = tabellaVoli.rowAtPoint(e.getPoint());
+                    if(row!=-1) {
+                        int column = tabellaVoli.getColumnCount();
+                        valori = new Object[column];
+                        for(int i =0; i<column; i++){
+                            valori[i]=tabellaVoli.getValueAt(row, i);
+                        }
+                        for (Object val : valori) {
+                            System.out.println(" - " + val);
+                        }
+                        Prenota prenotazione = new Prenota(frame, valori);
+                        prenotazione.frame.setVisible(true);
+                        frame.setVisible(false);
+                    }
+                }
+            }
+        });
     }
 
     /**
