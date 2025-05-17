@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Admin  extends Utente{
     //Un admin in quanto tale riceve un codice di accesso univoco
     private String codAdmin;
-    public ArrayList<Volo> voliGestiti = new ArrayList<>();
 
     public Admin(String log, String ps, String code){
         super(log,ps, "admin");

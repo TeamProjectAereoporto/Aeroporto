@@ -1,11 +1,13 @@
 package model;
 
+import java.util.Date;
+
 public class Volo {
     private int codiceVolo;
     private String compagniaAerea;
     private String aeroportoOrigine;
     private String aeroportoDestinazione;
-    private float orarioArrivo;
+    private Date orarioArrivo;
     private int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
     private statoVolo stato;
 
@@ -31,7 +33,7 @@ public class Volo {
         return codiceVolo;
     }
 
-    public float getOrarioArrivo() {
+    public Date getOrarioArrivo() {
         return orarioArrivo;
     }
 
@@ -71,7 +73,7 @@ public class Volo {
         this.compagniaAerea = compagniaAerea;
     }
 
-    public void setOrarioArrivo(float orarioArrivo) {
+    public void setOrarioArrivo(Date orarioArrivo) {
         this.orarioArrivo = orarioArrivo;
     }
 
@@ -84,7 +86,7 @@ public class Volo {
     }
 
 
-    public Volo(int codiceVolo, String compagniaAerea, float orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+    public Volo(int codiceVolo, String compagniaAerea, Date orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;
@@ -94,7 +96,7 @@ public class Volo {
         this.aeroportoDestinazione = aeroportoDestinazione;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea,float orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+    public Volo(int codiceVolo, String compagniaAerea,Date orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;

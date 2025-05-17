@@ -12,9 +12,8 @@ public class Main {
             frame.setContentPane(new Login(frame).getLogin());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
-            frame.setSize(300, 300);
             frame.setResizable(false);
-            frame.setLocation(200, 200);
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
     }

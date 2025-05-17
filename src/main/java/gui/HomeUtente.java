@@ -1,6 +1,8 @@
 package gui;
 
 import controller.Sistema;
+import model.Prenotazione;
+import model.Volo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * The type Home utente.
@@ -40,7 +43,18 @@ public class HomeUtente {
                 return false; // Nessuna cella è modificabile
             }
         };
-
+        //debbubing
+        Date orarioArrivo = new Date(); // ora attuale, oppure puoi usare un altro costruttore per una data specifica
+        Volo volo1 = new Volo(
+                12345,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                orarioArrivo,                      // orarioArrivo
+                15,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "Fiumicino",                       // aeroporto di origine
+                "Linate"                           // aeroporto di destinazione
+        );
+        sistema.aggiungiVolo(volo1);
         tabellaVoli.setModel(model);
         //visualizzazione voli
         ArrayList<model.Volo> voli = sistema.visualizzaVoli();

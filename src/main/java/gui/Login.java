@@ -1,10 +1,14 @@
 package gui;
 
 import controller.Sistema;
+import model.Utente;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * The type finestraPrincipale.
@@ -13,10 +17,12 @@ public class Login {
 
     private controller.Sistema controller;
     private  JPanel finestraPrincipale;
+    private JLabel immagine;
     private JTextField campoUsername;
-    private JLabel username;
-    private JButton invioButton;
+    private JButton invio;
     private JPasswordField campoPassword;
+    private JLabel username;
+    private JLabel password;
     /**
      * The constant frame.
      */
@@ -25,7 +31,10 @@ public class Login {
     public Login(JFrame frame) {
         this.frame=frame;
         controller = new Sistema();
-        invioButton.addActionListener(new ActionListener() {
+        controller.aggiungiUtente(new Utente("karol","karol","utenteGenerico"));
+        controller.aggiungiUtente(new Utente("saso","saso","admin"));
+
+        invio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             String username = campoUsername.getText();
@@ -39,7 +48,8 @@ public class Login {
                     frame.setVisible(false);
                     frame.dispose();
                 }else if(ruolo==2){
-                    AdminPage home = new AdminPage(frame);
+
+                    AdminPage home = new AdminPage(frame,controller);
                     home.frame.setVisible(true);
                     frame.setVisible(false);
                     frame.dispose();
@@ -47,6 +57,17 @@ public class Login {
 
                 }
             }
+            }
+        });
+        invio.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                invio.setBackground(new Color(80, 80, 80));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                invio.setBackground(new Color(60, 60, 60));
             }
         });
     }

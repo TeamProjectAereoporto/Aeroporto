@@ -13,12 +13,13 @@ import java.util.ArrayList;
  */
 public class Biglietto {
     private controller.Sistema sistema;
-    private JButton modificaButton;
-    private JButton eliminaButton;
     private JPanel finestraPrincipale;
-    private JPanel navbar;
+    private JButton modificaButton;
+    private JButton cancellaButton;
+    private JLabel titolo;
     private JTable tabellaBiglietti;
     private JButton fineButton;
+    private JPanel navbar;
     /**
      * The constant frame.
      */
@@ -43,7 +44,7 @@ public class Biglietto {
         frame.setLocation(200,200);
         frame.setVisible(true);
         //nomi colonne
-        String[] colonne= {"Nome", "Posto", "NumeroCarta"};
+        String[] colonne= {"Nome","Cognome", "Posto", "NumeroCarta"};
         //setting di tabella
         DefaultTableModel model = new DefaultTableModel(colonne,0){
             @Override
@@ -53,10 +54,10 @@ public class Biglietto {
         };
         tabellaBiglietti.setModel(model);
         //biglietti dell'utente
-        ArrayList<Prenotazione> biglietti = sistema.getBiglietti(nome, numeroBiglietto);
+        ArrayList<Prenotazione> biglietti = sistema.getBiglietti(nome, numeroBiglietto, sistema.utente);
         if (biglietti!=null) {
             for (int i = 0; i < biglietti.size(); i++)
-                model.addRow(new Object[]{biglietti.get(i).getPasseggero().getNome(), biglietti.get(i).getPostoAssegnato(), biglietti.get(i).getNumeroBiglietto()});
+                model.addRow(new Object[]{biglietti.get(i).getPasseggero().getNome(),biglietti.get(i).getPasseggero().getCognome(), biglietti.get(i).getPostoAssegnato(), biglietti.get(i).getNumeroBiglietto()});
         }
             //ritorno al frame principale
             fineButton.addActionListener(new ActionListener() {

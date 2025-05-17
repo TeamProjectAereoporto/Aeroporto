@@ -1,95 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.Login">
-  <grid id="27dc6" binding="finestraPrincipale" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="finestraPrincipale" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="131" y="20" width="922" height="674"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-14803426"/>
+    </properties>
     <border type="none"/>
     <children>
-      <grid id="375e7" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="9dac2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-14803426"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="f3150" class="javax.swing.JTextField" binding="campoUsername">
+          <component id="af51a" class="javax.swing.JLabel" binding="immagine">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <minimum-size width="180" height="20"/>
-                <preferred-size width="180" height="20"/>
-                <maximum-size width="180" height="20"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="25877" class="javax.swing.JLabel" binding="username">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <enabled value="true"/>
-              <text value="Username:"/>
-              <visible value="true"/>
+              <icon value="sfondo.jpg"/>
+              <text value=""/>
             </properties>
           </component>
         </children>
       </grid>
-      <grid id="44e8" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="38a72" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-14803426"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="aa4ff" class="javax.swing.JLabel">
+          <grid id="59278" layout-manager="GridLayoutManager" row-count="9" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Password:"/>
+              <background color="-14803426"/>
             </properties>
-          </component>
-          <component id="92eae" class="javax.swing.JPasswordField" binding="campoPassword">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <minimum-size width="180" height="20"/>
-                <preferred-size width="180" height="20"/>
-                <maximum-size width="180" height="20"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-        </children>
-      </grid>
-      <grid id="b2a5b" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="50" height="30"/>
-            <preferred-size width="80" height="80"/>
-            <maximum-size width="150" height="80"/>
+            <border type="none"/>
+            <children>
+              <component id="c7704" class="javax.swing.JLabel" binding="username">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Inter Semi Bold" size="18" style="1"/>
+                  <foreground color="-1"/>
+                  <text value="Username"/>
+                </properties>
+              </component>
+              <component id="f5106" class="javax.swing.JTextField" binding="campoUsername">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-13816531"/>
+                  <font name="Microsoft YaHei" size="14" style="1"/>
+                  <foreground color="-1"/>
+                </properties>
+              </component>
+              <component id="ffa5e" class="javax.swing.JLabel" binding="password">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Inter Semi Bold" size="18" style="1"/>
+                  <foreground color="-1"/>
+                  <text value="Password"/>
+                </properties>
+              </component>
+              <component id="d3b8b" class="javax.swing.JButton" binding="invio">
+                <constraints>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-12829636"/>
+                  <foreground color="-1"/>
+                  <text value="invio"/>
+                </properties>
+              </component>
+              <component id="b1121" class="javax.swing.JPasswordField" binding="campoPassword">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-13816531"/>
+                  <font name="Microsoft YaHei UI" size="14" style="1"/>
+                  <foreground color="-1"/>
+                </properties>
+              </component>
+              <vspacer id="1d8a6">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="50" height="50"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <vspacer id="36725">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="50" height="50"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <vspacer id="80f50">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="20" height="20"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <vspacer id="20fe7">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="20" height="20"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+            </children>
           </grid>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="eb927" class="javax.swing.JButton" binding="invioButton" default-binding="true">
+          <vspacer id="56713">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <minimum-size width="100" height="30"/>
-                <preferred-size width="100" height="30"/>
-                <maximum-size width="100" height="30"/>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="53631">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="80" height="80"/>
+                <maximum-size width="50" height="50"/>
               </grid>
             </constraints>
+          </vspacer>
+          <hspacer id="4919">
+            <constraints>
+              <grid row="2" column="0" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
+                <minimum-size width="50" height="50"/>
+              </grid>
+            </constraints>
+          </hspacer>
+          <hspacer id="b45f9">
+            <constraints>
+              <grid row="2" column="2" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
+                <minimum-size width="50" height="50"/>
+              </grid>
+            </constraints>
+          </hspacer>
+          <component id="99773" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
             <properties>
-              <text value="Invio"/>
+              <background color="-1"/>
+              <font name="Inter Semi Bold" size="26" style="1"/>
+              <foreground color="-1"/>
+              <text value="Login"/>
             </properties>
           </component>
+          <vspacer id="b2539">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="80" height="80"/>
+                <maximum-size width="30" height="30"/>
+              </grid>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
     </children>

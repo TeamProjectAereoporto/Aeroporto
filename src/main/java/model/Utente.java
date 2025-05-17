@@ -7,23 +7,17 @@ public class Utente {
     private String nomeUtente;
     private String psw;
     private String ruolo;
-    public ArrayList<Volo> voliGestiti = new ArrayList<>();
+    protected ArrayList<Volo> voliGestiti;
 
     //costruttore di Utente
     public Utente(String l, String p, String ruolo){
         nomeUtente = l;
         psw = p;
         this.ruolo=ruolo;
+        voliGestiti = new ArrayList<>();
     }
     //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
     public ArrayList<Volo> visualizzaVoli(){
-        Volo volo1 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
-        Volo volo2 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
-        Volo volo3 = new Volo(4679, "ItaAirways", 14, Volo.statoVolo.INORARIO,"napoli", "Malpensa" );
-        voliGestiti.add(volo1);
-        voliGestiti.add(volo2);
-        voliGestiti.add(volo3);
-
         return voliGestiti;
     }
     //getter
