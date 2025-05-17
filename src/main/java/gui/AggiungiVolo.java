@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AggiungiVolo {
     private JLabel aggiungiVoloLable;
@@ -39,11 +41,10 @@ public class AggiungiVolo {
                 finestra.dispose();
             }
         });
-
     }
 
     public static void main(String[] args) {
-        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo","Gate", "Stato"};
+        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Gate", "Stato"};
         DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
         AggiungiVolo av = new AggiungiVolo(modelloFinto);
         JFrame frame = new JFrame("Aggiungi Volo");
@@ -57,15 +58,38 @@ public class AggiungiVolo {
 
 
     private void salvaVolo(){
-        String codiceVolo = codiceVoloField.getText();
+        String codiceVolo = codiceVoloField.getText().trim();
         String compagniaAerea = compagniaAereaField.getText();
         String aeroportoOrigine = aeroportoOrigineField.getText();
         String aeroportoDestinazione = destinazioneField.getText();
         String ritardo = ritardoField.getText();
         String orario = orarioFIeld.getText();
+        String gate = gateField.getText();
+        String stato = (String) statoVoloCombo.getSelectedItem();
 
-        tableModel.addRow(new Object[]{codiceVolo, aeroportoDestinazione, compagniaAerea, aeroportoOrigine, orario, ritardo, "PROGRAMMATO"});
+        if(codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty()|| aeroportoDestinazione.isEmpty() || ritardo.isEmpty() || gate.isEmpty() || stato.isEmpty()){
+            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti","Errore", JOptionPane.ERROR_MESSAGE);
+        }
+        if (!codiceVolo.matches("\\d{4}")) {
+            JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        for(int i = 0; i < tableModel.getRowCount(); i++){
+            if(tableModel.getValueAt(i,0).toString().equals(codiceVolo)){
+                JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        tableModel.addRow(new Object[]{codiceVolo,
+                compagniaAerea,
+                aeroportoOrigine,
+                aeroportoDestinazione,
+                orario,
+                ritardo,
+                stato,
+                gate
+        });
         ((JFrame) principale.getTopLevelAncestor()).dispose();
-
     }
 }

@@ -10,6 +10,7 @@ public class Volo {
     private Date orarioArrivo;
     private int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
     private statoVolo stato;
+    private String gate;
 
     public enum statoVolo{
         DECOLLATO(1),
@@ -28,6 +29,7 @@ public class Volo {
         }
     }
     //getter
+
 
     public int getCodiceVolo() {
         return codiceVolo;
@@ -55,6 +57,9 @@ public class Volo {
 
     public String getCompagniaAerea() {
         return compagniaAerea;
+    }
+    public String getGate(){
+        return gate;
     }
     //setter
     public void setAeroportoDestinazione(String aeroportoDestinazione) {
@@ -85,8 +90,11 @@ public class Volo {
         this.stato = stato;
     }
 
+    public void setGate(String gate) {
+        this.gate = gate;
+    }
 
-    public Volo(int codiceVolo, String compagniaAerea, Date orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+    public Volo(int codiceVolo, String compagniaAerea, Date orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;
@@ -94,21 +102,23 @@ public class Volo {
         this.stato = stato;
         this.aeroportoOrigine = aeroportoOrigine;
         this.aeroportoDestinazione = aeroportoDestinazione;
+        this.gate = gate;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea,Date orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione){
+    public Volo(int codiceVolo, String compagniaAerea,Date orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;
         this.stato = stato;
         this.aeroportoOrigine = aeroportoOrigine;
         this.aeroportoDestinazione = aeroportoDestinazione;
+        this.gate = gate;
     }
 
     @Override
     public String toString() {
         return "Volo " + codiceVolo + " da " + aeroportoOrigine + " a " + aeroportoDestinazione +
-                " con arrivo previsto alle " + orarioArrivo + " (" + stato + ")";
+                " con arrivo previsto alle " + orarioArrivo + " (" + stato + ")" + "al gate " + gate;
     }
 
 

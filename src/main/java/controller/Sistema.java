@@ -10,8 +10,8 @@ public class Sistema {
     public ArrayList<Utente> utenti;
     public Prenotazione biglietto;
     public UtenteGenerico utente;
-    public Utente utento;
     public Admin admin;
+    public ArrayList<Volo> tuttiIVoli = new ArrayList<>();
 
     public Sistema(){
         utentiGenerici = new ArrayList<>();
@@ -34,9 +34,10 @@ public class Sistema {
     }
     public void aggiungiVolo(Volo v){
         admin.aggiungiVoli(v);
+        tuttiIVoli.add(v);
     }
     public ArrayList<Volo> visualizzaVoli(){
-        return utente.visualizzaVoli();
+        return tuttiIVoli;
     }
     public void aggiungiBiglietto(Prenotazione biglietto){
 

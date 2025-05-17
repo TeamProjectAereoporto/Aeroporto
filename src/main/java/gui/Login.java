@@ -43,13 +43,13 @@ public class Login {
                 int ruolo=controller.verificaUtenteP(username,password);
                 //apertura interfaccia utente=1 admin=2 else utente non esistente
                 if(ruolo == 1){
-                    HomeUtente home = new HomeUtente(frame);
+                    HomeUtente home = new HomeUtente(frame, controller, false);
                     home.frame.setVisible(true);
                     frame.setVisible(false);
                     frame.dispose();
                 }else if(ruolo==2){
 
-                    AdminPage home = new AdminPage(frame,controller);
+                    AdminPage home = new AdminPage(frame, controller);
                     home.frame.setVisible(true);
                     frame.setVisible(false);
                     frame.dispose();

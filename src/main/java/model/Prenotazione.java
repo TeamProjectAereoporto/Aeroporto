@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.Random;
+
 public class Prenotazione {
     private long numeroBiglietto;
     private String postoAssegnato;

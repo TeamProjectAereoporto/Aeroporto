@@ -17,6 +17,7 @@ public class Utente {
         voliGestiti = new ArrayList<>();
     }
     //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
+
     public ArrayList<Volo> visualizzaVoli(){
         return voliGestiti;
     }

@@ -17,7 +17,7 @@ public class Admin  extends Utente{
     }
 
     public void assegnaGate(Gate e, VoloPartenza v){
-        v.setGate(e);
+        v.setGate(e.getCodiceGate());
         e.assegnaVolo(v);
         System.out.println("il gate "+ e.getCodiceGate() +" è stato assegnato al volo "+ v.getCodiceVolo());
     }
