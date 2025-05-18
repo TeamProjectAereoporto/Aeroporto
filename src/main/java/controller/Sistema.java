@@ -10,8 +10,9 @@ public class Sistema {
     public ArrayList<Utente> utenti;
     public Prenotazione biglietto;
     public UtenteGenerico utente;
-    public Utente utento;
     public Admin admin;
+    public ArrayList<Volo> tuttiIVoli;
+    public ArrayList<Prenotazione> tuttiIBiglietti;
 
     public Sistema(){
         utentiGenerici = new ArrayList<>();
@@ -19,9 +20,8 @@ public class Sistema {
         utenti = new ArrayList<>();
         utente = new UtenteGenerico("karol", " leonardi");
         admin = new Admin("saso","saso", "231223");
-    }
-    public void setAdmin(Admin admin){
-        this.admin=admin;
+        tuttiIVoli = new ArrayList<>();
+        tuttiIBiglietti = new ArrayList<>();
     }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
@@ -34,12 +34,16 @@ public class Sistema {
     }
     public void aggiungiVolo(Volo v){
         admin.aggiungiVoli(v);
+        //tuttiIVoli.add(v);
     }
     public ArrayList<Volo> visualizzaVoli(){
         return utente.visualizzaVoli();
     }
     public void aggiungiBiglietto(Prenotazione biglietto){
-
+        tuttiIBiglietti.add(biglietto);
+    }
+    public Long creaBiglietto(){
+        return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
     public ArrayList getBiglietti(String nome, long numeroBiglietto, UtenteGenerico utente){
         return utente.cercaBiglietto(nome,numeroBiglietto, utente);
@@ -56,28 +60,6 @@ public class Sistema {
         }
         return 0;
     }
-    //crea il numero biglietto
-    public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
-        Random casuale = new Random();
-        boolean controllo = true;
-        long min = 1000000000L;
-        long max = 9999999999L;
-        long numeroCasuale=0;
-        while(controllo) {
-            numeroCasuale = min + ((long) (casuale.nextDouble() * (max - min + 1)));
-            if(controlloNumeroBigliettoEsistenti(biglietti,numeroCasuale)){
-                controllo=false;
-            }
-        }
-        return  numeroCasuale;
-    }
-    //controllo numeroBiglietti durante la creazione
-    public boolean controlloNumeroBigliettoEsistenti(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
-        for (Prenotazione p : biglietti){
-            if(p.getNumeroBiglietto()== numeroBiglietto){
-                return false;
-            }
-        }
-        return  true;
-    }
+
+
 }

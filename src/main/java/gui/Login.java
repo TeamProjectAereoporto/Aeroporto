@@ -37,26 +37,26 @@ public class Login {
         invio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            String username = campoUsername.getText();
-            String password = new String(campoPassword.getPassword());
-            if(!username.isEmpty() && !password.isEmpty()){
-                int ruolo=controller.verificaUtenteP(username,password);
-                //apertura interfaccia utente=1 admin=2 else utente non esistente
-                if(ruolo == 1){
-                    HomeUtente home = new HomeUtente(frame);
-                    home.frame.setVisible(true);
-                    frame.setVisible(false);
-                    frame.dispose();
-                }else if(ruolo==2){
+                String username = campoUsername.getText();
+                String password = new String(campoPassword.getPassword());
+                if(!username.isEmpty() && !password.isEmpty()){
+                    int ruolo=controller.verificaUtenteP(username,password);
+                    //apertura interfaccia utente=1 admin=2 else utente non esistente
+                    if(ruolo == 1){
+                        HomeUtente home = new HomeUtente(frame, controller, false);
+                        home.frame.setVisible(true);
+                        frame.setVisible(false);
+                        frame.dispose();
+                    }else if(ruolo==2){
 
-                    AdminPage home = new AdminPage(frame,controller);
-                    home.frame.setVisible(true);
-                    frame.setVisible(false);
-                    frame.dispose();
-                }else{
+                        AdminPage home = new AdminPage(frame, controller);
+                        home.frame.setVisible(true);
+                        frame.setVisible(false);
+                        frame.dispose();
+                    }else{
 
+                    }
                 }
-            }
             }
         });
         invio.addMouseListener(new MouseAdapter() {

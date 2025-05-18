@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.Random;
+
 public class Prenotazione {
     private long numeroBiglietto;
     private String postoAssegnato;
@@ -59,5 +60,28 @@ public class Prenotazione {
     public Passeggero getPasseggero(){
         return passeggero;
     }
-
+    //crea numeroBiglietto
+    public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
+        Random casuale = new Random();
+        boolean controllo = true;
+        long min = 1000000000L;
+        long max = 9999999999L;
+        long numeroCasuale=0;
+        while(controllo) {
+            numeroCasuale = min + ((long) (casuale.nextDouble() * (max - min + 1)));
+            if(controlloNumeroBigliettoEsistenti(biglietti,numeroCasuale)){
+                controllo=false;
+            }
+        }
+        return  numeroCasuale;
+    }
+    //controllo se il biglietto esistente è già creato
+    public boolean controlloNumeroBigliettoEsistenti(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
+        for (Prenotazione p : biglietti){
+            if(p.getNumeroBiglietto()== numeroBiglietto){
+                return false;
+            }
+        }
+        return  true;
+    }
 }

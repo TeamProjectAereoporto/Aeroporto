@@ -16,11 +16,12 @@ public class AdminPage {
     private JPanel voliPanel;
     private JLabel voliLable;
     private JTable tabellaVoli;
-    private JButton gateButton;
     public static JFrame frame;
+
     public AdminPage(JFrame chiamante, Sistema controller){
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
-                "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo"};
+                "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
+
         DefaultTableModel model = new DefaultTableModel(colonne,0);
         tabellaVoli.setModel(model);
 
@@ -42,6 +43,7 @@ public class AdminPage {
             finestra.setLocation(400, 300);
             finestra.setVisible(true);
         });
+
         eliminaVoloButton.addActionListener(e -> {
             int rigaSelezionata = tabellaVoli.getSelectedRow();
             if (rigaSelezionata != -1) {

@@ -13,11 +13,12 @@ public class Admin  extends Utente{
 
     //implementazione dei metodi specifici per l'utente Admin
     public void aggiungiVoli(Volo voloDaInserire){
+        System.out.println("volo aggiunto");
         voliGestiti.add(voloDaInserire);
     }
 
     public void assegnaGate(Gate e, VoloPartenza v){
-        v.setGate(e);
+        v.setGate(e.getCodiceGate());
         e.assegnaVolo(v);
         System.out.println("il gate "+ e.getCodiceGate() +" è stato assegnato al volo "+ v.getCodiceVolo());
     }

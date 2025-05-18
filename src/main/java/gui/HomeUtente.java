@@ -18,7 +18,7 @@ import java.util.Date;
  * The type Home utente.
  */
 public class HomeUtente {
-    private controller.Sistema sistema;
+    private Sistema sistema;
     private JButton cercaBigliettoButton;
     private JPanel navbar;
     private JPanel FinestraPrincipale;
@@ -34,15 +34,15 @@ public class HomeUtente {
     /**
      * Instantiates a new Home utente.
      */
-    public HomeUtente(JFrame frameChiamante) {
-        sistema = new Sistema();
+    public HomeUtente(JFrame frameChiamante, Sistema sistema, boolean isAdmin) {
+        this.sistema = sistema;
         //colonne della tabella
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
-                "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo"};
+                "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
         DefaultTableModel model = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Nessuna cella è modificabile
+                return isAdmin; // Nessuna cella è modificabile
             }
         };
         //debbubing
@@ -54,19 +54,52 @@ public class HomeUtente {
                 15,                                // ritardo in minuti
                 Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
                 "Fiumicino",                       // aeroporto di origine
-                "Linate"                           // aeroporto di destinazione
+                "Linate",
+                "3"// aeroporto di destinazione
+        );
+        Volo volo2 = new Volo(
+                12323,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                orarioArrivo,                      // orarioArrivo
+                25,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "Napoli",                       // aeroporto di origine
+                "Linate",
+                "2"// aeroporto di destinazione
+        );
+        Volo volo3 = new Volo(
+                22323,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                orarioArrivo,                      // orarioArrivo
+                0,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "Napoli",                       // aeroporto di origine
+                "Milano",
+                "1"// aeroporto di destinazione
         );
         sistema.aggiungiVolo(volo1);
+        sistema.aggiungiVolo(volo2);
+        sistema.aggiungiVolo(volo3);
         tabellaVoli.setModel(model);
         //visualizzazione voli
-        ArrayList<model.Volo> voli = sistema.visualizzaVoli();
-        if (voli!=null) {
-            for (int i = 0; i < voli.size(); i++)
-                model.addRow(new Object[]{voli.get(i).getCodiceVolo(), voli.get(i).getCompagniaAerea(), voli.get(i).getAeroportoOrigine(), voli.get(i).getAeroportoDestinazione(), voli.get(i).getOrarioArrivo(), voli.get(i).getRitardo(), voli.get(i).getStato()});
+        ArrayList<Volo> voli = sistema.visualizzaVoli();
+        if (voli != null) {
+            for (Volo v : voli) {
+                model.addRow(new Object[]{
+                        v.getCodiceVolo(),
+                        v.getCompagniaAerea(),
+                        v.getAeroportoOrigine(),
+                        v.getAeroportoDestinazione(),
+                        v.getOrarioArrivo(),
+                        v.getRitardo(),
+                        v.getStato(),
+                        v.getGate()
+                });
+            }
         }
 
-        if (tabellaVoli.getParent() instanceof JViewport) {
-        } else {
+        // Assicuro la corretta visualizzazione nella scroll pane
+        if (!(tabellaVoli.getParent() instanceof JViewport)) {
             voliPanel.removeAll();
             voliPanel.setLayout(new BorderLayout());
             voliPanel.add(new JScrollPane(tabellaVoli), BorderLayout.CENTER);
@@ -89,14 +122,12 @@ public class HomeUtente {
             }
         });
         //evento per andare alla GUI biglietti
-        cercaBigliettoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int numero = (Integer) numeroBiglietto.getValue();
-                Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
-                biglietto.frame.setVisible(true);
-                frame.setVisible(false);
-            }
+        // Azione bottone cerca biglietto (apre GUI biglietto)
+        cercaBigliettoButton.addActionListener(e -> {
+            int numero = (Integer) numeroBiglietto.getValue();
+            Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
+            biglietto.frame.setVisible(true);
+            frame.setVisible(false);
         });
         frame = new JFrame("Home");
         frame.setContentPane(FinestraPrincipale);
@@ -104,7 +135,7 @@ public class HomeUtente {
         frame.pack();
         frame.setSize(900,600);
         frame.setResizable(false);
-        frame.setLocation(200,200);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         tabellaVoli.addMouseListener(new MouseAdapter() {
             @Override

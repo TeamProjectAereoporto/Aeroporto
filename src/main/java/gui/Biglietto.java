@@ -68,5 +68,31 @@ public class Biglietto {
                 frame.dispose();
             }
         });
+        cancellaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        modificaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            int riga = tabellaBiglietti.getSelectedRow();
+            if(riga!=-1){
+                int conferma = JOptionPane.showConfirmDialog(null,
+                        "Sei sicuro di voler eliminare questo biglietto?",
+                        "Cancellazione biglietto",
+                        JOptionPane.YES_NO_OPTION);
+                if (conferma==JOptionPane.YES_OPTION){
+
+                }else{
+                    JOptionPane.showMessageDialog(null,
+                            "Seleziona un volo da eliminare!",
+                            "Errore",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+            }
+        });
     }
 }
