@@ -22,19 +22,13 @@ public class Sistema {
         admin = new Admin("saso","saso", "231223");
         tuttiIVoli = new ArrayList<>();
         tuttiIBiglietti = new ArrayList<>();
+        biglietto = new Prenotazione(312321123,"a3", Prenotazione.StatoPrenotazione.CONFERMATA, new Passeggero("", "", ""));
     }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
-    public void aggiungiUtenteGenerico(UtenteGenerico ug){
-        utentiGenerici.add(ug);
-    }
-    public void aggiungiAdmin(Admin a){
-        tantiAdmin.add(a);
-    }
     public void aggiungiVolo(Volo v){
         admin.aggiungiVoli(v);
-        //tuttiIVoli.add(v);
     }
     public ArrayList<Volo> visualizzaVoli(){
         return utente.visualizzaVoli();
@@ -46,7 +40,7 @@ public class Sistema {
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
     public ArrayList getBiglietti(String nome, long numeroBiglietto, UtenteGenerico utente){
-        return utente.cercaBiglietto(nome,numeroBiglietto, utente);
+        return utente.cercaBiglietto(nome,numeroBiglietto, utente, tuttiIBiglietti);
     }
     public int verificaUtenteP(String username, String psw){
         for(Utente u : utenti){

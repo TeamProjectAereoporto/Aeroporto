@@ -152,7 +152,7 @@ public class HomeUtente {
                         for (Object val : valori) {
                             System.out.println(" - " + val);
                         }
-                        Prenota prenotazione = new Prenota(frame, valori);
+                        Prenota prenotazione = new Prenota(frame, valori, sistema);
                         prenotazione.frame.setVisible(true);
                         frame.setVisible(false);
                     }

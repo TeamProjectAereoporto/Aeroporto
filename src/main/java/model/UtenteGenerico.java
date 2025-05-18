@@ -23,10 +23,10 @@ public class UtenteGenerico extends Utente {
         }
     }
     //ricerca per numero biglietto e nome
-    public ArrayList<Prenotazione> cercaBiglietto(String nome, long numeroBiglietto, UtenteGenerico acquirente) {
+    public ArrayList<Prenotazione> cercaBiglietto(String nome, long numeroBiglietto, UtenteGenerico acquirente, ArrayList<Prenotazione> biglietti) {
         ArrayList<Prenotazione> bigliettiTrovati = new ArrayList<>();
         // Verifica che stai cercando tra i tuoi stessi biglietti
-        if (acquirente == this) {
+        //if (acquirente == this) {
             if (nome.isEmpty() && numeroBiglietto == -1) {
                 return null;
             }
@@ -34,6 +34,7 @@ public class UtenteGenerico extends Utente {
             for (Prenotazione p : biglietti) {
                 boolean nomeMatch = !nome.isEmpty() && p.getPasseggero().getNome().equalsIgnoreCase(nome);
                 boolean numeroMatch = numeroBiglietto != -1 && p.getNumeroBiglietto() == numeroBiglietto;
+                System.out.println(p);
                 if ((nomeMatch && numeroMatch) || (nomeMatch && numeroBiglietto == -1) || (numeroMatch && nome.isEmpty())) {
                     System.out.println("sono dentro\n");
                     bigliettiTrovati.add(p);
@@ -42,7 +43,7 @@ public class UtenteGenerico extends Utente {
             if (bigliettiTrovati.isEmpty()) {
                 System.out.println("Nessun biglietto trovato");
             }
-        }
+        //}
 
         return bigliettiTrovati;
     }

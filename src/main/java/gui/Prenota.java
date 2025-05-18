@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Sistema;
+import model.Passeggero;
 import model.Prenotazione;
 
 import javax.swing.*;
@@ -18,9 +19,13 @@ public class Prenota {
     private JButton prenotaButton;
     private JButton annullaButton;
     private JPanel finestraPrincipale;
+    private JTextField nomeField;
+    private JTextField cognomeField;
+    private JTextField ciFIeld;
     public static JFrame frame;
-    private Sistema controller;
-    public Prenota(JFrame chiamante, Object[] valori){
+    private Sistema sistema;
+    public Prenota(JFrame chiamante, Object[] valori, Sistema sistema){
+        this.sistema=sistema;
         //setting label informazioni volo
         codiceVoloField.setText((valori[0].toString()));
         compagniaAereaField.setText((String) valori[1]);
@@ -39,10 +44,20 @@ public class Prenota {
         prenotaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Long numeroBiglietto = controller.creaBiglietto();
-                chiamante.setVisible(true);
-                frame.setVisible(false);
-                frame.dispose();
+                String nome= nomeField.getText();
+                String cognome = cognomeField.getText();
+                String ci = ciFIeld.getText();
+                if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
+                    Long numeroBiglietto = sistema.creaBiglietto();
+                    Prenotazione biglietto = new Prenotazione(numeroBiglietto,
+                            "A5",
+                            Prenotazione.StatoPrenotazione.CONFERMATA,
+                            new Passeggero(nome,cognome,ci));
+                    sistema.aggiungiBiglietto(biglietto);
+                    chiamante.setVisible(true);
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
             }
         });
         annullaButton.addActionListener(new ActionListener() {

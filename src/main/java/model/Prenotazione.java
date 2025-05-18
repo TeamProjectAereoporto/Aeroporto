@@ -7,6 +7,7 @@ public class Prenotazione {
     private String postoAssegnato;
     private StatoPrenotazione stato;
     private Passeggero passeggero;
+    private Volo volo;
     public enum StatoPrenotazione {
         CONFERMATA(1),
         IN_ATTESA(2),
@@ -83,5 +84,8 @@ public class Prenotazione {
             }
         }
         return  true;
+    }
+    public String toString(){
+        return "Biglietto: "+numeroBiglietto+"\nPosto: "+postoAssegnato+ "\nStato: "+stato+"\nnome "+ passeggero.getNome()+"\ncognome "+passeggero.getCognome()+"\nci "+ passeggero.getNumeroDocumento();
     }
 }
