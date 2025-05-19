@@ -36,6 +36,9 @@ public class Sistema {
     public void aggiungiBiglietto(Prenotazione biglietto){
         tuttiIBiglietti.add(biglietto);
     }
+    public boolean cancellaBiglietto(long numeroBiglietto){
+       return biglietto.cancellaBiglietto(tuttiIBiglietti,numeroBiglietto);
+    }
     public Long creaBiglietto(){
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }

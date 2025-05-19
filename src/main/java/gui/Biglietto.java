@@ -78,7 +78,20 @@ public class Biglietto {
                             "Cancellazione biglietto",
                             JOptionPane.YES_NO_OPTION);
                     if (conferma==JOptionPane.YES_OPTION){
-
+                        DefaultTableModel model1 = (DefaultTableModel) tabellaBiglietti.getModel();
+                        Object valoreNumeroBiglietto = model1.getValueAt(riga, 3); // colonna "NumeroCarta"
+                        if (valoreNumeroBiglietto != null) {
+                            try {
+                                long numeroBiglietto = Long.parseLong(valoreNumeroBiglietto.toString());
+                                sistema.cancellaBiglietto(numeroBiglietto); // Rimozione dal sistema
+                                model1.removeRow(riga); // Rimozione dalla tabella
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Numero biglietto non valido!",
+                                        "Errore",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
                     }else{
                         JOptionPane.showMessageDialog(null,
                                 "Seleziona un volo da eliminare!",

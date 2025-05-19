@@ -85,6 +85,15 @@ public class Prenotazione {
         }
         return  true;
     }
+    public boolean cancellaBiglietto(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
+        for(Prenotazione p : biglietti){
+            if(p.getNumeroBiglietto()==numeroBiglietto){
+                biglietti.remove(p);
+                return true;
+            }
+        }
+        return false;
+    }
     public String toString(){
         return "Biglietto: "+numeroBiglietto+"\nPosto: "+postoAssegnato+ "\nStato: "+stato+"\nnome "+ passeggero.getNome()+"\ncognome "+passeggero.getCognome()+"\nci "+ passeggero.getNumeroDocumento();
     }
