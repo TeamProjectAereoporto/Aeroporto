@@ -24,11 +24,12 @@ public class Prenotazione {
         }
     }
     //Costruttore
-    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero) {
+    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero, Volo volo) {
         this.numeroBiglietto = numeroBiglietto;
         this.postoAssegnato = postoAssegnato;
         this.stato = stato;
         this.passeggero=passeggero;
+        this.volo=volo;
     }
     //get statoPrenotazione
     public StatoPrenotazione getStato() {
@@ -58,9 +59,14 @@ public class Prenotazione {
     public void setPasseggero(Passeggero passeggero){
         this.passeggero=passeggero;
     }
+    //return passeggero
     public Passeggero getPasseggero(){
         return passeggero;
     }
+    //set passeggero
+    public void setVolo(Volo volo) {this.volo = volo;}
+    //return passeggero
+    public Volo getVolo() {return volo;}
     //crea numeroBiglietto
     public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
         Random casuale = new Random();
@@ -85,14 +91,14 @@ public class Prenotazione {
         }
         return  true;
     }
-    public boolean cancellaBiglietto(ArrayList<Prenotazione> biglietti, long numeroBiglietto){
-        for(Prenotazione p : biglietti){
+    public boolean cancellaBiglietto(ArrayList<Prenotazione> biglietti, long numeroBiglietto, ArrayList<Prenotazione> bigliettiAcquistati){
+        for(Prenotazione p : bigliettiAcquistati){
             if(p.getNumeroBiglietto()==numeroBiglietto){
-                biglietti.remove(p);
+                bigliettiAcquistati.remove(p);
                 return true;
             }
         }
-        return false;
+            return false;
     }
     public String toString(){
         return "Biglietto: "+numeroBiglietto+"\nPosto: "+postoAssegnato+ "\nStato: "+stato+"\nnome "+ passeggero.getNome()+"\ncognome "+passeggero.getCognome()+"\nci "+ passeggero.getNumeroDocumento();

@@ -35,7 +35,7 @@ public class AdminPage {
         }
 
         aggiungiVoloButton.addActionListener(e -> {
-            AggiungiVolo aggiungiVolo = new AggiungiVolo(model);
+            AggiungiVolo aggiungiVolo = new AggiungiVolo(model, controller);
             JFrame finestra = new JFrame("Aggiungi Volo");
             finestra.setContentPane(aggiungiVolo.getPrincipale());
             finestra.pack();
