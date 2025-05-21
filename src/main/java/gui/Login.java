@@ -23,6 +23,7 @@ public class Login {
     private JPasswordField campoPassword;
     private JLabel username;
     private JLabel password;
+    private JButton registratiButton;
     /**
      * The constant frame.
      */
@@ -68,6 +69,14 @@ public class Login {
             @Override
             public void mouseExited(MouseEvent e) {
                 invio.setBackground(new Color(60, 60, 60));
+            }
+        });
+        registratiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Register register = new Register(frame);
+                Register.frame.setVisible(true);
+                frame.setVisible(false);
             }
         });
     }
