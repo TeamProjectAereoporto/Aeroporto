@@ -27,7 +27,12 @@ public class AdminPage {
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
 
-        DefaultTableModel model = new DefaultTableModel(colonne, 0);
+        DefaultTableModel model = new DefaultTableModel(colonne, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tabellaVoli.setModel(model);
 
         if (tabellaVoli.getParent() instanceof JViewport) {
@@ -44,7 +49,7 @@ public class AdminPage {
             JFrame finestra = new JFrame("Aggiungi Volo");
             finestra.setContentPane(aggiungiVolo.getPrincipale());
             finestra.pack();
-            finestra.setSize(700, 290);
+            finestra.setSize(700, 340);
             finestra.setLocation(500, 400);
             finestra.setVisible(true);
         });
@@ -92,6 +97,7 @@ public class AdminPage {
                     frame.setContentPane(modificaVoloPanel.getPrincipale());
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame.pack();
+                    frame.setSize(700, 340);
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 } else {

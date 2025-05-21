@@ -81,7 +81,7 @@ public class AggiungiVolo {
         frame.setContentPane(av.getPrincipale());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(700, 350);
+        frame.setSize(700, 340);
         frame.setLocation(400, 300);
         frame.setVisible(true);
     }
