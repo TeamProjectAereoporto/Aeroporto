@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class AggiungiVolo {
-    static Sistema sistema = new Sistema();
+    static Sistema sistema;
     private JLabel aggiungiVoloLable;
     private JLabel codiceVoloLable;
     private JTextField codiceVoloField;
@@ -38,6 +38,7 @@ public class AggiungiVolo {
     }
 
     public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema) {
+        this.sistema=sistema;
         this.tableModel = tableModel;
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
@@ -49,16 +50,16 @@ public class AggiungiVolo {
 
         arrivoButton.addActionListener(e -> {
             gateField.setText("");
+            gateField.setEnabled(false);
             gateLabel.setVisible(false);
             gateField.setVisible(false);
-            gateField.setEnabled(false);
             destinazioneField.setText("Capodichino");
             aeroportoOrigineField.setText("");
         });
         partenzaButton.addActionListener(e -> {
+            gateField.setEnabled(true);
             gateLabel.setVisible(true);
             gateField.setVisible(true);
-            gateField.setEnabled(true);
             aeroportoOrigineField.setText("Capodichino");
             destinazioneField.setText("");
         });

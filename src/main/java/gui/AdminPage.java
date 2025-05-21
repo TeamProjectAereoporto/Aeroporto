@@ -22,8 +22,11 @@ public class AdminPage {
     private JTable tabellaVoli;
     private JButton modificaVoloButton;
     public static JFrame frame;
+    private Sistema sistema;
 
     public AdminPage(JFrame chiamante, Sistema controller) {
+        this.sistema = controller;
+
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
 
@@ -33,6 +36,7 @@ public class AdminPage {
                 return false;
             }
         };
+
         tabellaVoli.setModel(model);
 
         if (tabellaVoli.getParent() instanceof JViewport) {

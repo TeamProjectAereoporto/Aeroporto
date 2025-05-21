@@ -33,7 +33,7 @@ public class ModificaVolo {
     private JButton salvaButton;
     private JButton salvaVoloButton;
     private JButton annullaButton;
-
+    private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
 
@@ -41,6 +41,8 @@ public class ModificaVolo {
 
         this.tableModel = tableModel;
         this.voloModificato = voloDaModificare;
+        this.sistema = sistema;
+
 
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
@@ -56,35 +58,16 @@ public class ModificaVolo {
         gateField.setText(voloDaModificare.getGate());
         statoVoloCombo.setSelectedItem(voloDaModificare.getStato().toString());
 
-        // Imposta radio button e visibilità gate in base al volo
         if (voloDaModificare.getGate() == null || voloDaModificare.getGate().isEmpty()) {
-            arrivoButton.setSelected(true);
-            gateLabel.setVisible(false);
-            gateField.setVisible(false);
-            gateField.setEnabled(false);
+            impostaComeArrivo();
         } else {
-            partenzaButton.setSelected(true);
-            gateLabel.setVisible(true);
-            gateField.setVisible(true);
-            gateField.setEnabled(true);
+            impostaComePartenza();
         }
 
-        arrivoButton.addActionListener(e -> {
-            gateField.setText("");
-            gateLabel.setVisible(false);
-            gateField.setVisible(false);
-            gateField.setEnabled(false);
-            aeroportoDestinazioneField.setText("Capodichino");
-            aeroportoOrigineField.setText("");
-        });
+        arrivoButton.addActionListener(e -> impostaComeArrivo());
+        partenzaButton.addActionListener(e -> impostaComePartenza());
 
-        partenzaButton.addActionListener(e -> {
-            gateLabel.setVisible(true);
-            gateField.setVisible(true);
-            gateField.setEnabled(true);
-            aeroportoOrigineField.setText("Capodichino");
-            aeroportoDestinazioneField.setText("");
-        });
+
 
         salvaButton.addActionListener(e -> salvaVolo());
         annullaButton.addActionListener(e -> {
@@ -97,6 +80,25 @@ public class ModificaVolo {
 
     public JPanel getPrincipale() {
         return principale;
+    }
+
+    private void impostaComeArrivo() {
+        arrivoButton.setSelected(true);
+        gateField.setEnabled(false);
+        gateField.setText("");
+        gateLabel.setVisible(false);
+        gateField.setVisible(false);
+        aeroportoDestinazioneField.setText("Capodichino");
+        aeroportoOrigineField.setText("");
+    }
+
+    private void impostaComePartenza() {
+        partenzaButton.setSelected(true);
+        gateField.setEnabled(true);
+        gateLabel.setVisible(true);
+        gateField.setVisible(true);
+        aeroportoOrigineField.setText("Capodichino");
+        aeroportoDestinazioneField.setText("");
     }
 
     private void salvaVolo() {
