@@ -1,0 +1,43 @@
+package gui;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Register {
+    private JTextField usernameField;
+    private JTextField textField2;
+    private JPasswordField passwordField1;
+    private JLabel emailField;
+    private JLabel passwordField;
+    private JButton inviaButton;
+    private JButton annullaButton;
+    private JPanel finestraPrincipale;
+    public static JFrame frame;
+    public Register(JFrame chiamante){
+        frame = new JFrame("Registra il tuo account");
+        frame.setContentPane(finestraPrincipale);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        inviaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String email = emailField.getText();
+                String password = passwordField.getText();
+                boolean usernameBool =
+                if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty()){
+
+                }
+            }
+        });
+        annullaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}

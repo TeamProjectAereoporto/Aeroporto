@@ -7,7 +7,7 @@ public class Volo {
     private String compagniaAerea;
     private String aeroportoOrigine;
     private String aeroportoDestinazione;
-    private Date orarioArrivo;
+    private String orarioArrivo;
     private int ritardo; //se lo stato del volo è indicato come in ritardo, allora qui verrà salvato il tempo di ritardo in minuti/ore.
     private statoVolo stato;
     private String gate;
@@ -35,7 +35,7 @@ public class Volo {
         return codiceVolo;
     }
 
-    public Date getOrarioArrivo() {
+    public String getOrarioArrivo() {
         return orarioArrivo;
     }
 
@@ -78,7 +78,7 @@ public class Volo {
         this.compagniaAerea = compagniaAerea;
     }
 
-    public void setOrarioArrivo(Date orarioArrivo) {
+    public void setOrarioArrivo(String orarioArrivo) {
         this.orarioArrivo = orarioArrivo;
     }
 
@@ -94,7 +94,7 @@ public class Volo {
         this.gate = gate;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea, Date orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
+    public Volo(int codiceVolo, String compagniaAerea, String orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;
@@ -105,7 +105,7 @@ public class Volo {
         this.gate = gate;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea,Date orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
+    public Volo(int codiceVolo, String compagniaAerea,String orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.orarioArrivo = orarioArrivo;

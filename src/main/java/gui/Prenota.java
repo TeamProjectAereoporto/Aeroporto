@@ -3,10 +3,19 @@ package gui;
 import controller.Sistema;
 import model.Passeggero;
 import model.Prenotazione;
+import model.Volo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 public class Prenota {
     private JLabel codiceVoloField;
@@ -32,7 +41,7 @@ public class Prenota {
         origineField.setText((String) valori[2]);
         arrivoField.setText((String) valori[3]);
         orarioField.setText((valori[4].toString()));
-        ritardoField.setText((valori[5].toString()+"'"));
+        ritardoField.setText((valori[5].toString()));
         statoField.setText(valori[6].toString());
         //caratteristiche essenziali frame
         frame = new JFrame("Prenota Biglietto");
@@ -48,11 +57,21 @@ public class Prenota {
                 String cognome = cognomeField.getText();
                 String ci = ciFIeld.getText();
                 if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
-                    Long numeroBiglietto = sistema.creaBiglietto();
+                    Long numeroBiglietto = sistema.creaNumBiglietto();
                     Prenotazione biglietto = new Prenotazione(numeroBiglietto,
                             "A5",
                             Prenotazione.StatoPrenotazione.CONFERMATA,
-                            new Passeggero(nome,cognome,ci));
+                            new Passeggero(nome,cognome,ci),
+                            new Volo(
+                                    Integer.parseInt(codiceVoloField.getText()),
+                                    compagniaAereaField.getText(),
+                                    orarioField.getText(),
+                                    Integer.parseInt(ritardoField.getText()),
+                                    Volo.statoVolo.valueOf(statoField.getText()),
+                                    origineField.getText(),
+                                    arrivoField.getText(),
+                                    "gate"//si deve correggere
+                            ));
                     sistema.aggiungiBiglietto(biglietto);
                     chiamante.setVisible(true);
                     frame.setVisible(false);

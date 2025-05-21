@@ -1,8 +1,7 @@
 package controller;
 import model.*;
-
 import java.util.ArrayList;
-import java.util.Random;
+
 
 public class Sistema {
     public ArrayList<UtenteGenerico> utentiGenerici;
@@ -22,7 +21,7 @@ public class Sistema {
         admin = new Admin("saso","saso", "231223");
         tuttiIVoli = new ArrayList<>();
         tuttiIBiglietti = new ArrayList<>();
-        biglietto = new Prenotazione(312321123,"a3", Prenotazione.StatoPrenotazione.CONFERMATA, new Passeggero("", "", ""));
+        biglietto = new Prenotazione(312321123,"a3", Prenotazione.StatoPrenotazione.CONFERMATA, new Passeggero("", "", ""), new Volo(21, "", "15:00",12_21, Volo.statoVolo.PROGRAMMATO, "","","2"));
     }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
@@ -34,16 +33,17 @@ public class Sistema {
         return utente.visualizzaVoli();
     }
     public void aggiungiBiglietto(Prenotazione biglietto){
+        utente.prenotaVolo(biglietto);
         tuttiIBiglietti.add(biglietto);
     }
     public boolean cancellaBiglietto(long numeroBiglietto){
-       return biglietto.cancellaBiglietto(tuttiIBiglietti,numeroBiglietto);
+       return biglietto.cancellaBiglietto(tuttiIBiglietti,numeroBiglietto, utente.bigliettiAcquistati);
     }
-    public Long creaBiglietto(){
+    public Long creaNumBiglietto(){
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
-    public ArrayList getBiglietti(String nome, long numeroBiglietto, UtenteGenerico utente){
-        return utente.cercaBiglietto(nome,numeroBiglietto, utente, tuttiIBiglietti);
+    public ArrayList getBiglietti(String nome, int codiceVolo){
+        return utente.cercaBiglietto(nome,codiceVolo);
     }
     public int verificaUtenteP(String username, String psw){
         for(Utente u : utenti){

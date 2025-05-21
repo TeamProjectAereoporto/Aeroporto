@@ -1,14 +1,11 @@
 package gui;
 
 import controller.Sistema;
-import model.Prenotazione;
 import model.Volo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -24,8 +21,9 @@ public class HomeUtente {
     private JPanel FinestraPrincipale;
     private JTable tabellaVoli;
     private JPanel voliPanel;
-    private JSpinner numeroBiglietto;
+    private JTextField numeroBiglietto;
     private JTextField nome;
+    private JLabel titoloB;
     /**
      * The constant frame.
      */
@@ -42,15 +40,15 @@ public class HomeUtente {
         DefaultTableModel model = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
-                return isAdmin; // Nessuna cella è modificabile
+                return isAdmin; // Nessuna cella è modificabile per gli utenti
             }
         };
         //debbubing
-        Date orarioArrivo = new Date(); // ora attuale, oppure puoi usare un altro costruttore per una data specifica
+         // ora attuale, oppure puoi usare un altro costruttore per una data specifica
         Volo volo1 = new Volo(
-                12345,                   // codiceVolo
+                1234,                   // codiceVolo
                 "Alitalia",                        // compagniaAerea
-                orarioArrivo,                      // orarioArrivo
+                "12:13",                      // orarioArrivo
                 15,                                // ritardo in minuti
                 Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
                 "Fiumicino",                       // aeroporto di origine
@@ -58,9 +56,9 @@ public class HomeUtente {
                 "3"// aeroporto di destinazione
         );
         Volo volo2 = new Volo(
-                12323,                   // codiceVolo
+                1232,                   // codiceVolo
                 "Alitalia",                        // compagniaAerea
-                orarioArrivo,                      // orarioArrivo
+                "12:15",                      // orarioArrivo
                 25,                                // ritardo in minuti
                 Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
                 "Napoli",                       // aeroporto di origine
@@ -68,9 +66,9 @@ public class HomeUtente {
                 "2"// aeroporto di destinazione
         );
         Volo volo3 = new Volo(
-                22323,                   // codiceVolo
+                2232,                   // codiceVolo
                 "Alitalia",                        // compagniaAerea
-                orarioArrivo,                      // orarioArrivo
+                "13:00",                      // orarioArrivo
                 0,                                // ritardo in minuti
                 Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
                 "Napoli",                       // aeroporto di origine
@@ -124,10 +122,19 @@ public class HomeUtente {
         //evento per andare alla GUI biglietti
         // Azione bottone cerca biglietto (apre GUI biglietto)
         cercaBigliettoButton.addActionListener(e -> {
-            int numero = (Integer) numeroBiglietto.getValue();
-            Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
-            biglietto.frame.setVisible(true);
-            frame.setVisible(false);
+            if(!numeroBiglietto.getText().isEmpty() || !nome.getText().isEmpty()) {
+                int numero =-1;
+                if(!numeroBiglietto.getText().isEmpty()){
+                if (!numeroBiglietto.getText().matches("\\d{4}") && !numeroBiglietto.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(FinestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                 numero = Integer.parseInt(numeroBiglietto.getText());
+                }
+                Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
+                biglietto.frame.setVisible(true);
+                frame.setVisible(false);
+            }
         });
         frame = new JFrame("Home");
         frame.setContentPane(FinestraPrincipale);
