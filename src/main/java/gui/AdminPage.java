@@ -1,12 +1,16 @@
 package gui;
 
 import controller.Sistema;
+import model.Volo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static gui.AggiungiVolo.sistema;
+import static javax.swing.UIManager.get;
 
 public class AdminPage {
     private JPanel principale;
@@ -16,13 +20,14 @@ public class AdminPage {
     private JPanel voliPanel;
     private JLabel voliLable;
     private JTable tabellaVoli;
+    private JButton modificaVoloButton;
     public static JFrame frame;
 
-    public AdminPage(JFrame chiamante, Sistema controller){
+    public AdminPage(JFrame chiamante, Sistema controller) {
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
 
-        DefaultTableModel model = new DefaultTableModel(colonne,0);
+        DefaultTableModel model = new DefaultTableModel(colonne, 0);
         tabellaVoli.setModel(model);
 
         if (tabellaVoli.getParent() instanceof JViewport) {
@@ -40,7 +45,7 @@ public class AdminPage {
             finestra.setContentPane(aggiungiVolo.getPrincipale());
             finestra.pack();
             finestra.setSize(700, 290);
-            finestra.setLocation(400, 300);
+            finestra.setLocation(500, 400);
             finestra.setVisible(true);
         });
 
@@ -68,8 +73,31 @@ public class AdminPage {
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(800,400);
-        frame.setLocation(400,300);
+        frame.setSize(800, 400);
+        frame.setLocation(400, 300);
         frame.setVisible(true);
+
+        modificaVoloButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int selectedRow = tabellaVoli.getSelectedRow();
+                if (selectedRow != -1) {
+                    Volo voloSelezionato = sistema.visualizzaVoli().get(selectedRow);
+                    DefaultTableModel tableModel = (DefaultTableModel) tabellaVoli.getModel();
+
+                    ModificaVolo modificaVoloPanel = new ModificaVolo(tableModel, sistema, voloSelezionato);
+
+                    JFrame frame = new JFrame("Modifica Volo");
+                    frame.setContentPane(modificaVoloPanel.getPrincipale());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 }

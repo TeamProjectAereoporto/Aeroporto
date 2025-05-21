@@ -24,8 +24,8 @@ public class AggiungiVolo {
     private JLabel statoVoloLable;
     private JComboBox statoVoloCombo;
     private JPanel principale;
-    private JButton salvaVoloButton;
-    private JButton annullaButton;
+    private JButton salvaModificheButton;
+    private JButton annullaModificheButton;
     private JLabel gateLabel;
     private JTextField gateField;
     private JRadioButton arrivoButton;
@@ -63,8 +63,8 @@ public class AggiungiVolo {
             destinazioneField.setText("");
         });
 
-        salvaVoloButton.addActionListener(e -> salvaVolo());
-        annullaButton.addActionListener(e -> {
+        salvaModificheButton.addActionListener(e -> salvaVolo());
+        annullaModificheButton.addActionListener(e -> {
             JFrame finestra = (JFrame) principale.getTopLevelAncestor();
             if (finestra != null) {
                 finestra.dispose();

@@ -47,4 +47,8 @@ public class Utente {
     public void setRuolo(String ruolo) {
         this.ruolo = ruolo;
     }
+
+    public ArrayList getVoliGestiti(){
+        return voliGestiti;
+    }
 }

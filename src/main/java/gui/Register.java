@@ -27,7 +27,7 @@ public class Register {
                 String username = usernameField.getText();
                 String email = emailField.getText();
                 String password = passwordField.getText();
-                boolean usernameBool =
+
                 if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty()){
 
                 }
