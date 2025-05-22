@@ -46,6 +46,7 @@
             </constraints>
             <properties>
               <text value="Modifica Volo"/>
+              <toolTipText value="seleziona un volo con il cursore per modificarne gli attributi"/>
             </properties>
           </component>
         </children>
