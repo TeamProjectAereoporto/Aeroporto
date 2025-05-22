@@ -177,6 +177,7 @@ public class HomeUtente {
             public void actionPerformed(ActionEvent e) {
                 sistema.logout(sistema.utente);
                 Login login = new Login(frameChiamante,sistema);
+                login.frame.getRootPane().setDefaultButton(login.getInvio());
                 login.frame.setVisible(true);
                 frame.setVisible(false);
                 frame.dispose();

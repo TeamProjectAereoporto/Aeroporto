@@ -26,6 +26,11 @@ public class Login {
     private JLabel username;
     private JLabel password;
     private JButton registratiButton;
+
+    public JButton getInvio() {
+        return invio;
+    }
+
     /**
      * The constant frame.
      */
@@ -35,7 +40,7 @@ public class Login {
         this.frame=frame;
         sistema.aggiungiUtente(new UtenteGenerico("karol","karol"));
         sistema.aggiungiUtente(new Admin("saso","saso","123"));
-
+        frame.getRootPane().setDefaultButton(invio);
         invio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +63,12 @@ public class Login {
                         frame.setVisible(false);
                         frame.dispose();
                     }else{
-
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Credenziali errate. Riprova.",
+                                "Login Fallito",
+                                JOptionPane.WARNING_MESSAGE
+                        );
                     }
                 }
             }

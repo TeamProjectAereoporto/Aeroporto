@@ -53,10 +53,10 @@ public class Prenota {
         prenotaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nome= nomeField.getText();
-                String cognome = cognomeField.getText();
-                String ci = ciFIeld.getText();
-                if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
+                String nome= nomeField.getText().trim().toLowerCase();
+                String cognome = cognomeField.getText().trim().toLowerCase();
+                String ci = ciFIeld.getText().trim().toLowerCase();
+                if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty() && ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                     Long numeroBiglietto = sistema.creaNumBiglietto();
                     Prenotazione biglietto = new Prenotazione(numeroBiglietto,
                             "A5",
