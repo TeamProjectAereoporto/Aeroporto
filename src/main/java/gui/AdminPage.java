@@ -8,9 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.border.EmptyBorder;
 
-import static gui.AggiungiVolo.sistema;
-import static javax.swing.UIManager.get;
 
 public class AdminPage {
     private JPanel principale;
@@ -26,7 +25,6 @@ public class AdminPage {
 
     public AdminPage(JFrame chiamante, Sistema controller) {
         this.sistema = controller;
-
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
 
@@ -52,9 +50,10 @@ public class AdminPage {
             AggiungiVolo aggiungiVolo = new AggiungiVolo(model, controller);
             JFrame finestra = new JFrame("Aggiungi Volo");
             finestra.setContentPane(aggiungiVolo.getPrincipale());
+            finestra.getRootPane().setDefaultButton(aggiungiVolo.getSalvaButton());
             finestra.pack();
-            finestra.setSize(700, 340);
-            finestra.setLocation(500, 400);
+            finestra.setSize(700, 500);
+            finestra.setLocation(400, 150);
             finestra.setVisible(true);
         });
 
@@ -82,14 +81,12 @@ public class AdminPage {
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(800, 400);
-        frame.setLocation(400, 300);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 int selectedRow = tabellaVoli.getSelectedRow();
                 if (selectedRow != -1) {
                     Volo voloSelezionato = sistema.visualizzaVoli().get(selectedRow);
@@ -99,14 +96,80 @@ public class AdminPage {
 
                     JFrame frame = new JFrame("Modifica Volo");
                     frame.setContentPane(modificaVoloPanel.getPrincipale());
+                    frame.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame.pack();
-                    frame.setSize(700, 340);
-                    frame.setLocationRelativeTo(null);
+                    frame.setSize(700, 500);
+                    frame.setLocation(400, 150);
                     frame.setVisible(true);
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        applyStyles();
+    }
+    private void applyStyles() {
+        // Palette colori aeroportuale
+        Color primaryBlue = new Color(0, 95, 135);
+        Color secondaryBlue = new Color(0, 120, 167);
+        Color background = new Color(245, 245, 245);
+        Color errorRed = new Color(231, 76, 60);
+        Color successGreen = new Color(76, 175, 80);
+
+        // Font
+        Font titleFont = new Font("Segoe UI", Font.BOLD, 24);
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
+        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
+        Font tableFont = new Font("Segoe UI", Font.PLAIN, 12);
+
+        // Stile generale
+        principale.setBackground(background);
+        principale.setBorder(new EmptyBorder(15, 15, 15, 15));
+        voliPanel.setBackground(background);
+
+        // Titolo
+        adminTitle.setFont(titleFont);
+        adminTitle.setForeground(primaryBlue);
+        adminTitle.setBorder(new EmptyBorder(0, 0, 15, 0));
+
+        // Etichette
+        voliLable.setFont(labelFont);
+        voliLable.setForeground(primaryBlue);
+
+        // Stile pulsanti
+        styleButton(aggiungiVoloButton, successGreen, Color.WHITE, buttonFont);
+        styleButton(modificaVoloButton, secondaryBlue, Color.WHITE, buttonFont);
+        styleButton(eliminaVoloButton, errorRed, Color.WHITE, buttonFont);
+
+        // Stile tabella
+        tabellaVoli.setFont(tableFont);
+        tabellaVoli.setRowHeight(25);
+        tabellaVoli.setShowGrid(false);
+        tabellaVoli.setIntercellSpacing(new Dimension(0, 0));
+        tabellaVoli.setSelectionBackground(new Color(220, 240, 255));
+        tabellaVoli.getTableHeader().setFont(labelFont);
+        tabellaVoli.getTableHeader().setBackground(primaryBlue);
+        tabellaVoli.getTableHeader().setForeground(Color.WHITE);
+        tabellaVoli.getTableHeader().setReorderingAllowed(false);
+    }
+
+    private void styleButton(JButton button, Color bg, Color fg, Font font) {
+        button.setFont(font);
+        button.setBackground(bg);
+        button.setForeground(fg);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Effetto hover
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(bg.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bg);
             }
         });
     }

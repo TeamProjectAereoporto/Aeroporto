@@ -10,7 +10,6 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Login");
             Sistema sistema = new Sistema();
-            URL imageUrl = Main.class.getResource("sfondo.jpg");
             frame.setContentPane(new Login(frame,sistema).getLogin());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();

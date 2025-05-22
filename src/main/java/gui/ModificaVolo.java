@@ -4,10 +4,11 @@ import controller.Sistema;
 import model.Volo;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class ModificaVolo {
-    private JPanel rootPanel;
     private JPanel principale;
     private JLabel modificaVoloLabel;
     private JLabel codiceVoloLabel;
@@ -38,16 +39,12 @@ public class ModificaVolo {
     private Volo voloModificato;
 
     public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare) {
-
         this.tableModel = tableModel;
         this.voloModificato = voloDaModificare;
         this.sistema = sistema;
-
-
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
         partenzaArrivo.add(arrivoButton);
-
         // Carica i dati del volo nei campi
         codiceVoloField.setText(String.format("%04d", voloDaModificare.getCodiceVolo()));
         compagniaAereaField.setText(voloDaModificare.getCompagniaAerea());
@@ -57,13 +54,12 @@ public class ModificaVolo {
         ritardoField.setText(String.valueOf(voloDaModificare.getRitardo()));
         gateField.setText(voloDaModificare.getGate());
         statoVoloCombo.setSelectedItem(voloDaModificare.getStato().toString());
-
         if (voloDaModificare.getGate() == null || voloDaModificare.getGate().isEmpty()) {
             impostaComeArrivo();
         } else {
             impostaComePartenza();
         }
-
+        applyStyles();
         arrivoButton.addActionListener(e -> impostaComeArrivo());
         partenzaButton.addActionListener(e -> impostaComePartenza());
 
@@ -76,6 +72,19 @@ public class ModificaVolo {
                 finestra.dispose();
             }
         });
+
+
+    }
+
+    public JButton getSalvaButton() {
+        return salvaButton;
+    }
+
+    public void impostaDefaultButton() {
+        JFrame frame = (JFrame) principale.getTopLevelAncestor();
+        if (frame != null) {
+            frame.getRootPane().setDefaultButton(salvaButton);
+        }
     }
 
     public JPanel getPrincipale() {
@@ -98,7 +107,7 @@ public class ModificaVolo {
         gateLabel.setVisible(true);
         gateField.setVisible(true);
         aeroportoOrigineField.setText("Capodichino");
-
+        aeroportoDestinazioneField.setText("");
     }
 
     private void salvaVolo() {
@@ -110,6 +119,8 @@ public class ModificaVolo {
         String ritardo = ritardoField.getText();
         String gate = gateField.getText();
         String stato = (String) statoVoloCombo.getSelectedItem();
+        Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
+
 
         boolean partenzaButtonSelected = partenzaButton.isSelected();
 
@@ -123,7 +134,15 @@ public class ModificaVolo {
             JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (!gate.matches("[A-Z][1-9]")) {
+            JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        if(!orario.matches("([0-9]|1\\d|2[0-3]):[0-5]\\d")){
+            JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String codiceInTabella = tableModel.getValueAt(i, 0).toString();
             if (codiceInTabella.equals(codiceVolo) && voloModificato.getCodiceVolo() != Integer.parseInt(codiceVolo)) {
@@ -135,7 +154,6 @@ public class ModificaVolo {
         try {
             int codice = Integer.parseInt(codiceVolo);
             int rit = Integer.parseInt(ritardo);
-            Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
 
             voloModificato.setCodiceVolo(codice);
             voloModificato.setCompagniaAerea(compagniaAerea);
@@ -169,6 +187,86 @@ public class ModificaVolo {
             JOptionPane.showMessageDialog(principale, "Ritardo o codice volo non validi", "Errore", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(principale, "Stato del volo non valido", "Errore", JOptionPane.ERROR_MESSAGE);
+
+
         }
+    }
+
+    private void applyStyles() {
+        // Palette colori aeroportuale
+        Color primaryBlue = new Color(0, 95, 135);
+        Color secondaryBlue = new Color(0, 120, 167);
+        Color background = new Color(245, 245, 245);
+        Color errorRed = new Color(231, 76, 60);
+        Color successGreen = new Color(76, 175, 80);
+
+        // Font
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
+        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
+
+        // Stile generale
+        principale.setBackground(background);
+        principale.setBorder(new EmptyBorder(15, 15, 15, 15));
+        principale.setBackground(background);
+
+        // Stile etichette
+        for (JLabel label : new JLabel[]{
+                modificaVoloLabel, codiceVoloLabel, compagniaAereaLabel,
+                aeroportoOrigineLabel, aeroportoDestinazioneLabel, orarioDiArrivoLabel,
+                ritardoLabel, gateLabel, voloInLabel, statoVoloLabel
+        }) {
+            label.setFont(labelFont);
+            label.setForeground(primaryBlue);
+        }
+
+        // Stile campi testo
+        for (JTextField field : new JTextField[]{
+                codiceVoloField, compagniaAereaField, aeroportoOrigineField,
+                aeroportoDestinazioneField, orarioField, ritardoField, gateField
+        }) {
+            field.setFont(fieldFont);
+            field.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(204, 204, 204)),
+                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
+            ));
+            field.setBackground(Color.WHITE);
+        }
+
+        // Stile combo box
+        statoVoloCombo.setFont(fieldFont);
+        statoVoloCombo.setBackground(Color.WHITE);
+        statoVoloCombo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(204, 204, 204)),
+                BorderFactory.createEmptyBorder(2, 8, 2, 8)
+        ));
+
+        // Stile radio buttons
+        for (JRadioButton rb : new JRadioButton[]{arrivoButton, partenzaButton}) {
+            rb.setFont(fieldFont);
+            rb.setBackground(background);
+            rb.setFocusPainted(false);
+        }
+
+        // Stile pulsanti
+        styleButton(salvaButton, successGreen, Color.WHITE, buttonFont);
+        styleButton(annullaButton, background, primaryBlue, buttonFont);
+        annullaButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(primaryBlue),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+        ));
+
+        // Titolo finestra
+        modificaVoloLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        modificaVoloLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
+    }
+
+    private void styleButton(JButton button, Color bg, Color fg, Font font) {
+        button.setFont(font);
+        button.setBackground(bg);
+        button.setForeground(fg);
+        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }

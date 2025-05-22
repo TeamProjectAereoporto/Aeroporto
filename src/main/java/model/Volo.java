@@ -17,7 +17,7 @@ public class Volo {
         PROGRAMMATO(2),
         INRITARDO(3),
         INORARIO(4),
-        ATTERRATO(5),
+        ATTERRATO( 5),
         CANCELLATO(6);
 
         private final int codice;
