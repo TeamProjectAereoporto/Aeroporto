@@ -47,7 +47,9 @@ public class Register {
         annullaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            chiamante.setVisible(true);
+            frame.setVisible(false);
+            frame.dispose();
             }
         });
     }
