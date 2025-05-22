@@ -1,5 +1,8 @@
 package gui;
 
+import controller.Sistema;
+import model.UtenteGenerico;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,14 +10,16 @@ import java.awt.event.ActionListener;
 public class Register {
     private JTextField usernameField;
     private JTextField textField2;
-    private JPasswordField passwordField1;
+    private JPasswordField campoPassword;
     private JLabel emailField;
-    private JLabel passwordField;
+    private JLabel password1;
     private JButton inviaButton;
     private JButton annullaButton;
     private JPanel finestraPrincipale;
     public static JFrame frame;
-    public Register(JFrame chiamante){
+    private Sistema sistema;
+    public Register(JFrame chiamante, Sistema sistema){
+        this.sistema=sistema;
         frame = new JFrame("Registra il tuo account");
         frame.setContentPane(finestraPrincipale);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,10 +31,16 @@ public class Register {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
                 String email = emailField.getText();
-                String password = passwordField.getText();
-
-                if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty()){
-
+                String password = campoPassword.getText();
+                boolean usernameBool = !username.isEmpty();
+                boolean emailBool = !email.isEmpty();
+                boolean passwordBool = !password.isEmpty();
+                if(usernameBool && emailBool && passwordBool){
+                    UtenteGenerico utente = new UtenteGenerico(username,password);
+                    sistema.aggiungiUtente(utente);
+                    chiamante.setVisible(true);
+                    frame.setVisible(false);
+                    frame.dispose();
                 }
             }
         });

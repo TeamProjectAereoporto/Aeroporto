@@ -24,6 +24,7 @@ public class Prenotazione {
         }
     }
     //Costruttore
+    public Prenotazione(){}
     public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero, Volo volo) {
         this.numeroBiglietto = numeroBiglietto;
         this.postoAssegnato = postoAssegnato;

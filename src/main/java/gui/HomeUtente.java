@@ -6,10 +6,11 @@ import model.Volo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * The type Home utente.
@@ -24,10 +25,15 @@ public class HomeUtente {
     private JTextField numeroBiglietto;
     private JTextField nome;
     private JLabel titoloB;
+    private JButton logout;
     /**
      * The constant frame.
      */
     public static JFrame frame;
+
+    public JPanel getPanel() {
+        return FinestraPrincipale;
+    }
 
     /**
      * Instantiates a new Home utente.
@@ -43,7 +49,41 @@ public class HomeUtente {
                 return isAdmin; // Nessuna cella è modificabile per gli utenti
             }
         };
-
+        //debbubing
+        // ora attuale, oppure puoi usare un altro costruttore per una data specifica
+        Volo volo1 = new Volo(
+                1234,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                "Fiumicino",                       // aeroporto di origine
+                "Linate",
+                "12:13",                      // orarioArrivo
+                15,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "3"// aeroporto di destinazione
+        );
+        Volo volo2 = new Volo(
+                1232,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                "Napoli",                       // aeroporto di origine
+                "Linate",
+                "12:15",                      // orarioArrivo
+                25,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "2"// aeroporto di destinazione
+        );
+        Volo volo3 = new Volo(
+                2232,                   // codiceVolo
+                "Alitalia",                        // compagniaAerea
+                "Napoli",                       // aeroporto di origine
+                "Milano",
+                "13:00",                      // orarioArrivo
+                0,                                // ritardo in minuti
+                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
+                "1"// aeroporto di destinazione
+        );
+        sistema.aggiungiVolo(volo1);
+        sistema.aggiungiVolo(volo2);
+        sistema.aggiungiVolo(volo3);
         tabellaVoli.setModel(model);
         //visualizzazione voli
         ArrayList<Volo> voli = sistema.visualizzaVoli();
@@ -91,11 +131,11 @@ public class HomeUtente {
             if(!numeroBiglietto.getText().isEmpty() || !nome.getText().isEmpty()) {
                 int numero =-1;
                 if(!numeroBiglietto.getText().isEmpty()){
-                if (!numeroBiglietto.getText().matches("\\d{4}") && !numeroBiglietto.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(FinestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                 numero = Integer.parseInt(numeroBiglietto.getText());
+                    if (!numeroBiglietto.getText().trim().matches("\\d{4}") && !numeroBiglietto.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(FinestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    numero = Integer.parseInt(numeroBiglietto.getText().trim());
                 }
                 Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
                 biglietto.frame.setVisible(true);
@@ -130,6 +170,16 @@ public class HomeUtente {
                         frame.setVisible(false);
                     }
                 }
+            }
+        });
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sistema.logout(sistema.utente);
+                Login login = new Login(frameChiamante,sistema);
+                login.frame.setVisible(true);
+                frame.setVisible(false);
+                frame.dispose();
             }
         });
     }

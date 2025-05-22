@@ -1,7 +1,9 @@
 package gui;
 
 import controller.Sistema;
+import model.Admin;
 import model.Utente;
+import model.UtenteGenerico;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +17,7 @@ import java.awt.event.MouseEvent;
  */
 public class Login {
 
-    private controller.Sistema controller;
+    private controller.Sistema sistema;
     private  JPanel finestraPrincipale;
     private JLabel immagine;
     private JTextField campoUsername;
@@ -28,12 +30,11 @@ public class Login {
      * The constant frame.
      */
     public static JFrame frame;
-
-    public Login(JFrame frame) {
+    public Login(JFrame frame, Sistema sistema) {
+        this.sistema=sistema;
         this.frame=frame;
-        controller = new Sistema();
-        controller.aggiungiUtente(new Utente("karol","karol","utenteGenerico"));
-        controller.aggiungiUtente(new Utente("saso","saso","admin"));
+        sistema.aggiungiUtente(new UtenteGenerico("karol","karol"));
+        sistema.aggiungiUtente(new Admin("saso","saso","123"));
 
         invio.addActionListener(new ActionListener() {
             @Override
@@ -41,16 +42,18 @@ public class Login {
                 String username = campoUsername.getText();
                 String password = new String(campoPassword.getPassword());
                 if(!username.isEmpty() && !password.isEmpty()){
-                    int ruolo=controller.verificaUtenteP(username,password);
+                    int ruolo=sistema.verificaUtenteP(username,password);
                     //apertura interfaccia utente=1 admin=2 else utente non esistente
+                    campoPassword.setText("");
+                    campoUsername.setText("");
                     if(ruolo == 1){
-                        HomeUtente home = new HomeUtente(frame, controller, false);
+                        HomeUtente home = new HomeUtente(frame, sistema, false);
                         home.frame.setVisible(true);
                         frame.setVisible(false);
+                        System.out.println("sono dentro a utenteGenerico");
                         frame.dispose();
                     }else if(ruolo==2){
-
-                        AdminPage home = new AdminPage(frame, controller);
+                        AdminPage home = new AdminPage(frame, sistema);
                         home.frame.setVisible(true);
                         frame.setVisible(false);
                         frame.dispose();
@@ -74,7 +77,7 @@ public class Login {
         registratiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Register register = new Register(frame);
+                Register register = new Register(frame,sistema);
                 Register.frame.setVisible(true);
                 frame.setVisible(false);
             }

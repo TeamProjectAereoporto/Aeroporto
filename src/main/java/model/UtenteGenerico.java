@@ -7,7 +7,7 @@ public class UtenteGenerico extends Utente {
     public ArrayList<Prenotazione> bigliettiAcquistati;
     //costruttore per l'utente generico.
     public UtenteGenerico(String l, String p){
-        super(l,p, "utenteGenerico");
+        super(l,p);
         bigliettiAcquistati = new ArrayList<>();
     }
     //metodo per acquistare un biglietto
@@ -26,21 +26,21 @@ public class UtenteGenerico extends Utente {
     //ricerca per numero biglietto e nome
     public ArrayList<Prenotazione> cercaBiglietto(String nome, int codiceVolo) {
         ArrayList<Prenotazione> bigliettiTrovati = new ArrayList<>();
-            if (nome.isEmpty() && codiceVolo == -1) {
-                return null;
+        if (nome.isEmpty() && codiceVolo == -1) {
+            return null;
+        }
+        for (Prenotazione p : bigliettiAcquistati) {
+            boolean nomeMatch = !nome.isEmpty() && p.getPasseggero().getNome().equalsIgnoreCase(nome.trim());
+            boolean numeroMatch = codiceVolo != -1 && p.getVolo().getCodiceVolo() == codiceVolo;
+            System.out.println(p);
+            if ((nomeMatch && numeroMatch) || (nomeMatch && codiceVolo == -1) || (numeroMatch && nome.isEmpty())) {
+                System.out.println("sono dentro\n");
+                bigliettiTrovati.add(p);
             }
-            for (Prenotazione p : bigliettiAcquistati) {
-                boolean nomeMatch = !nome.isEmpty() && p.getPasseggero().getNome().equalsIgnoreCase(nome);
-                boolean numeroMatch = codiceVolo != -1 && p.getVolo().getCodiceVolo() == codiceVolo;
-                System.out.println(p);
-                if ((nomeMatch && numeroMatch) || (nomeMatch && codiceVolo == -1) || (numeroMatch && nome.isEmpty())) {
-                    System.out.println("sono dentro\n");
-                    bigliettiTrovati.add(p);
-                }
-            }
-            if (bigliettiTrovati.isEmpty()) {
-                System.out.println("Nessun biglietto trovato");
-            }
+        }
+        if (bigliettiTrovati.isEmpty()) {
+            System.out.println("Nessun biglietto trovato");
+        }
         return bigliettiTrovati;
     }
 

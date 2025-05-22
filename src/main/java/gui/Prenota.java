@@ -70,7 +70,7 @@ public class Prenota {
                                     orarioField.getText(),
                                     Integer.parseInt(ritardoField.getText()),
                                     Volo.statoVolo.valueOf(statoField.getText()),
-                                    "gate"
+                                    "gate"//si deve correggere
                             ));
                     sistema.aggiungiBiglietto(biglietto);
                     chiamante.setVisible(true);
