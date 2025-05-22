@@ -122,7 +122,7 @@ public class AggiungiVolo {
             int codice = Integer.parseInt(codiceVolo);
             Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);  // lo stato deve combaciare con l'enum
 
-            Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, statoEnum, aeroportoDestinazione, orario, gate);
+            Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, statoEnum, gate);
 
             sistema.aggiungiVolo(v);  // salva nella struttura dati (se esiste metodo)
 

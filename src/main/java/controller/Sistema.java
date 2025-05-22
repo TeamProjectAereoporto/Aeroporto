@@ -21,7 +21,6 @@ public class Sistema {
         admin = new Admin("saso","saso", "231223");
         tuttiIVoli = new ArrayList<>();
         tuttiIBiglietti = new ArrayList<>();
-        biglietto = new Prenotazione(312321123,"a3", Prenotazione.StatoPrenotazione.CONFERMATA, new Passeggero("", "", ""), new Volo(21, "", "15:00",12_21, Volo.statoVolo.PROGRAMMATO, "","","2"));
     }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);

@@ -65,12 +65,12 @@ public class Prenota {
                             new Volo(
                                     Integer.parseInt(codiceVoloField.getText()),
                                     compagniaAereaField.getText(),
+                                    origineField.getText(),
+                                    arrivoField.getText(),
                                     orarioField.getText(),
                                     Integer.parseInt(ritardoField.getText()),
                                     Volo.statoVolo.valueOf(statoField.getText()),
-                                    origineField.getText(),
-                                    arrivoField.getText(),
-                                    "gate"//si deve correggere
+                                    "gate"
                             ));
                     sistema.aggiungiBiglietto(biglietto);
                     chiamante.setVisible(true);

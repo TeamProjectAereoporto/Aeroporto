@@ -94,25 +94,22 @@ public class Volo {
         this.gate = gate;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea, String orarioArrivo, int ritardo, statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
+    public Volo(int codiceVolo, String compagniaAerea, String aeroportoOrigine, String aeroportoDestinazione,
+                String orarioArrivo, int ritardo, statoVolo stato, String gate) {
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
+        this.aeroportoOrigine = aeroportoOrigine;
+        this.aeroportoDestinazione = aeroportoDestinazione;
         this.orarioArrivo = orarioArrivo;
         this.ritardo = ritardo;
         this.stato = stato;
-        this.aeroportoOrigine = aeroportoOrigine;
-        this.aeroportoDestinazione = aeroportoDestinazione;
         this.gate = gate;
     }
 
-    public Volo(int codiceVolo, String compagniaAerea,String orarioArrivo,statoVolo stato, String aeroportoOrigine, String aeroportoDestinazione, String gate){
-        this.codiceVolo = codiceVolo;
-        this.compagniaAerea = compagniaAerea;
-        this.orarioArrivo = orarioArrivo;
-        this.stato = stato;
-        this.aeroportoOrigine = aeroportoOrigine;
-        this.aeroportoDestinazione = aeroportoDestinazione;
-        this.gate = gate;
+    public Volo(int codiceVolo, String compagniaAerea, String aeroportoOrigine, String aeroportoDestinazione,
+                String orarioArrivo, statoVolo stato, String gate) {
+        this(codiceVolo, compagniaAerea, aeroportoOrigine, aeroportoDestinazione,
+                orarioArrivo, 0, stato, gate);
     }
 
     @Override

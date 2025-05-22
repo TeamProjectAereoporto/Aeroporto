@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class ModificaVolo {
-    private JPanel rootPanel;
     private JPanel principale;
     private JLabel modificaVoloLabel;
     private JLabel codiceVoloLabel;
@@ -31,7 +30,6 @@ public class ModificaVolo {
     private JLabel statoVoloLabel;
     private JPanel panelButton;
     private JButton salvaButton;
-    private JButton salvaVoloButton;
     private JButton annullaButton;
     private Sistema sistema;
     private DefaultTableModel tableModel;
@@ -48,7 +46,6 @@ public class ModificaVolo {
         partenzaArrivo.add(partenzaButton);
         partenzaArrivo.add(arrivoButton);
 
-        // Carica i dati del volo nei campi
         codiceVoloField.setText(String.format("%04d", voloDaModificare.getCodiceVolo()));
         compagniaAereaField.setText(voloDaModificare.getCompagniaAerea());
         aeroportoOrigineField.setText(voloDaModificare.getAeroportoOrigine());
@@ -58,15 +55,26 @@ public class ModificaVolo {
         gateField.setText(voloDaModificare.getGate());
         statoVoloCombo.setSelectedItem(voloDaModificare.getStato().toString());
 
+        // Aggiungi questo debug prima di impostare i valori
+        System.out.println("DEBUG - Dati volo:");
+        System.out.println("Codice: " + voloDaModificare.getCodiceVolo());
+        System.out.println("Compagnia: " + voloDaModificare.getCompagniaAerea());
+        System.out.println("Origine: " + voloDaModificare.getAeroportoOrigine());
+        System.out.println("Destinazione: " + voloDaModificare.getAeroportoDestinazione());
+        System.out.println("Orario arrivo: " + voloDaModificare.getOrarioArrivo());
+        System.out.println("Ritardo: " + voloDaModificare.getRitardo());
+        System.out.println("Gate: " + voloDaModificare.getGate());
+        System.out.println("Stato: " + voloDaModificare.getStato());
+
+
         if (voloDaModificare.getGate() == null || voloDaModificare.getGate().isEmpty()) {
-            impostaComeArrivo();
+            impostaComeArrivo(voloDaModificare);
         } else {
-            impostaComePartenza();
+            impostaComePartenza(voloDaModificare);
         }
 
-        arrivoButton.addActionListener(e -> impostaComeArrivo());
-        partenzaButton.addActionListener(e -> impostaComePartenza());
-
+        arrivoButton.addActionListener(e -> impostaComeArrivo(voloDaModificare));
+        partenzaButton.addActionListener(e -> impostaComePartenza(voloDaModificare));
 
 
         salvaButton.addActionListener(e -> salvaVolo());
@@ -81,25 +89,29 @@ public class ModificaVolo {
     public JPanel getPrincipale() {
         return principale;
     }
-
-    private void impostaComeArrivo() {
+    private void impostaComeArrivo(Volo v) {
         arrivoButton.setSelected(true);
         gateField.setEnabled(false);
-        gateField.setText("");
-        gateLabel.setVisible(false);
         gateField.setVisible(false);
+        gateLabel.setVisible(false);
+        gateField.setText("");
         aeroportoDestinazioneField.setText("Capodichino");
         aeroportoOrigineField.setText("");
     }
 
-    private void impostaComePartenza() {
+
+
+    private void impostaComePartenza(Volo v) {
         partenzaButton.setSelected(true);
         gateField.setEnabled(true);
-        gateLabel.setVisible(true);
         gateField.setVisible(true);
+        gateLabel.setVisible(true);
         aeroportoOrigineField.setText("Capodichino");
         aeroportoDestinazioneField.setText("");
+
     }
+
+
 
     private void salvaVolo() {
         String codiceVolo = codiceVoloField.getText().trim();

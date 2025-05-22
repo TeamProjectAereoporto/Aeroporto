@@ -43,41 +43,7 @@ public class HomeUtente {
                 return isAdmin; // Nessuna cella è modificabile per gli utenti
             }
         };
-        //debbubing
-         // ora attuale, oppure puoi usare un altro costruttore per una data specifica
-        Volo volo1 = new Volo(
-                1234,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "12:13",                      // orarioArrivo
-                15,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "Fiumicino",                       // aeroporto di origine
-                "Linate",
-                "3"// aeroporto di destinazione
-        );
-        Volo volo2 = new Volo(
-                1232,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "12:15",                      // orarioArrivo
-                25,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "Napoli",                       // aeroporto di origine
-                "Linate",
-                "2"// aeroporto di destinazione
-        );
-        Volo volo3 = new Volo(
-                2232,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "13:00",                      // orarioArrivo
-                0,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "Napoli",                       // aeroporto di origine
-                "Milano",
-                "1"// aeroporto di destinazione
-        );
-        sistema.aggiungiVolo(volo1);
-        sistema.aggiungiVolo(volo2);
-        sistema.aggiungiVolo(volo3);
+
         tabellaVoli.setModel(model);
         //visualizzazione voli
         ArrayList<Volo> voli = sistema.visualizzaVoli();
