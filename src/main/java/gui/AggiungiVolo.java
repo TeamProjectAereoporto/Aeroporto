@@ -124,7 +124,7 @@ public class AggiungiVolo {
 
             Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, statoEnum, gate);
 
-            sistema.aggiungiVolo(v);  // salva nella struttura dati (se esiste metodo)
+            sistema.aggiungiVolo(v);
 
             tableModel.addRow(new Object[]{
                     codiceVolo,

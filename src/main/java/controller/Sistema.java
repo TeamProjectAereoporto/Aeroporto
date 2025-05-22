@@ -44,6 +44,8 @@ public class Sistema {
     public ArrayList getBiglietti(String nome, int codiceVolo){
         return utente.cercaBiglietto(nome,codiceVolo);
     }
+
+
     public int verificaUtenteP(String username, String psw){
         for(Utente u : utenti){
             if(u.getNomeUtente().equals(username) && u.getPsw().equals(psw)){
