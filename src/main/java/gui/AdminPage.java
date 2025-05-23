@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
 
 
@@ -36,7 +37,22 @@ public class AdminPage {
         };
 
         tabellaVoli.setModel(model);
-
+        sistema.generaContenutiCasuali();
+        ArrayList<Volo> voli = sistema.visualizzaVoli();
+        if (voli != null) {
+            for (Volo v : voli) {
+                model.addRow(new Object[]{
+                        v.getCodiceVolo(),
+                        v.getCompagniaAerea(),
+                        v.getAeroportoOrigine(),
+                        v.getAeroportoDestinazione(),
+                        v.getOrarioArrivo(),
+                        v.getRitardo(),
+                        v.getStato(),
+                        v.getGate()
+                });
+            }
+        }
         if (tabellaVoli.getParent() instanceof JViewport) {
         } else {
             voliPanel.removeAll();

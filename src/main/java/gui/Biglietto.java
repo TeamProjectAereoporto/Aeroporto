@@ -55,6 +55,9 @@ public class Biglietto {
             }
         };
         tabellaBiglietti.setModel(model);
+        tabellaBiglietti.getTableHeader().setReorderingAllowed(false);
+        // Blocca il ridimensionamento delle colonne
+        tabellaBiglietti.getTableHeader().setResizingAllowed(false);
         //biglietti dell'utente
         biglietti = sistema.getBiglietti(nome,  codiceVolo);
         if (biglietti!=null) {

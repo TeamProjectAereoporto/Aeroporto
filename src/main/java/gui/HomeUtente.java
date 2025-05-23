@@ -46,45 +46,14 @@ public class HomeUtente {
         DefaultTableModel model = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
-                return isAdmin; // Nessuna cella è modificabile per gli utenti
+                return false; // Nessuna cella è modificabile
             }
         };
-        //debbubing
-        // ora attuale, oppure puoi usare un altro costruttore per una data specifica
-        Volo volo1 = new Volo(
-                1234,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "Fiumicino",                       // aeroporto di origine
-                "Linate",
-                "12:13",                      // orarioArrivo
-                15,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "3"// aeroporto di destinazione
-        );
-        Volo volo2 = new Volo(
-                1232,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "Napoli",                       // aeroporto di origine
-                "Linate",
-                "12:15",                      // orarioArrivo
-                25,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "2"// aeroporto di destinazione
-        );
-        Volo volo3 = new Volo(
-                2232,                   // codiceVolo
-                "Alitalia",                        // compagniaAerea
-                "Napoli",                       // aeroporto di origine
-                "Milano",
-                "13:00",                      // orarioArrivo
-                0,                                // ritardo in minuti
-                Volo.statoVolo.PROGRAMMATO,         // stato del volo (enum)
-                "1"// aeroporto di destinazione
-        );
-        sistema.aggiungiVolo(volo1);
-        sistema.aggiungiVolo(volo2);
-        sistema.aggiungiVolo(volo3);
         tabellaVoli.setModel(model);
+        tabellaVoli.getTableHeader().setReorderingAllowed(false);
+// Blocca il ridimensionamento delle colonne
+        tabellaVoli.getTableHeader().setResizingAllowed(false);
+        sistema.generaContenutiCasuali();
         //visualizzazione voli
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         if (voli != null) {
@@ -160,6 +129,8 @@ public class HomeUtente {
                     if(row!=-1) {
                         int column = tabellaVoli.getColumnCount();
                         valori = new Object[column];
+                        String stato = tabellaVoli.getValueAt(row, 6).toString();
+                        if(!stato.equals("DECOLLATO") && !stato.equals("CANCELLATO") && !stato.equals("ATTERRATO")){
                         for(int i =0; i<column; i++){
                             valori[i]=tabellaVoli.getValueAt(row, i);
                         }
@@ -169,6 +140,14 @@ public class HomeUtente {
                         Prenota prenotazione = new Prenota(frame, valori, sistema);
                         prenotazione.frame.setVisible(true);
                         frame.setVisible(false);
+                    }else if(stato.equals("DECOLLATO")) {
+                        JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo già decollato", "Errore", JOptionPane.ERROR_MESSAGE);
+                    }else if(stato.equals("CANCELLATO")) {
+                            JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo cancellato", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
+                    else if(stato.equals("ATTERRATO")) {
+                        JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo atterrato", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
             }
