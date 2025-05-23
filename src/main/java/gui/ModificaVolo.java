@@ -37,7 +37,7 @@ public class ModificaVolo {
     private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
-
+    public ModificaVolo() {}
     public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare) {
         this.tableModel = tableModel;
         this.voloModificato = voloDaModificare;
@@ -53,6 +53,7 @@ public class ModificaVolo {
         orarioField.setText(voloDaModificare.getOrarioArrivo());
         ritardoField.setText(String.valueOf(voloDaModificare.getRitardo()));
         gateField.setText(voloDaModificare.getGate());
+
         statoVoloCombo.setSelectedItem(voloDaModificare.getStato().toString());
         if (voloDaModificare.getGate() == null || voloDaModificare.getGate().isEmpty()) {
             impostaComeArrivo();
@@ -177,7 +178,9 @@ public class ModificaVolo {
                     break;
                 }
             }
-
+            for(Volo v: sistema.visualizzaVoli()){
+                System.out.println(v);
+            }
             JFrame finestra = (JFrame) principale.getTopLevelAncestor();
             if (finestra != null) {
                 finestra.dispose();

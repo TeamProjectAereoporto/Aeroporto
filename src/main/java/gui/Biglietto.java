@@ -46,7 +46,7 @@ public class Biglietto {
         frame.setLocation(200,200);
         frame.setVisible(true);
         //nomi colonne
-        String[] colonne= {"Nome","Cognome", "Posto", "NumeroCarta"};
+        String[] colonne= {"Nome","Cognome","Carta d'identità", "Posto", "Numero Biglietto"};
         //setting di tabella
         DefaultTableModel model = new DefaultTableModel(colonne,0){
             @Override
@@ -59,7 +59,7 @@ public class Biglietto {
         biglietti = sistema.getBiglietti(nome,  codiceVolo);
         if (biglietti!=null) {
             for (int i = 0; i < biglietti.size(); i++)
-                model.addRow(new Object[]{biglietti.get(i).getPasseggero().getNome(),biglietti.get(i).getPasseggero().getCognome(), biglietti.get(i).getPostoAssegnato(), biglietti.get(i).getNumeroBiglietto()});
+                model.addRow(new Object[]{biglietti.get(i).getPasseggero().getNome(),biglietti.get(i).getPasseggero().getCognome(),biglietti.get(i).getPasseggero().getNumeroDocumento() ,biglietti.get(i).getPostoAssegnato(), biglietti.get(i).getNumeroBiglietto()});
         }
             //ritorno al frame principale
             fineButton.addActionListener(new ActionListener() {
@@ -106,7 +106,14 @@ public class Biglietto {
         modificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                int riga = tabellaBiglietti.getSelectedRow();
+                if (riga != -1) {
+                    Prenotazione bigliettoDaModificare = biglietti.get(riga);
+                    DefaultTableModel tableModel = (DefaultTableModel) tabellaBiglietti.getModel();
+                    modificaBiglietto modifica = new modificaBiglietto(sistema,bigliettoDaModificare,tableModel,frame);
+                    modifica.frame.setVisible(true);
+                    frame.setVisible(false);
+                }
             }
         });
         tabellaBiglietti.addMouseListener(new MouseAdapter() {

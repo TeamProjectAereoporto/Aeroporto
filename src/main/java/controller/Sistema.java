@@ -53,7 +53,7 @@ public class Sistema {
                     return 2;
                 }
             }
-            System.out.println(u.getNomeUtente()+" "+u.getPsw());
+            //System.out.println(u.getNomeUtente()+" "+u.getPsw()); debbubing
         }
 
         return 0;
@@ -63,6 +63,16 @@ public class Sistema {
             this.utente = (UtenteGenerico) u;
         }else{
             this.admin = (Admin) u;
+        }
+    }
+    public void modificaBiglietto(Prenotazione b){
+        biglietto.modificaBiglietto(b,utente.bigliettiAcquistati);
+    }
+    public void login(String username, String psw){
+        if(verificaUtenteP(username,psw)==1){
+            setUtenteLoggato(utente);
+        }else if(verificaUtenteP(username,psw)==2){
+            setUtenteLoggato(admin);
         }
     }
 

@@ -6,13 +6,13 @@ import model.UtenteGenerico;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 
 public class Register {
     private JTextField usernameField;
     private JPasswordField campoPassword;
     private JLabel password1;
     private JButton inviaButton;
-    private JButton annullaButton;
     private JPanel finestraPrincipale;
     public static JFrame frame;
     private Sistema sistema;
@@ -20,8 +20,9 @@ public class Register {
         this.sistema=sistema;
         frame = new JFrame("Registra il tuo account");
         frame.setContentPane(finestraPrincipale);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.pack();
+        frame.getRootPane().setDefaultButton(inviaButton);
         frame.setResizable(false);
         frame.setSize(300,200);
         frame.setLocationRelativeTo(null);
@@ -41,12 +42,12 @@ public class Register {
                 }
             }
         });
-        annullaButton.addActionListener(new ActionListener() {
+        frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-            chiamante.setVisible(true);
-            frame.setVisible(false);
-            frame.dispose();
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                chiamante.setVisible(true);
+                frame.setVisible(false);
+                frame.dispose();
             }
         });
     }

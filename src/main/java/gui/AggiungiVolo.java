@@ -87,6 +87,7 @@ public class AggiungiVolo {
         JFrame frame = new JFrame("Aggiungi Volo");
         frame.setContentPane(av.getPrincipale());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.getRootPane().setDefaultButton(aggiungiVoloButton); errore static boh
         frame.pack();
         frame.setSize(700, 500);
         frame.setLocation(400, 150);

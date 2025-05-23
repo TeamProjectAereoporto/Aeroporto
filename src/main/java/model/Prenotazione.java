@@ -1,4 +1,6 @@
 package model;
+import gui.Biglietto;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -101,7 +103,17 @@ public class Prenotazione {
         }
             return false;
     }
+    public void modificaBiglietto(Prenotazione bigliettoModificato, ArrayList<Prenotazione> biglietti){
+        for (Prenotazione p: biglietti){
+            if(p.getNumeroBiglietto()==bigliettoModificato.getNumeroBiglietto()){
+                p.setNumeroBiglietto(bigliettoModificato.getNumeroBiglietto());
+                p.setPostoAssegnato(bigliettoModificato.getPostoAssegnato());
+                p.setStato(bigliettoModificato.getStato());
+            }
+        }
+    }
     public String toString(){
         return "Biglietto: "+numeroBiglietto+"\nPosto: "+postoAssegnato+ "\nStato: "+stato+"\nnome "+ passeggero.getNome()+"\ncognome "+passeggero.getCognome()+"\nci "+ passeggero.getNumeroDocumento();
     }
+
 }

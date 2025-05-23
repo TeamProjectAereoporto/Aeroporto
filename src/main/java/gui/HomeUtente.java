@@ -150,6 +150,7 @@ public class HomeUtente {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.getRootPane().setDefaultButton(cercaBigliettoButton);
         tabellaVoli.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
