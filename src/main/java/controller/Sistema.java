@@ -58,6 +58,14 @@ public class Sistema {
 
         return 0;
     }
+    public boolean verificaUtenteUnivoco(String username){
+        for(Utente u : utenti){
+            if(u.getNomeUtente().equals(username) ){
+               return false;
+            }
+        }
+        return true;
+    }
     public void setUtenteLoggato(Utente u){
         if(u instanceof UtenteGenerico){
             this.utente = (UtenteGenerico) u;

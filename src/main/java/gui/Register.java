@@ -31,14 +31,18 @@ public class Register {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
                 String password = campoPassword.getText();
-                boolean usernameBool = !username.isEmpty();
-                boolean passwordBool = !password.isEmpty();
-                if(usernameBool && passwordBool){
-                    UtenteGenerico utente = new UtenteGenerico(username,password);
-                    sistema.aggiungiUtente(utente);
-                    chiamante.setVisible(true);
-                    frame.setVisible(false);
-                    frame.dispose();
+                if (sistema.verificaUtenteUnivoco(username)) {
+                    boolean usernameBool = !username.isEmpty();
+                    boolean passwordBool = !password.isEmpty();
+                    if (usernameBool && passwordBool) {
+                        UtenteGenerico utente = new UtenteGenerico(username, password);
+                        sistema.aggiungiUtente(utente);
+                        chiamante.setVisible(true);
+                        frame.setVisible(false);
+                        frame.dispose();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(frame,"Username già esistente", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
