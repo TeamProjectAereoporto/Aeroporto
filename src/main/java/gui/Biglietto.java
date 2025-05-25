@@ -4,6 +4,8 @@ import model.Prenotazione;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -45,8 +47,15 @@ public class Biglietto {
         frame.setResizable(false);
         frame.setLocation(200,200);
         frame.setVisible(true);
+        finestraPrincipale.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         //nomi colonne
         String[] colonne= {"Nome","Cognome","Carta d'identità", "Posto", "Numero Biglietto"};
+        tabellaBiglietti.setRowHeight(30);
+        tabellaBiglietti.setGridColor(new Color(80, 80, 80));
+        JTableHeader header = tabellaBiglietti.getTableHeader();
+        header.setBackground(new Color(75, 75, 75));
+        header.setForeground(Color.WHITE);
+        header.setFont(new Font("SansSerif", Font.BOLD, 12));
         //setting di tabella
         DefaultTableModel model = new DefaultTableModel(colonne,0){
             @Override
