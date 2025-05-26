@@ -135,7 +135,7 @@ public class ModificaVolo {
             JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (!gate.matches("[A-Z][1-9]")) {
+        if (!gate.matches("[A-Z][1-9]")&& partenzaButtonSelected) {
             JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
