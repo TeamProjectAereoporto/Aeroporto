@@ -63,14 +63,17 @@ public class AdminPage {
         }
 
         aggiungiVoloButton.addActionListener(e -> {
-            AggiungiVolo aggiungiVolo = new AggiungiVolo(model, controller);
-            JFrame finestra = new JFrame("Aggiungi Volo");
-            finestra.setContentPane(aggiungiVolo.getPrincipale());
-            finestra.getRootPane().setDefaultButton(aggiungiVolo.getSalvaButton());
-            finestra.pack();
-            finestra.setSize(700, 500);
-            finestra.setLocation(400, 150);
-            finestra.setVisible(true);
+            String[] colonna = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Gate", "Stato"};
+            DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
+            AggiungiVolo av = new AggiungiVolo(modelloFinto, sistema);
+            JFrame frame = new JFrame("Aggiungi Volo");
+            frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton());
+            frame.setContentPane(av.getPrincipale());
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.pack();
+            frame.setSize(700, 500);
+            frame.setLocation(400, 150);
+            frame.setVisible(true);
         });
 
         eliminaVoloButton.addActionListener(e -> {

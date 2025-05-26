@@ -140,7 +140,7 @@ public class ModificaVolo {
             return;
         }
 
-        if(!orario.matches("([0-9]|1\\d|2[0-3]):[0-5]\\d")){
+        if(!orario.matches("\"(\\\\d{1}|0\\\\d|1\\\\d|2[0-3]):[0-5]\\\\d\"\n")){
             JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }

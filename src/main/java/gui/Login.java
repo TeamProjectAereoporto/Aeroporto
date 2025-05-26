@@ -31,9 +31,6 @@ public class Login {
         return invio;
     }
 
-    /**
-     * The constant frame.
-     */
     public static JFrame frame;
     public Login(JFrame frame, Sistema sistema) {
         this.sistema=sistema;

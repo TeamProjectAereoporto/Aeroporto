@@ -79,20 +79,12 @@ public class AggiungiVolo {
         });
     }
 
-    public static void main(String[] args) {
 
-        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Gate", "Stato"};
-        DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
-        AggiungiVolo av = new AggiungiVolo(modelloFinto, sistema);
-        JFrame frame = new JFrame("Aggiungi Volo");
-        frame.setContentPane(av.getPrincipale());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.getRootPane().setDefaultButton(aggiungiVoloButton); errore static boh
-        frame.pack();
-        frame.setSize(700, 500);
-        frame.setLocation(400, 150);
-        frame.setVisible(true);
+
+    public JButton getAggiungiVoloButton(){
+        return aggiungiVoloButton;
     }
+
 
 
     private void salvaVolo() {
@@ -124,8 +116,7 @@ public class AggiungiVolo {
             JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        if(!orario.matches("([0-9]|1\\d|2[0-3]):[0-5]\\d")){
+        if(!orario.matches("\"(\\\\d{1}|0\\\\d|1\\\\d|2[0-3]):[0-5]\\\\d\"\n")){
             JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
