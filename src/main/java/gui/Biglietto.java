@@ -93,7 +93,7 @@ public class Biglietto {
                             JOptionPane.YES_NO_OPTION);
                     if (conferma==JOptionPane.YES_OPTION){
                         DefaultTableModel model1 = (DefaultTableModel) tabellaBiglietti.getModel();
-                        Object valoreNumeroBiglietto = model1.getValueAt(riga, 3); // colonna "NumeroCarta"
+                        Object valoreNumeroBiglietto = model1.getValueAt(riga, 4); // colonna "NumeroCarta"
                         if (valoreNumeroBiglietto != null) {
                             try {
                                 long numeroBiglietto = Long.parseLong(valoreNumeroBiglietto.toString());
@@ -106,11 +106,6 @@ public class Biglietto {
                                         JOptionPane.ERROR_MESSAGE);
                             }
                         }
-                    }else{
-                        JOptionPane.showMessageDialog(null,
-                                "Seleziona un volo da eliminare!",
-                                "Errore",
-                                JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
