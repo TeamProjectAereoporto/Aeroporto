@@ -116,13 +116,17 @@ public class Sistema {
         String aeroportoDestinazione;
         String orarioArrivo;
         String gate1;
+        int possibilita;
         for(int i=0;i<40;i++){
+             ritardo =0;
              codiceVolo = casuale.nextInt(9000) + 1000;
-             ritardo =  casuale.nextInt(181);
-             if(ritardo != 0){
-                statoVolo = stati[0];
-             } else if(ritardo == 0){
-                statoVolo = stati[casuale.nextInt(4)+2];
+             possibilita = casuale.nextInt(6);
+             System.out.println(possibilita);
+             if(possibilita == 0) {
+                     ritardo =  casuale.nextInt(181)+1;
+                     statoVolo = stati[0];
+             }else{
+                 statoVolo = stati[casuale.nextInt(4) + 2];
              }
              compagnia = nomiCompagnie[casuale.nextInt(17)];
              aeroportoOrigine = Aeroporti[casuale.nextInt(13)];
