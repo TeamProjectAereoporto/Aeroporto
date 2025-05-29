@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Gate {
 
-    private String codiceGate;
+    private final String codiceGate;
     private VoloPartenza voloAssegnato;
 
     public Gate(String coGate){

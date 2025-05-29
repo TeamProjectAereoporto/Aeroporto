@@ -21,8 +21,8 @@ public class AdminPage {
     private JLabel voliLable;
     private JTable tabellaVoli;
     private JButton modificaVoloButton;
-    public final static JFrame frame = new JFrame("AdminDashboard");;
-    private Sistema sistema;
+    public final static JFrame frame = new JFrame("AdminDashboard");
+    private final Sistema sistema;
 
     public AdminPage(JFrame chiamante, Sistema controller) {
         this.sistema = controller;

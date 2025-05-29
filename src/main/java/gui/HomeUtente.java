@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * The type Home utente.
  */
 public class HomeUtente {
-    private Sistema sistema;
+    private final Sistema sistema;
     private JButton cercaBigliettoButton;
     private JPanel navbar;
     private JPanel FinestraPrincipale;
@@ -115,7 +115,7 @@ public class HomeUtente {
                     numero = Integer.parseInt(numeroBiglietto.getText().trim());
                 }
                 Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
-                biglietto.frame.setVisible(true);
+                Biglietto.frame.setVisible(true);
                 frame.setVisible(false);
             }
         });
@@ -135,7 +135,7 @@ public class HomeUtente {
                                 valori[i] = tabellaVoli.getValueAt(row, i);
                             }
                             Prenota prenotazione = new Prenota(frame, valori, sistema);
-                            prenotazione.frame.setVisible(true);
+                            Prenota.frame.setVisible(true);
                             frame.setVisible(false);
                         } else {
                             JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo " + stato.toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -148,8 +148,8 @@ public class HomeUtente {
         logout.addActionListener(e -> {
             sistema.logout(sistema.utente);
             Login login = new Login(frameChiamante, sistema);
-            login.frame.getRootPane().setDefaultButton(login.getInvio());
-            login.frame.setVisible(true);
+            Login.frame.getRootPane().setDefaultButton(login.getInvio());
+            Login.frame.setVisible(true);
             frame.setVisible(false);
             frame.dispose();
         });

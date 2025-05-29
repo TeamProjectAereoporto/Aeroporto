@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Login {
 
-    private controller.Sistema sistema;
+    private final controller.Sistema sistema;
     private  JPanel finestraPrincipale;
     private JLabel immagine;
     private JLabel username;
@@ -35,7 +35,7 @@ public class Login {
     public static JFrame frame;
     public Login(JFrame frame, Sistema sistema) {
         this.sistema=sistema;
-        this.frame=frame;
+        Login.frame =frame;
         sistema.aggiungiUtente(new UtenteGenerico("karol","karol"));
         sistema.aggiungiUtente(new Admin("saso","saso","123"));
         frame.getRootPane().setDefaultButton(invio);
@@ -52,14 +52,14 @@ public class Login {
                     switch (ruolo){
                         case 1:
                             HomeUtente home = new HomeUtente(frame, sistema, false);
-                            home.frame.setVisible(true);
+                            HomeUtente.frame.setVisible(true);
                             frame.setVisible(false);
                             logger.info("sono dentro a utenteGenerico");
                             frame.dispose();
                             break;
                         case 2:
                             AdminPage homeAdmin = new AdminPage(frame, sistema);
-                            homeAdmin.frame.setVisible(true);
+                            AdminPage.frame.setVisible(true);
                             frame.setVisible(false);
                             frame.dispose();
                             break;

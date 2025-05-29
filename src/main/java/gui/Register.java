@@ -16,8 +16,8 @@ public class Register {
     private JTextField confermaPasswordField;
     private JButton inviaButton;
     private JPanel sfondoLogin;
-    public final static JFrame frame = new JFrame("Registra il tuo account");;
-    private Sistema sistema;
+    public final static JFrame frame = new JFrame("Registra il tuo account");
+    private final Sistema sistema;
 
 
     public Register(JFrame chiamante, Sistema sistema) {

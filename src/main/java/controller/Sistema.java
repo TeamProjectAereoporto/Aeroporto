@@ -10,7 +10,7 @@ public class Sistema {
     public UtenteGenerico utente;
     public Admin admin;
     public ArrayList<Prenotazione> tuttiIBiglietti;
-    private Random casuale= new Random();
+    private final Random casuale= new Random();
     public Sistema(){
         utenti = new ArrayList<>();
         utente = new UtenteGenerico("karol", " leonardi");
@@ -32,11 +32,12 @@ public class Sistema {
         utente.prenotaVolo(biglietto);
         tuttiIBiglietti.add(biglietto);
     }
-    //cancella un biglietto
+
     public boolean cancellaBiglietto(long numeroBiglietto){
-        return biglietto.cancellaBiglietto(numeroBiglietto, utente.bigliettiAcquistati);
+        return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati);
     }
-    //crea il numero di un biglietto unico
+
+
     public Long creaNumBiglietto(){
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
@@ -73,7 +74,7 @@ public class Sistema {
         }
     }
     public void modificaBiglietto(Prenotazione b){
-        biglietto.modificaBiglietto(b,utente.bigliettiAcquistati);
+        biglietto.modificaBiglietto(b, UtenteGenerico.bigliettiAcquistati);
     }
     public void login(String username, String psw){
         if(verificaUtenteP(username,psw)==1){

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 
 public class Biglietto {
-    private controller.Sistema sistema;
+    private final controller.Sistema sistema;
     private JPanel finestraPrincipale;
     private JButton modificaButton;
     private JButton cancellaButton;
@@ -144,7 +144,7 @@ public class Biglietto {
             Prenotazione bigliettoDaModificare = biglietti.get(riga);
             DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
             modificaBiglietto modifica = new modificaBiglietto(sistema, bigliettoDaModificare, model, frame);
-            modifica.frame.setVisible(true);
+            modificaBiglietto.frame.setVisible(true);
             frame.setVisible(false);
         }
     }
@@ -152,14 +152,13 @@ public class Biglietto {
     private void mostraDettagliVolo() {
         int riga = tabellaBiglietti.getSelectedRow();
         Prenotazione prenotazione = biglietti.get(riga);
-        StringBuilder info = new StringBuilder();
-        info.append("Codice Volo: ").append(prenotazione.getVolo().getCodiceVolo()).append("\n");
-        info.append("Compagnia Aerea: ").append(prenotazione.getVolo().getCompagniaAerea()).append("\n");
-        info.append("Aeroporto di Origine: ").append(prenotazione.getVolo().getAeroportoOrigine()).append("\n");
-        info.append("Aeroporto Destinazione: ").append(prenotazione.getVolo().getAeroportoDestinazione()).append("\n");
-        info.append("Orario di Arrivo: ").append(prenotazione.getVolo().getOrarioArrivo()).append("\n");
-        info.append("Ritardo: ").append(prenotazione.getVolo().getRitardo()).append("'\n");
-        info.append("Gate: ").append(prenotazione.getVolo().getGate());
-        JOptionPane.showMessageDialog(null, info.toString(), "Informazioni Volo", JOptionPane.INFORMATION_MESSAGE);
+        String info = "Codice Volo: " + prenotazione.getVolo().getCodiceVolo() + "\n" +
+                "Compagnia Aerea: " + prenotazione.getVolo().getCompagniaAerea() + "\n" +
+                "Aeroporto di Origine: " + prenotazione.getVolo().getAeroportoOrigine() + "\n" +
+                "Aeroporto Destinazione: " + prenotazione.getVolo().getAeroportoDestinazione() + "\n" +
+                "Orario di Arrivo: " + prenotazione.getVolo().getOrarioArrivo() + "\n" +
+                "Ritardo: " + prenotazione.getVolo().getRitardo() + "'\n" +
+                "Gate: " + prenotazione.getVolo().getGate();
+        JOptionPane.showMessageDialog(null, info, "Informazioni Volo", JOptionPane.INFORMATION_MESSAGE);
     }
 }

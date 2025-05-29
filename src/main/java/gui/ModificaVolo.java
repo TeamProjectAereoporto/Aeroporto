@@ -37,44 +37,153 @@ public class ModificaVolo {
     private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
-    public ModificaVolo() {}
+
+
     public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare) {
         this.tableModel = tableModel;
         this.voloModificato = voloDaModificare;
         this.sistema = sistema;
+
+        caricaDatiVolo();
+        applyStyles();
+        aggiungiAzioni();
+    }
+    private void caricaDatiVolo() {
+        codiceVoloField.setText(String.format("%04d", voloModificato.getCodiceVolo()));
+        compagniaAereaField.setText(voloModificato.getCompagniaAerea());
+        aeroportoOrigineField.setText(voloModificato.getAeroportoOrigine());
+        aeroportoDestinazioneField.setText(voloModificato.getAeroportoDestinazione());
+        orarioField.setText(voloModificato.getOrarioArrivo());
+        ritardoField.setText(String.valueOf(voloModificato.getRitardo()));
+        gateField.setText(voloModificato.getGate());
+        statoVoloCombo.setSelectedItem(voloModificato.getStato().toString());
+
+        if (voloModificato.getGate() == null || voloModificato.getGate().isEmpty()) {
+            impostaComeArrivo(voloModificato);
+        } else {
+            impostaComePartenza(voloModificato);
+        }
+    }
+
+
+    private void aggiungiAzioni() {
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
         partenzaArrivo.add(arrivoButton);
-        // Carica i dati del volo nei campi
-        codiceVoloField.setText(String.format("%04d", voloDaModificare.getCodiceVolo()));
-        compagniaAereaField.setText(voloDaModificare.getCompagniaAerea());
-        aeroportoOrigineField.setText(voloDaModificare.getAeroportoOrigine());
-        aeroportoDestinazioneField.setText(voloDaModificare.getAeroportoDestinazione());
-        orarioField.setText(voloDaModificare.getOrarioArrivo());
-        ritardoField.setText(String.valueOf(voloDaModificare.getRitardo()));
-        gateField.setText(voloDaModificare.getGate());
 
-        statoVoloCombo.setSelectedItem(voloDaModificare.getStato().toString());
-        if (voloDaModificare.getGate() == null || voloDaModificare.getGate().isEmpty()) {
-            impostaComeArrivo();
-        } else {
-            impostaComePartenza();
-        }
-        applyStyles();
-        arrivoButton.addActionListener(e -> impostaComeArrivo());
-        partenzaButton.addActionListener(e -> impostaComePartenza());
-
-
-
+        arrivoButton.addActionListener(e -> impostaComeArrivo(voloModificato));
+        partenzaButton.addActionListener(e -> impostaComePartenza(voloModificato));
         salvaButton.addActionListener(e -> salvaVolo());
-        annullaButton.addActionListener(e -> {
-            JFrame finestra = (JFrame) principale.getTopLevelAncestor();
-            if (finestra != null) {
-                finestra.dispose();
+        annullaButton.addActionListener(e -> chiudiFinestra());
+    }
+
+    private void impostaComeArrivo(Volo volo) {
+        arrivoButton.setSelected(true);
+        gateField.setEnabled(false);
+        gateField.setVisible(false);
+        gateField.setText("");
+        gateLabel.setVisible(false);
+        aeroportoDestinazioneField.setText("Capodichino");
+        aeroportoOrigineField.setText(volo.getAeroportoOrigine());
+
+    }
+
+    private void impostaComePartenza(Volo volo) {
+        partenzaButton.setSelected(true);
+        gateField.setEnabled(true);
+        gateField.setVisible(true);
+        gateField.setText(volo.getGate());
+        gateLabel.setVisible(true);
+        aeroportoOrigineField.setText("Capodichino");
+        aeroportoDestinazioneField.setText(volo.getAeroportoDestinazione());
+
+    }
+
+    private void salvaVolo() {
+        String codiceVolo = codiceVoloField.getText().trim();
+        String compagnia = compagniaAereaField.getText().trim();
+        String origine = aeroportoOrigineField.getText().trim();
+        String destinazione = aeroportoDestinazioneField.getText().trim();
+        String orario = orarioField.getText().trim();
+        String ritardo = ritardoField.getText().trim();
+        String gate = gateField.getText().trim();
+        String stato = (String) statoVoloCombo.getSelectedItem();
+
+        if (!convalidaCampi(codiceVolo, compagnia, origine, destinazione, orario, ritardo, gate, stato)) return;
+
+        try {
+            int codice = Integer.parseInt(codiceVolo);
+            int rit = Integer.parseInt(ritardo);
+
+            voloModificato.setCodiceVolo(codice);
+            voloModificato.setCompagniaAerea(compagnia);
+            voloModificato.setAeroportoOrigine(origine);
+            voloModificato.setAeroportoDestinazione(destinazione);
+            voloModificato.setOrarioArrivo(orario);
+            voloModificato.setRitardo(rit);
+            voloModificato.setGate(gate);
+            voloModificato.setStato(Volo.statoVolo.valueOf(stato));
+
+            aggiornaTabella(codice);
+            chiudiFinestra();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
+    private boolean convalidaCampi(String codice, String compagnia, String origine, String destinazione, String orario, String ritardo, String gate, String stato) {
+        if (codice.isEmpty() || compagnia.isEmpty() || origine.isEmpty() || destinazione.isEmpty() ||
+                orario.isEmpty() || ritardo.isEmpty() || (partenzaButton.isSelected() && gate.isEmpty()) || stato == null || stato.isEmpty()) {
+            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere compilati", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!codice.matches("\\d{4}")) {
+            JOptionPane.showMessageDialog(principale, "Codice volo non valido", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!orario.matches("([01]?\\d|2[0-3]):[0-5]\\d")) {
+            JOptionPane.showMessageDialog(principale, "Formato orario errato (HH:mm)", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!gate.matches("[A-Z][1-9]") && partenzaButton.isSelected()) {
+            JOptionPane.showMessageDialog(principale, "Formato gate errato (es. A1)", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String codiceTabella = tableModel.getValueAt(i, 0).toString();
+            if (codiceTabella.equals(codice) && voloModificato.getCodiceVolo() != Integer.parseInt(codice)) {
+                JOptionPane.showMessageDialog(principale, "Codice volo già esistente", "Errore", JOptionPane.ERROR_MESSAGE);
+                return false;
             }
-        });
+        }
+        return true;
+    }
 
+    private void aggiornaTabella(int codice) {
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (tableModel.getValueAt(i, 0).toString().equals(String.format("%04d", codice))) {
+                tableModel.setValueAt(String.format("%04d", codice), i, 0);
+                tableModel.setValueAt(compagniaAereaField.getText(), i, 1);
+                tableModel.setValueAt(aeroportoOrigineField.getText(), i, 2);
+                tableModel.setValueAt(aeroportoDestinazioneField.getText(), i, 3);
+                tableModel.setValueAt(orarioField.getText(), i, 4);
+                tableModel.setValueAt(ritardoField.getText(), i, 5);
+                tableModel.setValueAt(gateField.getText(), i, 6);
+                tableModel.setValueAt(statoVoloCombo.getSelectedItem(), i, 7);
+                break;
+            }
+        }
+    }
 
+    private void chiudiFinestra() {
+        JFrame frame = (JFrame) principale.getTopLevelAncestor();
+        if (frame != null) frame.dispose();
+    }
+
+    public JPanel getPrincipale() {
+        return principale;
     }
 
     public JButton getSalvaButton() {
@@ -83,116 +192,7 @@ public class ModificaVolo {
 
     public void impostaDefaultButton() {
         JFrame frame = (JFrame) principale.getTopLevelAncestor();
-        if (frame != null) {
-            frame.getRootPane().setDefaultButton(salvaButton);
-        }
-    }
-
-    public JPanel getPrincipale() {
-        return principale;
-    }
-
-    private void impostaComeArrivo() {
-        arrivoButton.setSelected(true);
-        gateField.setEnabled(false);
-        gateField.setText("");
-        gateLabel.setVisible(false);
-        gateField.setVisible(false);
-        aeroportoDestinazioneField.setText("Capodichino");
-        aeroportoOrigineField.setText("");
-    }
-
-    private void impostaComePartenza() {
-        partenzaButton.setSelected(true);
-        gateField.setEnabled(true);
-        gateLabel.setVisible(true);
-        gateField.setVisible(true);
-        aeroportoOrigineField.setText("Capodichino");
-        aeroportoDestinazioneField.setText("");
-    }
-
-    private void salvaVolo() {
-        String codiceVolo = codiceVoloField.getText().trim();
-        String compagniaAerea = compagniaAereaField.getText();
-        String aeroportoOrigine = aeroportoOrigineField.getText();
-        String aeroportoDestinazione = aeroportoDestinazioneField.getText();
-        String orario = orarioField.getText();
-        String ritardo = ritardoField.getText();
-        String gate = gateField.getText();
-        String stato = (String) statoVoloCombo.getSelectedItem();
-        Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
-
-
-        boolean partenzaButtonSelected = partenzaButton.isSelected();
-
-        if (codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty() || aeroportoDestinazione.isEmpty()
-                || ritardo.isEmpty() || (partenzaButtonSelected && gate.isEmpty()) || stato == null || stato.isEmpty()) {
-            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (!codiceVolo.matches("\\d{4}")) {
-            JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (!gate.matches("[A-Z][1-9]")&& partenzaButtonSelected) {
-            JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if(!orario.matches("([0-9]|1\\d|2[0-3]):[0-5]\\d")){
-            JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String codiceInTabella = tableModel.getValueAt(i, 0).toString();
-            if (codiceInTabella.equals(codiceVolo) && voloModificato.getCodiceVolo() != Integer.parseInt(codiceVolo)) {
-                JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", "Errore", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        try {
-            int codice = Integer.parseInt(codiceVolo);
-            int rit = Integer.parseInt(ritardo);
-
-            voloModificato.setCodiceVolo(codice);
-            voloModificato.setCompagniaAerea(compagniaAerea);
-            voloModificato.setAeroportoOrigine(aeroportoOrigine);
-            voloModificato.setAeroportoDestinazione(aeroportoDestinazione);
-            voloModificato.setOrarioArrivo(orario);
-            voloModificato.setRitardo(rit);
-            voloModificato.setGate(gate);
-            voloModificato.setStato(statoEnum);
-
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                if (tableModel.getValueAt(i, 0).toString().equals(String.format("%04d", codice))) {
-                    tableModel.setValueAt(codiceVolo, i, 0);
-                    tableModel.setValueAt(compagniaAerea, i, 1);
-                    tableModel.setValueAt(aeroportoOrigine, i, 2);
-                    tableModel.setValueAt(aeroportoDestinazione, i, 3);
-                    tableModel.setValueAt(orario, i, 4);
-                    tableModel.setValueAt(ritardo, i, 5);
-                    tableModel.setValueAt(gate, i, 6);
-                    tableModel.setValueAt(stato, i, 7);
-                    break;
-                }
-            }
-            for(Volo v: sistema.visualizzaVoli()){
-                System.out.println(v);
-            }
-            JFrame finestra = (JFrame) principale.getTopLevelAncestor();
-            if (finestra != null) {
-                finestra.dispose();
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(principale, "Ritardo o codice volo non validi", "Errore", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(principale, "Stato del volo non valido", "Errore", JOptionPane.ERROR_MESSAGE);
-
-
-        }
+        if (frame != null) frame.getRootPane().setDefaultButton(salvaButton);
     }
 
     private void applyStyles() {

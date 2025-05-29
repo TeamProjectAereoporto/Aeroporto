@@ -20,7 +20,7 @@ public class Volo {
         CANCELLATO(6);
 
         private final int codice;
-        private statoVolo(int codice){
+        statoVolo(int codice){
             this.codice = codice;
         }
         public int getStato(){

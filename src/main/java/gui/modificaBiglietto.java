@@ -18,9 +18,9 @@ public class modificaBiglietto {
     private JButton invioButton;
     private JPanel finestraPrincipale;
 
-    private Sistema sistema;
+    private final Sistema sistema;
     public final static JFrame frame  = new JFrame("Modifica Biglietto");
-    private DefaultTableModel tableModel;
+    private final DefaultTableModel tableModel;
 
     public modificaBiglietto(Sistema sistema, Prenotazione bigliettoDaModificare, DefaultTableModel tableModel, JFrame chiamante) {
         this.sistema = sistema;

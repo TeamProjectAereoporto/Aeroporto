@@ -26,8 +26,8 @@ public class Prenota {
     private JTextField cognomeField;
     private JTextField ciFIeld;
     private JLabel gateField;
-    public final static JFrame frame = new JFrame("Prenota Biglietto");;
-    private Sistema sistema;
+    public final static JFrame frame = new JFrame("Prenota Biglietto");
+    private final Sistema sistema;
     public Prenota(JFrame chiamante, Object[] valori, Sistema sistema){
         this.sistema=sistema;
         //setting label informazioni volo

@@ -33,7 +33,7 @@ public class AggiungiVolo {
     private JRadioButton arrivoButton;
     private JRadioButton partenzaButton;
     private JLabel voloInLable;
-    private DefaultTableModel tableModel;
+    private final DefaultTableModel tableModel;
     private static final JFrame frame = new JFrame("Aggiungi Volo");
 
     public JPanel getPrincipale(){
@@ -41,7 +41,7 @@ public class AggiungiVolo {
     }
 
     public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema) {
-        this.sistema=sistema;
+        AggiungiVolo.sistema =sistema;
         this.tableModel = tableModel;
         final String aeroporto = "Capodichino";
         applyStyles();
