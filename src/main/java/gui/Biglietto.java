@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class Biglietto {
     /**
      * The constant frame.
      */
-    public static JFrame frame;
+    public final static JFrame frame = new JFrame("Cerca e modifica biglietto");
     private  ArrayList<Prenotazione> biglietti;
     /**
      * Instantiates a new Biglietto.
@@ -35,115 +33,132 @@ public class Biglietto {
      * @param frameChiamante the frame chiamante
      * @param sistema        the sistema
      */
-    public Biglietto(JFrame frameChiamante, controller.Sistema sistema, String nome, int codiceVolo){
-        //inizializzazione sistema
-        this.sistema=sistema;
-        //caretteristiche frame essenziali
-        frame = new JFrame("Cerca e modifica biglietto");
+    public Biglietto(JFrame frameChiamante, controller.Sistema sistema, String nome, int codiceVolo) {
+        this.sistema = sistema;
+        inizializzaFrame();
+        configuraTabella();
+        caricaBiglietti(nome, codiceVolo);
+        impostaAzioni(frameChiamante);
+    }
+
+    private void inizializzaFrame() {
         frame.setContentPane(finestraPrincipale);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         frame.pack();
-        frame.setSize(900,600);
+        frame.setSize(900, 600);
         frame.setResizable(false);
-        frame.setLocation(200,200);
+        frame.setLocation(200, 200);
         frame.setVisible(true);
         finestraPrincipale.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        //nomi colonne
-        String[] colonne= {"Nome","Cognome","Carta d'identità", "Posto", "Numero Biglietto"};
+    }
+
+    private void configuraTabella() {
+        String[] colonne = {"Nome", "Cognome", "Carta d'identità", "Posto", "Numero Biglietto"};
         tabellaBiglietti.setRowHeight(30);
         tabellaBiglietti.setGridColor(new Color(80, 80, 80));
         JTableHeader header = tabellaBiglietti.getTableHeader();
         header.setBackground(new Color(75, 75, 75));
         header.setForeground(Color.WHITE);
         header.setFont(new Font("SansSerif", Font.BOLD, 12));
-        //setting di tabella
-        DefaultTableModel model = new DefaultTableModel(colonne,0){
+
+        DefaultTableModel model = new DefaultTableModel(colonne, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         tabellaBiglietti.setModel(model);
         tabellaBiglietti.getTableHeader().setReorderingAllowed(false);
-        // Blocca il ridimensionamento delle colonne
         tabellaBiglietti.getTableHeader().setResizingAllowed(false);
-        //biglietti dell'utente
-        biglietti = sistema.getBiglietti(nome,  codiceVolo);
-        if (biglietti!=null) {
-            for (int i = 0; i < biglietti.size(); i++)
-                model.addRow(new Object[]{biglietti.get(i).getPasseggero().getNome(),biglietti.get(i).getPasseggero().getCognome(),biglietti.get(i).getPasseggero().getNumeroDocumento() ,biglietti.get(i).getPostoAssegnato(), biglietti.get(i).getNumeroBiglietto()});
+    }
+
+    private void caricaBiglietti(String nome, int codiceVolo) {
+        biglietti = sistema.getBiglietti(nome, codiceVolo);
+        DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
+        if (biglietti != null) {
+            for (Prenotazione p : biglietti) {
+                model.addRow(new Object[]{
+                        p.getPasseggero().getNome(),
+                        p.getPasseggero().getCognome(),
+                        p.getPasseggero().getNumeroDocumento(),
+                        p.getPostoAssegnato(),
+                        p.getNumeroBiglietto()
+                });
+            }
         }
-            //ritorno al frame principale
-            fineButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameChiamante.setVisible(true);
-                frame.setVisible(false);
-                frame.dispose();
-            }
+    }
+
+    private void impostaAzioni(JFrame frameChiamante) {
+        fineButton.addActionListener(e -> {
+            frameChiamante.setVisible(true);
+            frame.setVisible(false);
+            frame.dispose();
         });
-        cancellaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int riga = tabellaBiglietti.getSelectedRow();
-                if(riga!=-1){
-                    int conferma = JOptionPane.showConfirmDialog(null,
-                            "Sei sicuro di voler eliminare questo biglietto?",
-                            "Cancellazione biglietto",
-                            JOptionPane.YES_NO_OPTION);
-                    if (conferma==JOptionPane.YES_OPTION){
-                        DefaultTableModel model1 = (DefaultTableModel) tabellaBiglietti.getModel();
-                        Object valoreNumeroBiglietto = model1.getValueAt(riga, 4); // colonna "NumeroCarta"
-                        if (valoreNumeroBiglietto != null) {
-                            try {
-                                long numeroBiglietto = Long.parseLong(valoreNumeroBiglietto.toString());
-                                sistema.cancellaBiglietto(numeroBiglietto); // Rimozione dal sistema
-                                model1.removeRow(riga); // Rimozione dalla tabella
-                            } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Numero biglietto non valido!",
-                                        "Errore",
-                                        JOptionPane.ERROR_MESSAGE);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        modificaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int riga = tabellaBiglietti.getSelectedRow();
-                if (riga != -1) {
-                    Prenotazione bigliettoDaModificare = biglietti.get(riga);
-                    DefaultTableModel tableModel = (DefaultTableModel) tabellaBiglietti.getModel();
-                    modificaBiglietto modifica = new modificaBiglietto(sistema,bigliettoDaModificare,tableModel,frame);
-                    modifica.frame.setVisible(true);
-                    frame.setVisible(false);
-                }
-            }
-        });
+
+        cancellaButton.addActionListener(e -> eliminaBiglietto());
+
+        modificaButton.addActionListener(e -> modificaBiglietto());
+
         tabellaBiglietti.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount()==2){
-                    int riga = tabellaBiglietti.getSelectedRow();
-                    int colonne= tabellaBiglietti.getColumnCount();
-                    Object[] o = new Object[colonne];
-                    for(int column=0; column<colonne; column++){
-                        o[column] = tabellaBiglietti.getValueAt(riga, column);
-                    }
-                    StringBuilder info = new StringBuilder();
-                    info.append("Codice Volo: ").append(biglietti.get(riga).getVolo().getCodiceVolo()+"\n");
-                    info.append("Compagnia Aerea: ").append(biglietti.get(riga).getVolo().getCompagniaAerea()+"\n");
-                    info.append("Aeroporto di Origine: ").append(biglietti.get(riga).getVolo().getAeroportoOrigine()+"\n");
-                    info.append("Aeroporto Destinazione: ").append(biglietti.get(riga).getVolo().getAeroportoDestinazione()+"\n");
-                    info.append("Orario di Arrivo: ").append(biglietti.get(riga).getVolo().getOrarioArrivo()+"\n");
-                    info.append("Ritardo: ").append(biglietti.get(riga).getVolo().getRitardo()+"'\n");
-                    info.append("Gate: ").append(biglietti.get(riga).getVolo().getGate());
-                    JOptionPane.showMessageDialog(null, info.toString(), "Informazioni Volo",JOptionPane.INFORMATION_MESSAGE);
+                if (e.getClickCount() == 2) {
+                    mostraDettagliVolo();
                 }
             }
         });
+    }
+
+    private void eliminaBiglietto() {
+        int riga = tabellaBiglietti.getSelectedRow();
+        if (riga != -1) {
+            int conferma = JOptionPane.showConfirmDialog(null,
+                    "Sei sicuro di voler eliminare questo biglietto?",
+                    "Cancellazione biglietto",
+                    JOptionPane.YES_NO_OPTION);
+            if (conferma == JOptionPane.YES_OPTION) {
+                DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
+                Object valoreNumeroBiglietto = model.getValueAt(riga, 4);
+                if (valoreNumeroBiglietto != null) {
+                    try {
+                        long numeroBiglietto = Long.parseLong(valoreNumeroBiglietto.toString());
+                        sistema.cancellaBiglietto(numeroBiglietto);
+                        model.removeRow(riga);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null,
+                                "Numero biglietto non valido!",
+                                "Errore",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
+    }
+
+    private void modificaBiglietto() {
+        int riga = tabellaBiglietti.getSelectedRow();
+        if (riga != -1) {
+            Prenotazione bigliettoDaModificare = biglietti.get(riga);
+            DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
+            modificaBiglietto modifica = new modificaBiglietto(sistema, bigliettoDaModificare, model, frame);
+            modifica.frame.setVisible(true);
+            frame.setVisible(false);
+        }
+    }
+
+    private void mostraDettagliVolo() {
+        int riga = tabellaBiglietti.getSelectedRow();
+        Prenotazione prenotazione = biglietti.get(riga);
+        StringBuilder info = new StringBuilder();
+        info.append("Codice Volo: ").append(prenotazione.getVolo().getCodiceVolo()).append("\n");
+        info.append("Compagnia Aerea: ").append(prenotazione.getVolo().getCompagniaAerea()).append("\n");
+        info.append("Aeroporto di Origine: ").append(prenotazione.getVolo().getAeroportoOrigine()).append("\n");
+        info.append("Aeroporto Destinazione: ").append(prenotazione.getVolo().getAeroportoDestinazione()).append("\n");
+        info.append("Orario di Arrivo: ").append(prenotazione.getVolo().getOrarioArrivo()).append("\n");
+        info.append("Ritardo: ").append(prenotazione.getVolo().getRitardo()).append("'\n");
+        info.append("Gate: ").append(prenotazione.getVolo().getGate());
+        JOptionPane.showMessageDialog(null, info.toString(), "Informazioni Volo", JOptionPane.INFORMATION_MESSAGE);
     }
 }

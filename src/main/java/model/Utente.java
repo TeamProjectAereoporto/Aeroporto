@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class Utente {
     //attributi della superclasse Utente
@@ -17,7 +18,6 @@ public class Utente {
     //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
 
     public ArrayList<Volo> visualizzaVoli() {
-        System.out.println("visualizza");
         return voliGestiti;
     }
 

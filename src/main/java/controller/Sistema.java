@@ -5,12 +5,12 @@ import java.util.Random;
 
 
 public class Sistema {
-    public ArrayList<Utente> utenti;
+    public static ArrayList<Utente> utenti;
     public Prenotazione biglietto;
     public UtenteGenerico utente;
     public Admin admin;
     public ArrayList<Prenotazione> tuttiIBiglietti;
-
+    private Random casuale= new Random();
     public Sistema(){
         utenti = new ArrayList<>();
         utente = new UtenteGenerico("karol", " leonardi");
@@ -34,7 +34,7 @@ public class Sistema {
     }
     //cancella un biglietto
     public boolean cancellaBiglietto(long numeroBiglietto){
-        return biglietto.cancellaBiglietto(tuttiIBiglietti,numeroBiglietto, utente.bigliettiAcquistati);
+        return biglietto.cancellaBiglietto(numeroBiglietto, utente.bigliettiAcquistati);
     }
     //crea il numero di un biglietto unico
     public Long creaNumBiglietto(){
@@ -47,14 +47,12 @@ public class Sistema {
         for(Utente u : utenti){
             if(u.getNomeUtente().equals(username) && u.getPsw().equals(psw)){
                 if(u instanceof UtenteGenerico){
-                    //setUtenteLoggato(new UtenteGenerico(username,psw));
+
                     return 1;
                 }else if(u instanceof Admin){
-                    //setUtenteLoggato(new Admin(username,psw, "prova"));
                     return 2;
                 }
             }
-            //System.out.println(u.getNomeUtente()+" "+u.getPsw()); debbubing
         }
 
         return 0;
@@ -88,7 +86,6 @@ public class Sistema {
         utente =null;
     }
     public void generaContenutiCasuali(){
-        Random casuale= new Random();
 
         String[] nomiCompagnie = {"Aircampnia","RaynAir","AliItalia","AirRoma","AliGermany",
                 "AirRomania","FlyNaples","FlyRomenia","FlyHighIT","FranceFly","SpainFly","AirTool",
@@ -103,14 +100,14 @@ public class Sistema {
                 "21:00", "22:25", "23:50", "00:30", "01:45"
         };
         String[] gate = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1","N1","O1","P1","Q1","R1","S1","T1","U1","V1","W1","X1","Y1","Z1"};
-        String[] stati = {"INRITARDO",
+        String[] stati = {
+                "INRITARDO",
                 "INORARIO",
                 "DECOLLATO",
                 "PROGRAMMATO",
                 "ATTERRATO",
                 "CANCELLATO"};
 
-        Random rand = new Random();
         int codiceVolo;
         int ritardo;
         String statoVolo = "";
@@ -121,19 +118,19 @@ public class Sistema {
         String gate1;
         for(int i=0;i<40;i++){
              codiceVolo = casuale.nextInt(9000) + 1000;
-         ritardo = 0;
-        if(ritardo != 0){
-            statoVolo = stati[0];
-        } else if(ritardo == 0){
-            statoVolo = stati[rand.nextInt(4)+2];
-        }
-         compagnia = nomiCompagnie[casuale.nextInt(17)];
-         aeroportoOrigine = Aeroporti[casuale.nextInt(13)];
-         aeroportoDestinazione = Aeroporti[casuale.nextInt(13)];
-         orarioArrivo = orari[casuale.nextInt(20)];
-         gate1 = gate[casuale.nextInt(26)];
-        Volo v=new Volo(codiceVolo,compagnia,aeroportoOrigine,aeroportoDestinazione,orarioArrivo,ritardo,Volo.statoVolo.valueOf(statoVolo), gate1);
-        admin.aggiungiVoli(v);
+             ritardo =  casuale.nextInt(181);
+             if(ritardo != 0){
+                statoVolo = stati[0];
+             } else if(ritardo == 0){
+                statoVolo = stati[casuale.nextInt(4)+2];
+             }
+             compagnia = nomiCompagnie[casuale.nextInt(17)];
+             aeroportoOrigine = Aeroporti[casuale.nextInt(13)];
+             aeroportoDestinazione = Aeroporti[casuale.nextInt(13)];
+             orarioArrivo = orari[casuale.nextInt(20)];
+             gate1 = gate[casuale.nextInt(26)];
+            Volo v=new Volo(codiceVolo,compagnia,aeroportoOrigine,aeroportoDestinazione,orarioArrivo,ritardo,Volo.statoVolo.valueOf(statoVolo), gate1);
+            admin.aggiungiVoli(v);
         }
 
     }

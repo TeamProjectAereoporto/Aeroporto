@@ -34,6 +34,7 @@ public class AggiungiVolo {
     private JRadioButton partenzaButton;
     private JLabel voloInLable;
     private DefaultTableModel tableModel;
+    private static final JFrame frame = new JFrame("Aggiungi Volo");
 
     public JPanel getPrincipale(){
         return principale;
@@ -42,7 +43,7 @@ public class AggiungiVolo {
     public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema) {
         this.sistema=sistema;
         this.tableModel = tableModel;
-
+        final String aeroporto = "Capodichino";
         applyStyles();
 
         ButtonGroup partenzaArrivo = new ButtonGroup();
@@ -52,21 +53,21 @@ public class AggiungiVolo {
 
         partenzaButton.setSelected(true);
         gateField.setEnabled(true);
-        aeroportoOrigineField.setText("Capodichino");
+        aeroportoOrigineField.setText(aeroporto);
 
         arrivoButton.addActionListener(e -> {
             gateField.setText("");
             gateField.setEnabled(false);
             gateLabel.setVisible(false);
             gateField.setVisible(false);
-            destinazioneField.setText("Capodichino");
+            destinazioneField.setText(aeroporto);
             aeroportoOrigineField.setText("");
         });
         partenzaButton.addActionListener(e -> {
             gateField.setEnabled(true);
             gateLabel.setVisible(true);
             gateField.setVisible(true);
-            aeroportoOrigineField.setText("Capodichino");
+            aeroportoOrigineField.setText(aeroporto);
             destinazioneField.setText("");
         });
 
@@ -86,8 +87,7 @@ public class AggiungiVolo {
         AggiungiVolo av = new AggiungiVolo(modelloFinto, sistema);
         JFrame frame = new JFrame("Aggiungi Volo");
         frame.setContentPane(av.getPrincipale());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.getRootPane().setDefaultButton(aggiungiVoloButton); errore static boh
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.pack();
         frame.setSize(700, 500);
         frame.setLocation(400, 150);
@@ -109,30 +109,30 @@ public class AggiungiVolo {
 
 
         boolean partenzaButtonSelected = partenzaButton.isSelected();
-
+        final String errore ="Errore";
         if (codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty() || aeroportoDestinazione.isEmpty()
                 || ritardo.isEmpty() || (partenzaButtonSelected && gate.isEmpty()) || stato == null || stato.isEmpty()) {
-            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti", errore, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (!codiceVolo.matches("\\d{4}")) {
-            JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", errore, JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (!gate.matches("[A-Z][1-9]") && partenzaButtonSelected) {
-            JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", errore, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if(!orario.matches("([0-9]|1\\d|2[0-3]):[0-5]\\d")){
-            JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per l'orario HH:MM", errore, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             if (tableModel.getValueAt(i, 0).toString().equals(codiceVolo)) {
-                JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", errore, JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
@@ -158,9 +158,9 @@ public class AggiungiVolo {
             ((JFrame) principale.getTopLevelAncestor()).dispose();
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(principale, "Il codice volo non è un numero valido", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Il codice volo non è un numero valido", errore, JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(principale, "Stato del volo non valido", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Stato del volo non valido", errore, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -170,15 +170,14 @@ public class AggiungiVolo {
     private void applyStyles() {
         // Palette colori aeroportuale
         Color primaryBlue = new Color(0, 95, 135);
-        Color secondaryBlue = new Color(0, 120, 167);
         Color background = new Color(245, 245, 245);
-        Color errorRed = new Color(231, 76, 60);
         Color successGreen = new Color(76, 175, 80);
 
         // Font
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
+        final String fontName = "Segoe UI";
+        Font labelFont = new Font(fontName, Font.BOLD, 14);
+        Font fieldFont = new Font(fontName, Font.PLAIN, 14);
+        Font buttonFont = new Font(fontName, Font.BOLD, 14);
 
         // Stile generale
         principale.setBackground(background);

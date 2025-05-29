@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Passeggero {
 
     private String nome;

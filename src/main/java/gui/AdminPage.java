@@ -21,7 +21,7 @@ public class AdminPage {
     private JLabel voliLable;
     private JTable tabellaVoli;
     private JButton modificaVoloButton;
-    public static JFrame frame;
+    public final static JFrame frame = new JFrame("AdminDashboard");;
     private Sistema sistema;
 
     public AdminPage(JFrame chiamante, Sistema controller) {
@@ -92,12 +92,10 @@ public class AdminPage {
                         JOptionPane.WARNING_MESSAGE);
             }
         });
-
-        frame = new JFrame("AdminDashboard");
         frame.setContentPane(principale);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         modificaVoloButton.addActionListener(new ActionListener() {
@@ -110,14 +108,14 @@ public class AdminPage {
 
                     ModificaVolo modificaVoloPanel = new ModificaVolo(tableModel, sistema, voloSelezionato);
 
-                    JFrame frame = new JFrame("Modifica Volo");
-                    frame.setContentPane(modificaVoloPanel.getPrincipale());
-                    frame.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setSize(700, 500);
-                    frame.setLocation(400, 150);
-                    frame.setVisible(true);
+                    JFrame frameVolo = new JFrame("Modifica Volo");
+                    frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
+                    frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
+                    frameVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    frameVolo.pack();
+                    frameVolo.setSize(700, 500);
+                    frameVolo.setLocation(400, 150);
+                    frameVolo.setVisible(true);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -135,10 +133,11 @@ public class AdminPage {
         Color successGreen = new Color(76, 175, 80);
 
         // Font
-        Font titleFont = new Font("Segoe UI", Font.BOLD, 24);
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font tableFont = new Font("Segoe UI", Font.PLAIN, 12);
+        final String name = "Segoe UI";
+        Font titleFont = new Font(name, Font.BOLD, 24);
+        Font labelFont = new Font(name, Font.BOLD, 14);
+        Font buttonFont = new Font(name, Font.BOLD, 14);
+        Font tableFont = new Font(name, Font.PLAIN, 12);
 
         // Stile generale
         principale.setBackground(background);
@@ -181,9 +180,11 @@ public class AdminPage {
 
         // Effetto hover
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(bg.darker());
             }
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(bg);
             }

@@ -1,10 +1,12 @@
 package model;
-import gui.Prenota;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
 //questa classe è un'estensione della superclasse Utente
 public class UtenteGenerico extends Utente {
-    public ArrayList<Prenotazione> bigliettiAcquistati;
+    public static ArrayList<Prenotazione> bigliettiAcquistati;
+    private static final Logger logger = Logger.getLogger(UtenteGenerico.class.getName());
     //costruttore per l'utente generico.
     public UtenteGenerico(String l, String p){
         super(l,p);
@@ -27,19 +29,18 @@ public class UtenteGenerico extends Utente {
     public ArrayList<Prenotazione> cercaBiglietto(String nome, int codiceVolo) {
         ArrayList<Prenotazione> bigliettiTrovati = new ArrayList<>();
         if (nome.isEmpty() && codiceVolo == -1) {
-            return null;
+            return bigliettiTrovati;
         }
         for (Prenotazione p : bigliettiAcquistati) {
             boolean nomeMatch = !nome.isEmpty() && p.getPasseggero().getNome().equalsIgnoreCase(nome.trim());
             boolean numeroMatch = codiceVolo != -1 && p.getVolo().getCodiceVolo() == codiceVolo;
-            System.out.println(p);
             if ((nomeMatch && numeroMatch) || (nomeMatch && codiceVolo == -1) || (numeroMatch && nome.isEmpty())) {
-                System.out.println("sono dentro\n");
+                logger.info("ho trovato il biglietto\n");
                 bigliettiTrovati.add(p);
             }
         }
         if (bigliettiTrovati.isEmpty()) {
-            System.out.println("Nessun biglietto trovato");
+            logger.info("Nessun biglietto trovato");
         }
         return bigliettiTrovati;
     }

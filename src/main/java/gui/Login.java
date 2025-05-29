@@ -2,7 +2,6 @@ package gui;
 
 import controller.Sistema;
 import model.Admin;
-import model.Utente;
 import model.UtenteGenerico;
 
 import javax.swing.*;
@@ -11,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 /**
  * The type finestraPrincipale.
@@ -23,9 +23,8 @@ public class Login {
     private JTextField campoUsername;
     private JButton invio;
     private JPasswordField campoPassword;
-    private JLabel username;
-    private JLabel password;
     private JButton registratiButton;
+    private static final Logger logger = Logger.getLogger(Login.class.getName());
 
     public JButton getInvio() {
         return invio;
@@ -51,24 +50,27 @@ public class Login {
                     //apertura interfaccia utente=1 admin=2 else utente non esistente
                     campoPassword.setText("");
                     campoUsername.setText("");
-                    if(ruolo == 1){
-                        HomeUtente home = new HomeUtente(frame, sistema, false);
-                        home.frame.setVisible(true);
-                        frame.setVisible(false);
-                        System.out.println("sono dentro a utenteGenerico");
-                        frame.dispose();
-                    }else if(ruolo==2){
-                        AdminPage home = new AdminPage(frame, sistema);
-                        home.frame.setVisible(true);
-                        frame.setVisible(false);
-                        frame.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Credenziali errate. Riprova.",
-                                "Login Fallito",
-                                JOptionPane.WARNING_MESSAGE
-                        );
+                    switch (ruolo){
+                        case 1:
+                            HomeUtente home = new HomeUtente(frame, sistema, false);
+                            home.frame.setVisible(true);
+                            frame.setVisible(false);
+                            logger.info("sono dentro a utenteGenerico");
+                            frame.dispose();
+                            break;
+                        case 2:
+                            AdminPage homeAdmin = new AdminPage(frame, sistema);
+                            homeAdmin.frame.setVisible(true);
+                            frame.setVisible(false);
+                            frame.dispose();
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Credenziali errate. Riprova.",
+                                    "Login Fallito",
+                                    JOptionPane.WARNING_MESSAGE
+                            );
                     }
                 }
             }
@@ -87,7 +89,6 @@ public class Login {
         registratiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Register register = new Register(frame,sistema);
                 Register.frame.setVisible(true);
                 frame.setVisible(false);
             }

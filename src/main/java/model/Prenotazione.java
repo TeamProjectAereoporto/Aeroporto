@@ -1,5 +1,4 @@
 package model;
-import gui.Biglietto;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -94,7 +93,7 @@ public class Prenotazione {
         }
         return  true;
     }
-    public boolean cancellaBiglietto(ArrayList<Prenotazione> biglietti, long numeroBiglietto, ArrayList<Prenotazione> bigliettiAcquistati){
+    public boolean cancellaBiglietto( long numeroBiglietto, ArrayList<Prenotazione> bigliettiAcquistati){
         for(Prenotazione p : bigliettiAcquistati){
             if(p.getNumeroBiglietto()==numeroBiglietto){
                 bigliettiAcquistati.remove(p);

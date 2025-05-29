@@ -10,14 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
+
 
 public class Prenota {
     private JLabel codiceVoloField;
@@ -33,7 +26,7 @@ public class Prenota {
     private JTextField cognomeField;
     private JTextField ciFIeld;
     private JLabel gateField;
-    public static JFrame frame;
+    public final static JFrame frame = new JFrame("Prenota Biglietto");;
     private Sistema sistema;
     public Prenota(JFrame chiamante, Object[] valori, Sistema sistema){
         this.sistema=sistema;
@@ -47,9 +40,8 @@ public class Prenota {
         statoField.setText(valori[6].toString());
         gateField.setText(valori[7].toString());
         //caratteristiche essenziali frame
-        frame = new JFrame("Prenota Biglietto");
         frame.setContentPane(finestraPrincipale);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.pack();
         frame.getRootPane().setDefaultButton(prenotaButton);
         frame.setResizable(false);
@@ -61,7 +53,7 @@ public class Prenota {
                 String cognome = cognomeField.getText().trim().toLowerCase();
                 String ci = ciFIeld.getText().trim().toUpperCase();
                 if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
-                    if (ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
+                    if (ci.matches("[A-Za-z]{2}\\d[0-9]{5}[A-Za-z]{2}")) {
                         Long numeroBiglietto = sistema.creaNumBiglietto();
                         Prenotazione biglietto = new Prenotazione(numeroBiglietto,
                                 "A5",
