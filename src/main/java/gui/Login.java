@@ -20,6 +20,8 @@ public class Login {
     private controller.Sistema sistema;
     private  JPanel finestraPrincipale;
     private JLabel immagine;
+    private JLabel username;
+    private JLabel password;
     private JTextField campoUsername;
     private JButton invio;
     private JPasswordField campoPassword;
@@ -30,9 +32,6 @@ public class Login {
         return invio;
     }
 
-    /**
-     * The constant frame.
-     */
     public static JFrame frame;
     public Login(JFrame frame, Sistema sistema) {
         this.sistema=sistema;

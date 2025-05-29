@@ -242,4 +242,7 @@ public class AggiungiVolo {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+    public JButton getAggiungiVoloButton(){
+        return aggiungiVoloButton;
+    }
 }

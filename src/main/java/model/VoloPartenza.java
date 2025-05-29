@@ -8,3 +8,4 @@ public class VoloPartenza extends Volo {
     }
 
 }
+

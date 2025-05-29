@@ -19,6 +19,7 @@ public class Register {
     public final static JFrame frame = new JFrame("Registra il tuo account");;
     private Sistema sistema;
 
+
     public Register(JFrame chiamante, Sistema sistema) {
         this.sistema = sistema;
 

@@ -44,6 +44,7 @@ public class ModificaVolo {
         // Qui inserisci il codice per inizializzare i componenti (da GUI designer o manuale)
     }
 
+
     private void caricaDatiVolo() {
         codiceVoloField.setText(String.format("%04d", voloModificato.getCodiceVolo()));
         compagniaAereaField.setText(voloModificato.getCompagniaAerea());

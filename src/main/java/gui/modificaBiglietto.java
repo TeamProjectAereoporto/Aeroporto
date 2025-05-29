@@ -29,7 +29,7 @@ public class modificaBiglietto {
         frame.setContentPane(finestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.pack();
-        frame.setResizable(false);
+        frame.setSize(new Dimension(400, 300) );
         frame.setLocationRelativeTo(null);
         frame.getRootPane().setDefaultButton(invioButton);
         frame.setVisible(true);
@@ -53,7 +53,7 @@ public class modificaBiglietto {
                 return;
             }
 
-            if (!ci.matches("[A-Za-z]{2}\\d[0-9]{5}[A-Za-z]{2}")) {
+            if (!ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                 showError("Formato CI non valido. Deve essere: CC12345CC");
                 return;
             }

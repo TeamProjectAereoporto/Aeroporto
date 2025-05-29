@@ -116,7 +116,4 @@ public class Volo {
         return "Volo " + codiceVolo + " da " + aeroportoOrigine + " a " + aeroportoDestinazione +
                 " con arrivo previsto alle " + orarioArrivo + " (" + stato + ")" + "al gate " + gate;
     }
-
-
-
 }

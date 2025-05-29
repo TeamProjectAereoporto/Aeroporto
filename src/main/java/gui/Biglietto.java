@@ -13,6 +13,7 @@ import java.util.ArrayList;
 /**
  * The type Biglietto.
  */
+
 public class Biglietto {
     private controller.Sistema sistema;
     private JPanel finestraPrincipale;

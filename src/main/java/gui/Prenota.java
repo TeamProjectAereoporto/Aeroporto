@@ -53,7 +53,7 @@ public class Prenota {
                 String cognome = cognomeField.getText().trim().toLowerCase();
                 String ci = ciFIeld.getText().trim().toUpperCase();
                 if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
-                    if (ci.matches("[A-Za-z]{2}\\d[0-9]{5}[A-Za-z]{2}")) {
+                    if (ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                         Long numeroBiglietto = sistema.creaNumBiglietto();
                         Prenotazione biglietto = new Prenotazione(numeroBiglietto,
                                 "A5",
