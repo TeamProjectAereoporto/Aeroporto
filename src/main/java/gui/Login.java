@@ -19,7 +19,6 @@ public class Login {
 
     private final controller.Sistema sistema;
     private  JPanel finestraPrincipale;
-    private JLabel immagine;
     private JLabel username;
     private JLabel password;
     private JTextField campoUsername;
