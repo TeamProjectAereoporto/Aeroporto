@@ -1,5 +1,8 @@
 package controller;
+import implementazionePostgres.VoloDB;
 import model.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,21 +14,48 @@ public class Sistema {
     public Admin admin;
     public ArrayList<Prenotazione> tuttiIBiglietti;
     private final Random casuale= new Random();
+    private VoloDB voloDB;
     public Sistema(){
         utenti = new ArrayList<>();
         utente = new UtenteGenerico("karol", " leonardi");
         admin = new Admin("saso","saso", "231223");
         tuttiIBiglietti = new ArrayList<>();
         biglietto = new Prenotazione();
+        voloDB = new VoloDB();
     }
     public void aggiungiUtente(Utente ug){
         utenti.add(ug);
     }
     public void aggiungiVolo(Volo v){
-        admin.aggiungiVoli(v);
+        try {
+            voloDB.aggiungiVoloDB(v);
+            admin.aggiungiVoli(v);
+        } catch (SQLException e) {
+            System.err.println("Errore aggiungendo volo: " + e.getMessage());
+        }
     }
     public ArrayList<Volo> visualizzaVoli(){
-        return utente.visualizzaVoli();
+        try {
+            return voloDB.getTuttiVoli();
+        } catch (SQLException e) {
+            System.err.println("Errore nel recupero voli: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+    public void eliminaVolo(int codiceVolo) {
+        try {
+            voloDB.eliminaVolo(codiceVolo);
+        } catch (SQLException e) {
+            System.err.println("Errore eliminando volo: " + e.getMessage());
+        }
+    }
+
+    public void modificaVolo(Volo v) {
+        try {
+            voloDB.modificaVoloDB(v);
+        } catch (SQLException e) {
+            System.err.println("Errore modificando volo: " + e.getMessage());
+        }
     }
     //aggiungi il biglietto tra i biglietti acquistati dell'utente e tutti i biglietti
     public void aggiungiBiglietto(Prenotazione biglietto){

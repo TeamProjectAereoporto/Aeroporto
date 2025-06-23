@@ -125,6 +125,7 @@ public class ModificaVolo {
             voloModificato.setStato(Volo.statoVolo.valueOf(stato));
 
             aggiornaTabella(codice);
+            sistema.modificaVolo(voloModificato);
             chiudiFinestra();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", "Errore", JOptionPane.ERROR_MESSAGE);

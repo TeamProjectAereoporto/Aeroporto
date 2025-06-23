@@ -34,6 +34,7 @@ public class AdminPage {
                 return false;
             }
         };
+        popolaTabellaVoli(model);
         tabellaVoli.setModel(model);
 
         aggiungiVoloButton.addActionListener(e -> {
@@ -57,6 +58,19 @@ public class AdminPage {
                         JOptionPane.YES_NO_OPTION);
 
                 if (conferma == JOptionPane.YES_OPTION) {
+                    Object valoreCodice = tabellaVoli.getValueAt(rigaSelezionata, 0);
+                    int codiceVolo = -1;
+                    if (valoreCodice instanceof Integer) {
+                        codiceVolo = (Integer) valoreCodice;
+                    } else if (valoreCodice instanceof String) {
+                        try {
+                            codiceVolo = Integer.parseInt((String) valoreCodice);
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(null, "Errore nel formato del codice volo");
+                            return;
+                        }
+                    }
+                    sistema.eliminaVolo(codiceVolo);
                     model.removeRow(rigaSelezionata);
                     sistema.visualizzaVoli().remove(rigaSelezionata);
                 }
@@ -67,6 +81,7 @@ public class AdminPage {
                         JOptionPane.WARNING_MESSAGE);
             }
         });
+
 
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -98,6 +113,23 @@ public class AdminPage {
         });
         applyStyles();
     }
+
+    private void popolaTabellaVoli(DefaultTableModel model) {
+        ArrayList<Volo> voli = sistema.visualizzaVoli();
+        for (Volo v : voli) {
+            model.addRow(new Object[]{
+                    v.getCodiceVolo(),
+                    v.getCompagniaAerea(),
+                    v.getAeroportoOrigine(),
+                    v.getAeroportoDestinazione(),
+                    v.getOrarioArrivo(),
+                    v.getRitardo(),
+                    v.getStato(),
+                    v.getGate()  // Se lo hai rimosso dal DB e dal model, togli anche da qui
+            });
+        }
+    }
+
 
     private void applyStyles() {
         // Palette colori aeroportuale

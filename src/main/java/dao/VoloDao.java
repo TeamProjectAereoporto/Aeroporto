@@ -9,6 +9,6 @@ public interface VoloDao {
     public void aggiungiVoloDB(Volo volo) throws SQLException;
     public void modificaVoloDB(Volo volo) throws SQLException;
     public void eliminaVolo(int codiceVolo) throws SQLException;
-    public void getVolo(int codiceVolo) throws SQLException;
-    public void getTuttiVoli(ArrayList<Volo> volo) throws SQLException;
+    public Volo getVolo(int codiceVolo) throws SQLException;
+    public ArrayList<Volo> getTuttiVoli() throws SQLException;
 }
