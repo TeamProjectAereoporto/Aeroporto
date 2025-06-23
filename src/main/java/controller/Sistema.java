@@ -86,7 +86,7 @@ public class Sistema {
     public void logout(Utente utente){
         utente =null;
     }
-    public void generaContenutiCasuali(){
+    /*public void generaContenutiCasuali(){
 
         String[] nomiCompagnie = {"Aircampnia","RaynAir","AliItalia","AirRoma","AliGermany",
                 "AirRomania","FlyNaples","FlyRomenia","FlyHighIT","FranceFly","SpainFly","AirTool",
@@ -138,6 +138,6 @@ public class Sistema {
             admin.aggiungiVoli(v);
         }
 
-    }
+    }*/
 
 }

@@ -33,7 +33,7 @@ public class AggiungiVolo {
     private JRadioButton arrivoButton;
     private JRadioButton partenzaButton;
     private JLabel voloInLable;
-    private final DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private static final JFrame frame = new JFrame("Aggiungi Volo");
 
     public JPanel getPrincipale(){
@@ -79,22 +79,6 @@ public class AggiungiVolo {
             }
         });
     }
-
-    public static void main(String[] args) {
-
-        String[] colonne = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Gate", "Stato"};
-        DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
-        AggiungiVolo av = new AggiungiVolo(modelloFinto, sistema);
-        JFrame frame = new JFrame("Aggiungi Volo");
-        frame.setContentPane(av.getPrincipale());
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        frame.pack();
-        frame.setSize(700, 500);
-        frame.setLocation(400, 150);
-        frame.setVisible(true);
-    }
-
-
     private void salvaVolo() {
         String codiceVolo = codiceVoloField.getText().trim();
         String compagniaAerea = compagniaAereaField.getText();
@@ -105,9 +89,6 @@ public class AggiungiVolo {
         String gate = gateField.getText();
         String stato = (String) statoVoloCombo.getSelectedItem();
         Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
-
-
-
         boolean partenzaButtonSelected = partenzaButton.isSelected();
         final String errore ="Errore";
         if (codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty() || aeroportoDestinazione.isEmpty()
@@ -139,7 +120,6 @@ public class AggiungiVolo {
 
         try {
             int codice = Integer.parseInt(codiceVolo);
-
             Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, statoEnum, gate);
 
             sistema.aggiungiVolo(v);
@@ -156,7 +136,6 @@ public class AggiungiVolo {
             });
 
             ((JFrame) principale.getTopLevelAncestor()).dispose();
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(principale, "Il codice volo non è un numero valido", errore, JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException e) {

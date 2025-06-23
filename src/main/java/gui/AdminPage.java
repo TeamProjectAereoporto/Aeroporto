@@ -28,44 +28,16 @@ public class AdminPage {
         this.sistema = controller;
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
-
         DefaultTableModel model = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
         tabellaVoli.setModel(model);
-        sistema.generaContenutiCasuali();
-        ArrayList<Volo> voli = sistema.visualizzaVoli();
-        if (voli != null) {
-            for (Volo v : voli) {
-                model.addRow(new Object[]{
-                        v.getCodiceVolo(),
-                        v.getCompagniaAerea(),
-                        v.getAeroportoOrigine(),
-                        v.getAeroportoDestinazione(),
-                        v.getOrarioArrivo(),
-                        v.getRitardo(),
-                        v.getStato(),
-                        v.getGate()
-                });
-            }
-        }
-        if (tabellaVoli.getParent() instanceof JViewport) {
-        } else {
-            voliPanel.removeAll();
-            voliPanel.setLayout(new BorderLayout());
-            voliPanel.add(new JScrollPane(tabellaVoli), BorderLayout.CENTER);
-            voliPanel.revalidate();
-            voliPanel.repaint();
-        }
 
         aggiungiVoloButton.addActionListener(e -> {
-            String[] colonna = {"Codice", "Destinazione", "Compagnia", "Origine", "Orario", "Ritardo", "Gate", "Stato"};
-            DefaultTableModel modelloFinto = new DefaultTableModel(colonne, 0);
-            AggiungiVolo av = new AggiungiVolo(modelloFinto, sistema);
+            AggiungiVolo av = new AggiungiVolo(model, sistema);
             JFrame frame = new JFrame("Aggiungi Volo");
             frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton());
             frame.setContentPane(av.getPrincipale());
@@ -85,8 +57,8 @@ public class AdminPage {
                         JOptionPane.YES_NO_OPTION);
 
                 if (conferma == JOptionPane.YES_OPTION) {
-                    DefaultTableModel model1 = (DefaultTableModel) tabellaVoli.getModel();
-                    model1.removeRow(rigaSelezionata);
+                    model.removeRow(rigaSelezionata);
+                    sistema.visualizzaVoli().remove(rigaSelezionata);
                 }
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -95,11 +67,13 @@ public class AdminPage {
                         JOptionPane.WARNING_MESSAGE);
             }
         });
+
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setSize(700, 500);
 
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
@@ -107,10 +81,7 @@ public class AdminPage {
                 int selectedRow = tabellaVoli.getSelectedRow();
                 if (selectedRow != -1) {
                     Volo voloSelezionato = sistema.visualizzaVoli().get(selectedRow);
-                    DefaultTableModel tableModel = (DefaultTableModel) tabellaVoli.getModel();
-
-                    ModificaVolo modificaVoloPanel = new ModificaVolo(tableModel, sistema, voloSelezionato);
-
+                    ModificaVolo modificaVoloPanel = new ModificaVolo(model , sistema, voloSelezionato);
                     JFrame frameVolo = new JFrame("Modifica Volo");
                     frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
                     frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
@@ -127,6 +98,7 @@ public class AdminPage {
         });
         applyStyles();
     }
+
     private void applyStyles() {
         // Palette colori aeroportuale
         Color primaryBlue = new Color(0, 95, 135);

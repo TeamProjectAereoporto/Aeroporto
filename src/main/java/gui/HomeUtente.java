@@ -73,7 +73,7 @@ public class HomeUtente {
     }
 
     private void caricaVoli() {
-        sistema.generaContenutiCasuali();
+        // sistema.generaContenutiCasuali();
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         DefaultTableModel model = (DefaultTableModel) tabellaVoli.getModel();
 

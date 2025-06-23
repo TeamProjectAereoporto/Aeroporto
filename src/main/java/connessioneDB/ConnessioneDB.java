@@ -1,7 +1,7 @@
 package connessioneDB;
 
-import com.sun.jdi.connect.spi.Connection;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -26,7 +26,7 @@ public class ConnessioneDB {
     public static ConnessioneDB getInstance() throws SQLException {
         if(instance == null) {
             instance = new ConnessioneDB();
-        } else if(!instance.connection.isOpen()) {
+        } else if(instance.connection.isClosed()) {
             instance = new ConnessioneDB();
         } return instance;
     }
