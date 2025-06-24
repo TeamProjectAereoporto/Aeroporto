@@ -16,6 +16,7 @@ public class Register {
     private JTextField confermaPasswordField;
     private JButton inviaButton;
     private JPanel sfondoLogin;
+    private JLabel usernameLabel;
     public final static JFrame frame = new JFrame("Registra il tuo account");
     private final Sistema sistema;
 
@@ -26,7 +27,8 @@ public class Register {
         frame.setContentPane(finestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.pack();
-        frame.setResizable(false);
+        frame.setSize(500, 400);
+        frame.setResizable(true);
         frame.setLocationRelativeTo(null);
 
         applyStyles();

@@ -1,5 +1,5 @@
 package controller;
-import implementazionePostgres.VoloDB;
+import implementazionePostgres.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -15,6 +15,7 @@ public class Sistema {
     public ArrayList<Prenotazione> tuttiIBiglietti;
     private final Random casuale= new Random();
     private VoloDB voloDB;
+    private UtenteDB utenteDB;
     public Sistema(){
         utenti = new ArrayList<>();
         utente = new UtenteGenerico("karol", " leonardi");
@@ -22,9 +23,15 @@ public class Sistema {
         tuttiIBiglietti = new ArrayList<>();
         biglietto = new Prenotazione();
         voloDB = new VoloDB();
+        utenteDB = new UtenteDB();
     }
     public void aggiungiUtente(Utente ug){
-        utenti.add(ug);
+            utenti.add(ug);
+        try {
+            utenteDB.aggiungiUtenteDB(ug); // aggiungi anche nel DB
+        } catch (SQLException e) {
+            System.err.println("Errore aggiungendo utente al DB: " + e.getMessage());
+        }
     }
     public void aggiungiVolo(Volo v){
         try {
@@ -75,17 +82,15 @@ public class Sistema {
         return utente.cercaBiglietto(nome,codiceVolo);
     }
     public int verificaUtenteP(String username, String psw){
-        for(Utente u : utenti){
-            if(u.getNomeUtente().equals(username) && u.getPsw().equals(psw)){
-                if(u instanceof UtenteGenerico){
-
-                    return 1;
-                }else if(u instanceof Admin){
-                    return 2;
-                }
+        try {
+            Utente u = utenteDB.verificaCredenziali(username, psw);
+            if (u != null) {
+                if (u instanceof UtenteGenerico) return 1;
+                else if (u instanceof Admin) return 2;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return 0;
     }
     public boolean verificaUtenteUnivoco(String username){
@@ -106,11 +111,14 @@ public class Sistema {
     public void modificaBiglietto(Prenotazione b){
         biglietto.modificaBiglietto(b, UtenteGenerico.bigliettiAcquistati);
     }
-    public void login(String username, String psw){
-        if(verificaUtenteP(username,psw)==1){
-            setUtenteLoggato(utente);
-        }else if(verificaUtenteP(username,psw)==2){
-            setUtenteLoggato(admin);
+    public void login(String username, String psw) throws SQLException {
+        int ruolo = verificaUtenteP(username, psw);
+        if(ruolo == 1){
+            UtenteGenerico u = (UtenteGenerico) utenteDB.getUtenteByUsername(username);
+            setUtenteLoggato(u);
+        } else if(ruolo == 2){
+            Admin a = (Admin) utenteDB.getUtenteByUsername(username);
+            setUtenteLoggato(a);
         }
     }
     public void logout(Utente utente){

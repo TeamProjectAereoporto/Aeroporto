@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
@@ -37,8 +38,8 @@ public class Login {
     public Login(JFrame frame, Sistema sistema) {
         this.sistema=sistema;
         Login.frame =frame;
-        sistema.aggiungiUtente(new UtenteGenerico("karol","karol"));
-        sistema.aggiungiUtente(new Admin("saso","saso","123"));
+            sistema.aggiungiUtente(new UtenteGenerico("karol","karol"));
+            sistema.aggiungiUtente(new Admin("saso","saso", "231223"));
         frame.getRootPane().setDefaultButton(invio);
         invio.addActionListener(new ActionListener() {
             @Override

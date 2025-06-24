@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
 
@@ -21,6 +23,8 @@ public class AdminPage {
     private JLabel voliLable;
     private JTable tabellaVoli;
     private JButton modificaVoloButton;
+    private JLabel logoutLabel;
+    private JPanel logOutPanel;
     public final static JFrame frame = new JFrame("AdminDashboard");
     private final Sistema sistema;
 
@@ -77,12 +81,17 @@ public class AdminPage {
         });
 
 
+
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        frame.setSize(700, 500);
+
+
+
+
+
 
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
@@ -105,7 +114,8 @@ public class AdminPage {
                 }
             }
         });
-        applyStyles();
+        applyStyles(chiamante);
+
     }
 
     private void popolaTabellaVoli(DefaultTableModel model) {
@@ -125,7 +135,7 @@ public class AdminPage {
     }
 
 
-    private void applyStyles() {
+    private void applyStyles(JFrame chiamante) {
         // Palette colori aeroportuale
         Color primaryBlue = new Color(0, 95, 135);
         Color secondaryBlue = new Color(0, 120, 167);
@@ -144,6 +154,7 @@ public class AdminPage {
         principale.setBackground(background);
         principale.setBorder(new EmptyBorder(15, 15, 15, 15));
         voliPanel.setBackground(background);
+        logOutPanel.setBackground(secondaryBlue);
 
         // Titolo
         adminTitle.setFont(titleFont);
@@ -153,6 +164,8 @@ public class AdminPage {
         // Etichette
         voliLable.setFont(labelFont);
         voliLable.setForeground(primaryBlue);
+        logoutLabel.setFont(labelFont);
+        logoutLabel.setForeground(background);
 
         // Stile pulsanti
         styleButton(aggiungiVoloButton, successGreen, Color.WHITE, buttonFont);
@@ -169,6 +182,29 @@ public class AdminPage {
         tabellaVoli.getTableHeader().setBackground(primaryBlue);
         tabellaVoli.getTableHeader().setForeground(Color.WHITE);
         tabellaVoli.getTableHeader().setReorderingAllowed(false);
+        logOutPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logOutPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                logOutPanel.setBackground(successGreen);
+                chiamante.setVisible(true);
+                Window window = SwingUtilities.getWindowAncestor(principale);
+                if (window != null) {
+                    window.dispose();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logOutPanel.setBackground(errorRed);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logOutPanel.setBackground(secondaryBlue);
+            }
+        });
+
     }
 
     private void styleButton(JButton button, Color bg, Color fg, Font font) {
