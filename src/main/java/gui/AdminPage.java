@@ -35,7 +35,7 @@ public class AdminPage {
         tabellaVoli.setModel(model);
 
         aggiungiVoloButton.addActionListener(e -> {
-            AggiungiVolo av = new AggiungiVolo(model, sistema);
+            AggiungiVolo av = new AggiungiVolo(model, sistema, this);
             JFrame frame = new JFrame("Aggiungi Volo");
             frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton());
             frame.setContentPane(av.getPrincipale());
@@ -80,18 +80,11 @@ public class AdminPage {
             }
         });
 
-
-
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
-
-
-
-
-
 
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
@@ -118,6 +111,10 @@ public class AdminPage {
 
     }
 
+    public JTable getTabellaVoli(){
+        return tabellaVoli;
+    }
+
     private void popolaTabellaVoli(DefaultTableModel model) {
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         for (Volo v : voli) {
@@ -133,6 +130,8 @@ public class AdminPage {
             });
         }
     }
+
+
 
 
     private void applyStyles(JFrame chiamante) {

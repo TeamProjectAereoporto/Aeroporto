@@ -54,8 +54,8 @@ public class Register {
                 showError("Le password non coincidono");
                 return;
             }
-
-            UtenteGenerico utente = new UtenteGenerico(username, password);
+            int ruolo = 1;
+            UtenteGenerico utente = new UtenteGenerico(username, password, ruolo);
             sistema.aggiungiUtente(utente);
             chiamante.setVisible(true);
             frame.dispose();

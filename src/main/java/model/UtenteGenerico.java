@@ -8,8 +8,8 @@ public class UtenteGenerico extends Utente {
     public static ArrayList<Prenotazione> bigliettiAcquistati;
     private static final Logger logger = Logger.getLogger(UtenteGenerico.class.getName());
     //costruttore per l'utente generico.
-    public UtenteGenerico(String l, String p){
-        super(l,p);
+    public UtenteGenerico(String l, String p, int ruolo){
+        super(l,p, 1);
         bigliettiAcquistati = new ArrayList<>();
     }
     //metodo per acquistare un biglietto

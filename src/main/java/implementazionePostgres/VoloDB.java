@@ -87,25 +87,28 @@ public class VoloDB implements VoloDao {
     public Volo getVolo(int codiceVolo) throws SQLException {
         String sql = "SELECT * FROM volo WHERE codice_volo = ?";
 
-        try(Connection connection = ConnessioneDB.getInstance().connection) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (Connection connection = ConnessioneDB.getInstance().connection;
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, codiceVolo);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+
+            if (resultSet.next()) {
                 int codice = resultSet.getInt("codice_volo");
                 String compagniaAerea = resultSet.getString("compagnia_aerea");
-                String aeroportoOrigine= resultSet.getString("aeroporto_origine");
+                String aeroportoOrigine = resultSet.getString("aeroporto_origine");
                 String aeroportoDestinazione = resultSet.getString("aeroporto_destinazione");
-                String  orarioArrivo = resultSet.getString("orario_arrivo");
+                String orarioArrivo = resultSet.getString("orario_partenza_arrivo"); // Controlla se il nome è corretto
                 int ritardo = resultSet.getInt("ritardo");
                 String statoString = resultSet.getString("stato");
                 Volo.statoVolo stato = Volo.statoVolo.valueOf(statoString);
-                String gate = resultSet.getString("id_idgate");
+                String gate = resultSet.getString("id_gate");
 
-                return new Volo(codice,compagniaAerea,aeroportoOrigine,aeroportoDestinazione,orarioArrivo,ritardo,stato,gate);
+                return new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orarioArrivo, ritardo, stato, gate);
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante l'eliminazione: "+ e.getMessage());
+            System.err.println("Errore durante il recupero del volo: " + e.getMessage());
+            throw e;
         }
         return null;
     }

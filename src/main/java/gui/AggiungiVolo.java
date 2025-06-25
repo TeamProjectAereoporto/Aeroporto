@@ -35,14 +35,16 @@ public class AggiungiVolo {
     private JLabel voloInLable;
     private DefaultTableModel tableModel;
     private static final JFrame frame = new JFrame("Aggiungi Volo");
+    private AdminPage adminPage;
 
     public JPanel getPrincipale(){
         return principale;
     }
 
-    public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema) {
+    public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema, AdminPage adminPage) {
         this.sistema =sistema;
         this.tableModel = tableModel;
+        this.adminPage = adminPage;
         final String aeroporto = "Capodichino";
         applyStyles();
 
@@ -122,24 +124,29 @@ public class AggiungiVolo {
             int codice = Integer.parseInt(codiceVolo);
             Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, statoEnum, gate);
 
-            sistema.aggiungiVolo(v);
+            sistema.aggiungiVolo(v); // Salva nel DB
 
-            tableModel.addRow(new Object[]{
-                    codiceVolo,
-                    compagniaAerea,
-                    aeroportoOrigine,
-                    aeroportoDestinazione,
-                    orario,
-                    ritardo,
-                    stato,
-                    gate
-            });
+            // Svuota e ricarica tutta la tabella dal DB
+            DefaultTableModel model = (DefaultTableModel) adminPage.getTabellaVoli().getModel();
+            model.setRowCount(0); // Cancella tutti i dati esistenti
+
+            // Ricarica i voli dal database
+            for (Volo volo : sistema.visualizzaVoli()) {
+                model.addRow(new Object[]{
+                        volo.getCodiceVolo(),
+                        volo.getCompagniaAerea(),
+                        volo.getAeroportoOrigine(),
+                        volo.getAeroportoDestinazione(),
+                        volo.getOrarioArrivo(),
+                        volo.getRitardo(),
+                        volo.getStato().toString(),
+                        volo.getGate()
+                });
+            }
 
             ((JFrame) principale.getTopLevelAncestor()).dispose();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(principale, "Il codice volo non è un numero valido", errore, JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(principale, "Stato del volo non valido", errore, JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(principale, "Errore: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
 

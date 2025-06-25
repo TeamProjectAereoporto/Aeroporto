@@ -8,20 +8,20 @@ public class Utente {
     private String nomeUtente;
     private String psw;
     protected static ArrayList<Volo> voliGestiti;
+    private int ruolo;
 
     //costruttore di Utente
-    public Utente(String l, String p){
-        nomeUtente = l;
-        psw = p;
+    public Utente(String l, String p, int ruolo){
+        this.nomeUtente = l;
+        this.psw = p;
+        this.ruolo = ruolo;
         voliGestiti = new ArrayList<>();
     }
-    //metodo per visualizzare tutti i voli inseriti nel sistema che sarà comune a tutte le classi figlie di Utente
 
     public ArrayList<Volo> visualizzaVoli() {
         return voliGestiti;
     }
 
-    //getter
     public String getNomeUtente() {
         return nomeUtente;
     }
@@ -30,7 +30,9 @@ public class Utente {
         return psw;
     }
 
-    //setter
+    public int getRuolo(){
+        return ruolo;
+    }
 
     public void setNomeUtente(String nomeUtente) {
         this.nomeUtente = nomeUtente;

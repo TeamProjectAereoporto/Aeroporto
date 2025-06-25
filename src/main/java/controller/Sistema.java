@@ -18,8 +18,6 @@ public class Sistema {
     private UtenteDB utenteDB;
     public Sistema(){
         utenti = new ArrayList<>();
-        utente = new UtenteGenerico("karol", " leonardi");
-        admin = new Admin("saso","saso", "231223");
         tuttiIBiglietti = new ArrayList<>();
         biglietto = new Prenotazione();
         voloDB = new VoloDB();
@@ -66,9 +64,14 @@ public class Sistema {
     }
     //aggiungi il biglietto tra i biglietti acquistati dell'utente e tutti i biglietti
     public void aggiungiBiglietto(Prenotazione biglietto){
-        utente.prenotaVolo(biglietto);
-        tuttiIBiglietti.add(biglietto);
+        if (utente != null) {
+            utente.prenotaVolo(biglietto);
+            tuttiIBiglietti.add(biglietto);
+        } else {
+            System.err.println("Errore: nessun utente generico loggato.");
+        }
     }
+
 
     public boolean cancellaBiglietto(long numeroBiglietto){
         return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati);
@@ -81,18 +84,23 @@ public class Sistema {
     public ArrayList getBiglietti(String nome, int codiceVolo){
         return utente.cercaBiglietto(nome,codiceVolo);
     }
-    public int verificaUtenteP(String username, String psw){
+    public int verificaUtenteP(String username, String psw) {
         try {
             Utente u = utenteDB.verificaCredenziali(username, psw);
             if (u != null) {
-                if (u instanceof UtenteGenerico) return 1;
-                else if (u instanceof Admin) return 2;
+                if (u instanceof UtenteGenerico) {
+                    return 1;
+                } else if (u instanceof Admin) {
+                    return 2;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return 0; // login fallito
     }
+
+
     public boolean verificaUtenteUnivoco(String username){
         for(Utente u : utenti){
             if(u.getNomeUtente().equals(username) ){
@@ -102,27 +110,28 @@ public class Sistema {
         return true;
     }
     public void setUtenteLoggato(Utente u){
-        if(u instanceof UtenteGenerico){
+        if (u instanceof UtenteGenerico) {
             this.utente = (UtenteGenerico) u;
-        }else{
+        } else if (u instanceof Admin) {
             this.admin = (Admin) u;
         }
     }
+
     public void modificaBiglietto(Prenotazione b){
         biglietto.modificaBiglietto(b, UtenteGenerico.bigliettiAcquistati);
     }
-    public void login(String username, String psw) throws SQLException {
-        int ruolo = verificaUtenteP(username, psw);
-        if(ruolo == 1){
-            UtenteGenerico u = (UtenteGenerico) utenteDB.getUtenteByUsername(username);
-            setUtenteLoggato(u);
-        } else if(ruolo == 2){
-            Admin a = (Admin) utenteDB.getUtenteByUsername(username);
-            setUtenteLoggato(a);
+    public boolean login(String username, String psw) throws SQLException {
+        Utente u = utenteDB.verificaCredenziali(username, psw);
+        if (u != null) {
+            setUtenteLoggato(u); // Imposta correttamente l'utente loggato (utente o admin)
+            return true;
         }
+        return false; // login fallito
     }
+
+
     public void logout(Utente utente){
-        utente =null;
+        utente = null;
     }
     public void generaContenutiCasuali(){
 

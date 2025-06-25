@@ -3,13 +3,11 @@ package model;
 import java.util.logging.Logger;
 
 public class Admin  extends Utente{
-    //Un admin in quanto tale riceve un codice di accesso univoco
-    private String codAdmin;
+    private String ruolo;
     private static final Logger logger = Logger.getLogger(Admin.class.getName());
 
-    public Admin(String log, String ps, String code){
-        super(log,ps);
-        codAdmin = code;
+    public Admin(String log, String ps, int ruolo){
+        super(log,ps, 2);
     }
 
     //implementazione dei metodi specifici per l'utente Admin
@@ -22,11 +20,5 @@ public class Admin  extends Utente{
         v.setGate(e.getCodiceGate());
         e.assegnaVolo(v);
         logger.info("il gate "+ e.getCodiceGate() +" è stato assegnato al volo "+ v.getCodiceVolo());
-    }
-    public String getCodAdmin(){
-        return codAdmin;
-    }
-    public void setCodAdmin(String codAdmin){
-        this.codAdmin=codAdmin;
     }
 }
