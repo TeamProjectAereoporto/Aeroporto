@@ -38,8 +38,7 @@ public class Login {
     public Login(JFrame frame, Sistema sistema) {
         this.sistema = sistema; // inizializza il sistema
         Login.frame = frame; // assegna il frame passato
-        frame.getRootPane().setDefaultButton(invio); // imposta il bottone invio come predefinito per Enter
-
+        frame.getRootPane().setDefaultButton(invio);// imposta il bottone invio come predefinito per Enter
         // aggiunge l'azione di login al bottone invio
         invio.addActionListener(new ActionListener() {
             @Override

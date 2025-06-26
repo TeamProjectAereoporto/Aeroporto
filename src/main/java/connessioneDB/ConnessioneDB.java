@@ -14,8 +14,8 @@ public class ConnessioneDB {
     private static ConnessioneDB instance; //Implementa il pattern Singleton
     public Connection connection = null; //Oggetto JDBC che rappresenta la connessione attiva con il database
     private String nome = "postgres";
-    private String password = "kira";
-    private String url = "jdbc:postgresql://localhost:5451/Aeroporto";
+    private String password = "postgres";
+    private String url = "jdbc:postgresql://localhost:5432/Aeroporto";
     private String driver = "org.postgresql.Driver";
 
     private ConnessioneDB() throws SQLException {

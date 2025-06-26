@@ -30,6 +30,15 @@ public class Sistema {
         utenteDB = new UtenteDB();
         prenotazioneDB = new PrenotazioneDB();
         passeggeroDB =  new PasseggeroDB();
+        creaAdmin();
+    }
+
+    //se non esiste crea admin
+    public void creaAdmin(){
+        if(!utenteDB.esisteAlmenoUnAdmin()){
+            Admin admin = new Admin("admin", "admin123", 2);
+            System.out.println("admin creato: \nUsername: " + admin.getNomeUtente() + "\nPassword: "+ admin.getPsw());
+        }
     }
 
     //il sistema aggiunge un utente.
@@ -161,6 +170,8 @@ public class Sistema {
         return false; // login fallito
     }
 
+
+
     //effettua il logout dal sistema.
     public void logout(Utente utente){
         this.utente = null;
@@ -169,19 +180,19 @@ public class Sistema {
     //questo metodo è stato utilizzato una volta sola volta per riempire il db di voli automaticamente e poi cancellato
     //al fine di simulare il progetto "a regime".
     public void generaContenutiCasuali() {
-        String[] nomiCompagnie = {"Aircampnia", "RaynAir", "AliItalia", "AirRoma", "AliGermany",
-                "AirRomania", "FlyNaples", "FlyRomenia", "FlyHighIT", "FranceFly", "SpainFly", "AirTool",
-                "AmericaFly", "NYflyHigh", "NigeriaFly", "JapanFly", "TokyoFly"};
-        String[] Aeroporti = {"Capodichino", "Roma", "Latina", "Heathrow Airport", "John F. Kennedy International Airport",
-                "Charles de Gaulle Airport", "Frankfurt Airport", "Tokyo Haneda Airport", "Los Angeles International Airport",
-                "Dubai International Airport", "Singapore Changi Airport", "Incheon International Airport", "Beijing Capital International Airport"};
+        String[] nomiCompagnie = {"Aircampnia","RaynAir","AliItalia","AirRoma","AliGermany",
+                "AirRomania","FlyNaples","FlyRomenia","FlyHighIT","FranceFly","SpainFly","AirTool",
+                "AmericaFly","NYflyHigh","NigeriaFly","JapanFly","TokyoFly"};
+        String[] Aeroporti= {"Capodichino", "Roma", "Latina","Heathrow Airport","John F. Kennedy International Airport",
+                "Charles de Gaulle Airport","Frankfurt Airport ","Tokyo Haneda Airport","Los Angeles International Airport ",
+                "Dubai International Airport","Singapore Changi Airport","Incheon International Airport","Beijing Capital International Airport"};
         String[] orari = {
                 "06:15", "07:30", "08:45", "09:00", "10:20",
                 "11:55", "12:10", "13:25", "14:40", "15:50",
                 "16:05", "17:30", "18:15", "19:45", "20:10",
                 "21:00", "22:25", "23:50", "00:30", "01:45"
         };
-        String[] gate = {"A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"};
+        String[] gate = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1","N1","O1","P1","Q1","R1","S1","T1","U1","V1","W1","X1","Y1","Z1"};
         String[] stati = {
                 "INRITARDO",
                 "INORARIO",
@@ -199,47 +210,49 @@ public class Sistema {
         String orarioArrivo;
         String gate1;
         int possibilita;
-
-        for (int i = 0; i < 40; i++) {
-            ritardo = 0;
+        for(int i=0;i<40;i++){
+            ritardo =0;
             codiceVolo = casuale.nextInt(9000) + 1000;
             possibilita = casuale.nextInt(6);
+            System.out.println(possibilita);
 
-            if (possibilita == 0) {
-                ritardo = casuale.nextInt(181) + 1;
-                statoVolo = stati[0];
+            // Modifica per garantire che almeno uno dei due aeroporti sia "Capodichino"
+            if(casuale.nextBoolean()) {
+                aeroportoOrigine = "Capodichino";
+                aeroportoDestinazione = Aeroporti[casuale.nextInt(Aeroporti.length)];
+            } else {
+                aeroportoOrigine = Aeroporti[casuale.nextInt(Aeroporti.length)];
+                aeroportoDestinazione = "Capodichino";
+            }
+
+            // Gestione ritardo e stato
+            if(possibilita == 0) {
+                ritardo = casuale.nextInt(181)+1;
+                statoVolo = stati[0]; // INRITARDO
             } else {
                 statoVolo = stati[casuale.nextInt(4) + 2];
             }
 
-            compagnia = nomiCompagnie[casuale.nextInt(17)];
-
-            // Modifica per garantire almeno un aeroporto = Capodichino
-            if (casuale.nextBoolean()) {
-                aeroportoOrigine = "Capodichino";
-                aeroportoDestinazione = Aeroporti[casuale.nextInt(Aeroporti.length)];
-                while (aeroportoDestinazione.equals("Capodichino")) {
-                    aeroportoDestinazione = Aeroporti[casuale.nextInt(Aeroporti.length)];
-                }
+            // Gestione gate per voli in arrivo a Capodichino
+            if(aeroportoDestinazione.equals("Capodichino")) {
+                gate1 = ""; // Voli in arrivo a Capodichino non hanno gate
             } else {
-                aeroportoDestinazione = "Capodichino";
-                aeroportoOrigine = Aeroporti[casuale.nextInt(Aeroporti.length)];
-                while (aeroportoOrigine.equals("Capodichino")) {
-                    aeroportoOrigine = Aeroporti[casuale.nextInt(Aeroporti.length)];
+                gate1 = gate[casuale.nextInt(gate.length)];
+                // Solo voli con gate possono essere cancellati
+                if(statoVolo.equals("CANCELLATO") && gate1.isEmpty()) {
+                    statoVolo = stati[casuale.nextInt(4) + 2]; // Assegna un altro stato
                 }
             }
 
-            orarioArrivo = orari[casuale.nextInt(20)];
-
-            // Modifica: i voli in arrivo (destinazione = Capodichino) non hanno gate
-            if (aeroportoDestinazione.equals("Capodichino")) {
-                gate1 = null; // Voli in arrivo senza gate
-            } else {
-                gate1 = gate[casuale.nextInt(gate.length)]; // Voli in partenza con gate casuale
+            // Verifica finale che voli con ritardo abbiano stato INRITARDO
+            if(ritardo > 0) {
+                statoVolo = stati[0]; // INRITARDO
             }
 
-            Volo v = new Volo(codiceVolo, compagnia, aeroportoOrigine, aeroportoDestinazione,
-                    orarioArrivo, ritardo, Volo.statoVolo.valueOf(statoVolo), gate1);
+            compagnia = nomiCompagnie[casuale.nextInt(nomiCompagnie.length)];
+            orarioArrivo = orari[casuale.nextInt(orari.length)];
+
+            Volo v = new Volo(codiceVolo, compagnia, aeroportoOrigine, aeroportoDestinazione, orarioArrivo, ritardo, Volo.statoVolo.valueOf(statoVolo), gate1);
             admin.aggiungiVoli(v);
             try {
                 voloDB.aggiungiVoloDB(v);
@@ -248,5 +261,4 @@ public class Sistema {
             }
         }
     }
-
 }
