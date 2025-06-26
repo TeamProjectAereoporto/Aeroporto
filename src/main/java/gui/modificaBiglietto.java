@@ -10,61 +10,72 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Finestra per la modifica dei dati di un biglietto.
+ */
 public class modificaBiglietto {
-    private JTextField nomeField;
-    private JTextField cognomeField;
-    private JTextField ciField;
-    private JTextField postoField;
-    private JButton invioButton;
-    private JPanel finestraPrincipale;
+    private JTextField nomeField;       // campo per inserire nome passeggero
+    private JTextField cognomeField;    // campo per inserire cognome passeggero
+    private JTextField ciField;         // campo per inserire codice identificativo/documento
+    private JTextField postoField;      // campo per inserire il posto assegnato
+    private JButton invioButton;        // bottone per confermare la modifica
+    private JPanel finestraPrincipale;  // pannello principale della finestra
 
-    private final Sistema sistema;
-    public final static JFrame frame  = new JFrame("Modifica Biglietto");
-    private final DefaultTableModel tableModel;
+    private final Sistema sistema;      // riferimento al sistema di controllo
+    public final static JFrame frame  = new JFrame("Modifica Biglietto");  // frame della finestra
+    private final DefaultTableModel tableModel;  // modello della tabella da aggiornare
 
+    /*
+     * Costruttore per la finestra di modifica del biglietto.
+     */
     public modificaBiglietto(Sistema sistema, Prenotazione bigliettoDaModificare, DefaultTableModel tableModel, JFrame chiamante) {
         this.sistema = sistema;
         this.tableModel = tableModel;
 
+        // Imposta il contenuto del frame con il pannello finestraPrincipale
         frame.setContentPane(finestraPrincipale);
+        // Disabilita la chiusura automatica con la X (per gestirla manualmente)
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.pack();
-        frame.setSize(new Dimension(400, 300) );
-        frame.setLocationRelativeTo(null);
-        frame.getRootPane().setDefaultButton(invioButton);
+        frame.setSize(new Dimension(400, 300));
+        frame.setLocationRelativeTo(null);  // centra la finestra
+        frame.getRootPane().setDefaultButton(invioButton);  // imposta invioButton come default per ENTER
         frame.setVisible(true);
 
-        // Riempimento iniziale dei campi
+        // Riempie i campi con i dati attuali del biglietto da modificare
         nomeField.setText(bigliettoDaModificare.getPasseggero().getNome());
         cognomeField.setText(bigliettoDaModificare.getPasseggero().getCognome());
         ciField.setText(bigliettoDaModificare.getPasseggero().getNumeroDocumento());
         postoField.setText(bigliettoDaModificare.getPostoAssegnato());
 
-        applyStyles();
+        applyStyles();  // applica gli stili grafici
 
+        // Gestore evento clic su invioButton per salvare modifiche
         invioButton.addActionListener(e -> {
             String nome = nomeField.getText().trim();
             String cognome = cognomeField.getText().trim();
             String ci = ciField.getText().trim().toUpperCase();
             String posto = postoField.getText().trim().toUpperCase();
 
+            // Controlla che nessun campo sia vuoto
             if (nome.isEmpty() || cognome.isEmpty() || ci.isEmpty() || posto.isEmpty()) {
                 showError("Tutti i campi devono essere compilati.");
                 return;
             }
 
+            // Validazione formato codice identificativo (es. CC12345CC)
             if (!ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                 showError("Formato CI non valido. Deve essere: CC12345CC");
                 return;
             }
 
-            // Salvataggio dati
+            // Aggiorna i dati del biglietto modificato
             bigliettoDaModificare.getPasseggero().setNome(nome);
             bigliettoDaModificare.getPasseggero().setCognome(cognome);
             bigliettoDaModificare.getPasseggero().setNumeroDocumento(ci);
             bigliettoDaModificare.setPostoAssegnato(posto);
 
-            // Aggiornamento tabella
+            // Aggiorna la riga corrispondente nella tabella usando il numero biglietto come chiave
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 if (tableModel.getValueAt(i, 4).toString().equals(String.format("%10d", bigliettoDaModificare.getNumeroBiglietto()))) {
                     tableModel.setValueAt(nome, i, 0);
@@ -75,10 +86,12 @@ public class modificaBiglietto {
                 }
             }
 
+            // Rende visibile la finestra chiamante e chiude questa
             chiamante.setVisible(true);
             frame.dispose();
         });
 
+        // Gestisce la chiusura della finestra con la X: riattiva chiamante e chiude frame
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -88,10 +101,17 @@ public class modificaBiglietto {
         });
     }
 
+    /**
+     * Mostra un messaggio di errore in dialogo.
+     * @param message testo dell'errore da mostrare
+     */
     private void showError(String message) {
         JOptionPane.showMessageDialog(frame, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Applica stili grafici ai componenti della finestra.
+     */
     private void applyStyles() {
         Color background = new Color(245, 245, 245);
         Color borderColor = new Color(200, 200, 200);
@@ -102,6 +122,7 @@ public class modificaBiglietto {
         finestraPrincipale.setBackground(background);
         finestraPrincipale.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+        // Applica stile ai campi testo
         JTextField[] fields = {nomeField, cognomeField, ciField, postoField};
         for (JTextField field : fields) {
             field.setFont(fieldFont);
@@ -112,6 +133,7 @@ public class modificaBiglietto {
             ));
         }
 
+        // Stile per il bottone invio
         invioButton.setFont(buttonFont);
         invioButton.setBackground(buttonColor);
         invioButton.setForeground(Color.WHITE);

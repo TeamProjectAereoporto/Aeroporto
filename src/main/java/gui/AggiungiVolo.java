@@ -9,7 +9,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class AggiungiVolo {
+    // Riferimento statico al controller del sistema
     static Sistema sistema;
+
+    // Componenti dell'interfaccia
     private JLabel aggiungiVoloLable;
     private JLabel codiceVoloLable;
     private JTextField codiceVoloField;
@@ -41,22 +44,26 @@ public class AggiungiVolo {
         return principale;
     }
 
+    // Costruttore: inizializza componenti, imposta valori di default e listener
     public AggiungiVolo(DefaultTableModel tableModel, Sistema sistema, AdminPage adminPage) {
         this.sistema =sistema;
         this.tableModel = tableModel;
         this.adminPage = adminPage;
-        final String aeroporto = "Capodichino";
+        final String aeroporto = "Capodichino"; // Aeroporto fisso per logica del progetto
         applyStyles();
 
+        // Gruppo per i radio button (partenza/arrivo)
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
         partenzaArrivo.add(arrivoButton);
-        ritardoField.setText("0");
+        ritardoField.setText("0"); // Ritardo default a 0
 
+        // Stato iniziale: partenza selezionata
         partenzaButton.setSelected(true);
         gateField.setEnabled(true);
         aeroportoOrigineField.setText(aeroporto);
 
+        // Listener per pulsante "Arrivo"
         arrivoButton.addActionListener(e -> {
             gateField.setText("");
             gateField.setEnabled(false);
@@ -65,6 +72,8 @@ public class AggiungiVolo {
             destinazioneField.setText(aeroporto);
             aeroportoOrigineField.setText("");
         });
+
+        // Listener per pulsante "Partenza"
         partenzaButton.addActionListener(e -> {
             gateField.setEnabled(true);
             gateLabel.setVisible(true);
@@ -73,6 +82,7 @@ public class AggiungiVolo {
             destinazioneField.setText("");
         });
 
+        // Listener per pulsanti
         aggiungiVoloButton.addActionListener(e -> salvaVolo());
         annullaVoloButton.addActionListener(e -> {
             JFrame finestra = (JFrame) principale.getTopLevelAncestor();
@@ -81,7 +91,10 @@ public class AggiungiVolo {
             }
         });
     }
+
+    // Salvataggio di un nuovo volo dopo la validazione dei dati
     private void salvaVolo() {
+        // Recupero dei dati dai campi
         String codiceVolo = codiceVoloField.getText().trim();
         String compagniaAerea = compagniaAereaField.getText();
         String aeroportoOrigine = aeroportoOrigineField.getText();
@@ -92,7 +105,10 @@ public class AggiungiVolo {
         String stato = (String) statoVoloCombo.getSelectedItem();
         Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
         boolean partenzaButtonSelected = partenzaButton.isSelected();
+
         final String errore ="Errore";
+
+        // Validazioni sui campi
         if (codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty() || aeroportoDestinazione.isEmpty()
                 || ritardo.isEmpty() || (partenzaButtonSelected && gate.isEmpty()) || stato == null || stato.isEmpty()) {
             JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti", errore, JOptionPane.ERROR_MESSAGE);
@@ -103,6 +119,7 @@ public class AggiungiVolo {
             JOptionPane.showMessageDialog(principale, "Il codice volo deve essere un numero intero di 4 cifre", errore, JOptionPane.ERROR_MESSAGE);
             return;
         }
+
         if (!gate.matches("[A-Z][1-9]") && partenzaButtonSelected) {
             JOptionPane.showMessageDialog(principale, "Il codice gate contiene solo una lettera maiuscola e un numero intero positivo", errore, JOptionPane.ERROR_MESSAGE);
             return;
@@ -113,6 +130,7 @@ public class AggiungiVolo {
             return;
         }
 
+        // Controllo unicità codice volo nella tabella
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             if (tableModel.getValueAt(i, 0).toString().equals(codiceVolo)) {
                 JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", errore, JOptionPane.ERROR_MESSAGE);
@@ -121,16 +139,16 @@ public class AggiungiVolo {
         }
 
         try {
+            // Parsing e creazione oggetto volo
             int codice = Integer.parseInt(codiceVolo);
             Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, statoEnum, gate);
 
-            sistema.aggiungiVolo(v); // Salva nel DB
+            sistema.aggiungiVolo(v); // Inserisce nel DB
 
-            // Svuota e ricarica tutta la tabella dal DB
+            // Ricarica della tabella dal database per riflettere le modifiche
             DefaultTableModel model = (DefaultTableModel) adminPage.getTabellaVoli().getModel();
-            model.setRowCount(0); // Cancella tutti i dati esistenti
+            model.setRowCount(0);
 
-            // Ricarica i voli dal database
             for (Volo volo : sistema.visualizzaVoli()) {
                 model.addRow(new Object[]{
                         volo.getCodiceVolo(),
@@ -144,6 +162,7 @@ public class AggiungiVolo {
                 });
             }
 
+            // Chiude la finestra dopo il salvataggio
             ((JFrame) principale.getTopLevelAncestor()).dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(principale, "Errore: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -153,23 +172,25 @@ public class AggiungiVolo {
     public JButton getSalvaButton() {
         return aggiungiVoloButton;
     }
+
+    // Applica gli stili all'interfaccia utente
     private void applyStyles() {
-        // Palette colori aeroportuale
+        // Palette colori coerente con l'interfaccia principale
         Color primaryBlue = new Color(0, 95, 135);
         Color background = new Color(245, 245, 245);
         Color successGreen = new Color(76, 175, 80);
 
-        // Font
+        // Font utilizzati
         final String fontName = "Segoe UI";
         Font labelFont = new Font(fontName, Font.BOLD, 14);
         Font fieldFont = new Font(fontName, Font.PLAIN, 14);
         Font buttonFont = new Font(fontName, Font.BOLD, 14);
 
-        // Stile generale
+        // Stile generale del pannello principale
         principale.setBackground(background);
         principale.setBorder(new EmptyBorder(15, 15, 15, 15));
 
-        // Stile etichette
+        // Etichette
         for (JLabel label : new JLabel[]{
                 aggiungiVoloLable, codiceVoloLable, compagniaAereaLable,
                 aeroportoOrigineLable, destinazioneLable, orarioArrivoLable,
@@ -179,7 +200,7 @@ public class AggiungiVolo {
             label.setForeground(primaryBlue);
         }
 
-        // Stile campi testo
+        // Campi di testo
         for (JTextField field : new JTextField[]{
                 codiceVoloField, compagniaAereaField, aeroportoOrigineField,
                 destinazioneField, orarioFIeld, ritardoField, gateField
@@ -192,7 +213,7 @@ public class AggiungiVolo {
             field.setBackground(Color.WHITE);
         }
 
-        // Stile combo box
+        // ComboBox per lo stato del volo
         statoVoloCombo.setFont(fieldFont);
         statoVoloCombo.setBackground(Color.WHITE);
         statoVoloCombo.setBorder(BorderFactory.createCompoundBorder(
@@ -200,14 +221,14 @@ public class AggiungiVolo {
                 BorderFactory.createEmptyBorder(2, 8, 2, 8)
         ));
 
-        // Stile radio buttons
+        // Radio buttons
         for (JRadioButton rb : new JRadioButton[]{arrivoButton, partenzaButton}) {
             rb.setFont(fieldFont);
             rb.setBackground(background);
             rb.setFocusPainted(false);
         }
 
-        // Stile pulsanti
+        // Pulsanti
         styleButton(aggiungiVoloButton, successGreen, Color.WHITE, buttonFont);
         styleButton(annullaVoloButton, background, primaryBlue, buttonFont);
         annullaVoloButton.setBorder(BorderFactory.createCompoundBorder(
@@ -220,6 +241,7 @@ public class AggiungiVolo {
         aggiungiVoloLable.setBorder(new EmptyBorder(0, 0, 10, 0));
     }
 
+    // Metodo di supporto per applicare stile ai pulsanti
     private void styleButton(JButton button, Color bg, Color fg, Font font) {
         button.setFont(font);
         button.setBackground(bg);
@@ -228,6 +250,7 @@ public class AggiungiVolo {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+
     public JButton getAggiungiVoloButton(){
         return aggiungiVoloButton;
     }

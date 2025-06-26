@@ -6,8 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+//la classe controller si occupa della gestione e della logica delle operazioni svolte dalle classi del model.
+/*normalmente ci sarebbe stata la necessità di creare e lavorare con più controller ognuno specializzato nella gestione di
+una singola operazione o in un campo specifo. Per attenerci alla traccia si è preferito crearne uno solo.
+ */
 public class Sistema {
+
     public static ArrayList<Utente> utenti;
     public Prenotazione biglietto;
     public UtenteGenerico utente;
@@ -27,6 +31,8 @@ public class Sistema {
         prenotazioneDB = new PrenotazioneDB();
         passeggeroDB =  new PasseggeroDB();
     }
+
+    //il sistema aggiunge un utente.
     public void aggiungiUtente(Utente ug){
             utenti.add(ug);
         try {
@@ -35,6 +41,8 @@ public class Sistema {
             System.err.println("Errore aggiungendo utente al DB: " + e.getMessage());
         }
     }
+
+    //in quanto admin si può aggiungere un volo alla tabella
     public void aggiungiVolo(Volo v){
         try {
             voloDB.aggiungiVoloDB(v);
@@ -43,6 +51,8 @@ public class Sistema {
             System.err.println("Errore aggiungendo volo: " + e.getMessage());
         }
     }
+
+    //tutti gli utenti possono visualizzare tutti i voli tramite questo metodo
     public ArrayList<Volo> visualizzaVoli(){
         try {
             return voloDB.getTuttiVoli();
@@ -51,6 +61,8 @@ public class Sistema {
             return new ArrayList<>();
         }
     }
+
+    //da admin si ha la possibilità di eliminare un volo dalla tabella
     public void eliminaVolo(int codiceVolo) {
         try {
             voloDB.eliminaVolo(codiceVolo);
@@ -59,6 +71,7 @@ public class Sistema {
         }
     }
 
+    //da admin si può modificare un volo all'interno della tabella
     public void modificaVolo(Volo v) {
         try {
             voloDB.modificaVoloDB(v);
@@ -77,19 +90,21 @@ public class Sistema {
         }
     }
 
-
+    //metodo per eliminare un biglietto disponibile per l'utente generico che prenota per sé o per un eventuale passeggero
     public boolean cancellaBiglietto(long numeroBiglietto){
         return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati)
                 && prenotazioneDB.deleteTicket(numeroBiglietto);
     }
-
-
+    //metodo finalizzato alla creazione di un numero biglietto univoco e random
     public Long creaNumBiglietto(){
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
+    //metodo necessario alla tabella dell'area personale dell'utente generico che vuole visualizzare tutti i suoi voli prenotati
     public ArrayList getBiglietti(String nome, int codiceVolo){
         return utente.cercaBiglietto(nome,codiceVolo);
     }
+
+    //Il metodo serve a verificare se l'utente è un admin o un utente generico
     public int verificaUtenteP(String username, String psw) {
         try {
             Utente u = utenteDB.verificaCredenziali(username, psw);
@@ -105,10 +120,13 @@ public class Sistema {
         }
         return 0; // login fallito
     }
+
+    //aggiunge un passeggero al DB
     public void aggiungiPasseggero(Passeggero passeggero) throws SQLException {
         passeggeroDB.aggiungiPasseggero(passeggero);
     }
 
+    //si assicura che l'username dell'utente sia univoco e non duplicato
     public boolean verificaUtenteUnivoco(String username){
         for(Utente u : utenti){
             if(u.getNomeUtente().equals(username) ){
@@ -117,6 +135,7 @@ public class Sistema {
         }
         return true;
     }
+
     public void setUtenteLoggato(Utente u){
         if (u instanceof UtenteGenerico) {
             this.utente = (UtenteGenerico) u;
@@ -137,10 +156,13 @@ public class Sistema {
         return false; // login fallito
     }
 
-
+    //effettua il logout dal sistema.
     public void logout(Utente utente){
-        utente = null;
+        this.utente = null;
     }
+
+    //questo metodo è stato utilizzato una volta sola volta per riempire il db di voli automaticamente e poi cancellato
+    //al fine di simulare il progetto "a regime".
     public void generaContenutiCasuali(){
 
         String[] nomiCompagnie = {"Aircampnia","RaynAir","AliItalia","AirRoma","AliGermany",

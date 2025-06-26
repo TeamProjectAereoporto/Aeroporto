@@ -11,11 +11,12 @@ public class Admin  extends Utente{
     }
 
     //implementazione dei metodi specifici per l'utente Admin
+    // Metodo per aggiungere un volo alla lista gestita dall'admin
     public void aggiungiVoli(Volo voloDaInserire){
         logger.info("volo aggiunto");
         voliGestiti.add(voloDaInserire);
     }
-
+    // Metodo per assegnare un gate a un volo di partenza
     public void assegnaGate(Gate e, VoloPartenza v){
         v.setGate(e.getCodiceGate());
         e.assegnaVolo(v);

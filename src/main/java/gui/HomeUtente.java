@@ -31,6 +31,7 @@ public class HomeUtente {
     public final static JFrame frame = new JFrame("Home");
 
     public JPanel getPanel() {
+        // Ritorna il pannello principale della finestra
         return FinestraPrincipale;
     }
 
@@ -40,33 +41,35 @@ public class HomeUtente {
     public HomeUtente(JFrame frameChiamante, Sistema sistema, DefaultTableModel model) {
         this.sistema = sistema;
 
-        inizializzaFrame();
-        configuraTabella(model);
-        caricaVoli();
-        impostaAzioni(frameChiamante);
+        inizializzaFrame();        // Inizializza le impostazioni della finestra JFrame
+        configuraTabella(model);   // Configura la tabella per visualizzare i voli
+        caricaVoli();              // Carica i dati dei voli nel modello della tabella
+        impostaAzioni(frameChiamante);  // Imposta le azioni per i vari bottoni e componenti
     }
 
     private void inizializzaFrame() {
+        // Imposta il contenuto della finestra, le proprietà base e la rende visibile
         frame.setContentPane(FinestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(1100, 700);
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);  // Centra la finestra sullo schermo
         frame.setVisible(true);
     }
 
     private void configuraTabella(DefaultTableModel model) {
+        // Imposta le colonne della tabella e configura proprietà come riordinamento, dimensione e altezza righe
         String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
                 "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
         tabellaVoli.setModel(model);
-        tabellaVoli.getTableHeader().setReorderingAllowed(false);
-        tabellaVoli.getTableHeader().setResizingAllowed(false);
-        tabellaVoli.setRowHeight(20); // 30 pixel
+        tabellaVoli.getTableHeader().setReorderingAllowed(false);  // Disabilita il riordinamento delle colonne
+        tabellaVoli.getTableHeader().setResizingAllowed(false);    // Disabilita il ridimensionamento delle colonne
+        tabellaVoli.setRowHeight(20);                              // Imposta altezza riga a 20 pixel
     }
 
     private void caricaVoli() {
-        // sistema.generaContenutiCasuali();
+        // Ottiene la lista dei voli dal sistema e la aggiunge alla tabella
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         DefaultTableModel model = (DefaultTableModel) tabellaVoli.getModel();
 
@@ -85,6 +88,7 @@ public class HomeUtente {
             }
         }
 
+        // Aggiunge la tabella dentro uno JScrollPane se non già presente nel contenitore voliPanel
         if (!(tabellaVoli.getParent() instanceof JViewport)) {
             voliPanel.removeAll();
             voliPanel.setLayout(new BorderLayout());
@@ -95,26 +99,31 @@ public class HomeUtente {
     }
 
     private void impostaAzioni(JFrame frameChiamante) {
-        personalizzaBottoneCerca();
+        personalizzaBottoneCerca(); // Applica stile personalizzato al bottone cercaBigliettoButton
 
+        // Azione per il bottone cerca biglietto: verifica input e apre la finestra Biglietto se valido
         cercaBigliettoButton.addActionListener(e -> {
             if (!numeroBiglietto.getText().isEmpty() || !nome.getText().isEmpty()) {
                 int numero = -1;
                 if (!numeroBiglietto.getText().isEmpty()) {
                     if (!numeroBiglietto.getText().trim().matches("\\d{4}")) {
+                        // Mostra errore se il codice volo non è un numero di 4 cifre
                         JOptionPane.showMessageDialog(FinestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     numero = Integer.parseInt(numeroBiglietto.getText().trim());
                 }
+                // Crea e mostra la finestra Biglietto e nasconde quella attuale
                 Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
                 Biglietto.frame.setVisible(true);
                 frame.setVisible(false);
             }
         });
 
+        // Imposta il bottone cercaBigliettoButton come predefinito per invio tastiera
         frame.getRootPane().setDefaultButton(cercaBigliettoButton);
 
+        // Azione doppio click su una riga della tabella voli
         tabellaVoli.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -122,15 +131,18 @@ public class HomeUtente {
                     int row = tabellaVoli.rowAtPoint(e.getPoint());
                     if (row != -1) {
                         String stato = tabellaVoli.getValueAt(row, 6).toString();
+                        // Controlla che lo stato del volo permetta la prenotazione
                         if (!stato.equals("DECOLLATO") && !stato.equals("CANCELLATO") && !stato.equals("ATTERRATO")) {
                             Object[] valori = new Object[tabellaVoli.getColumnCount()];
                             for (int i = 0; i < valori.length; i++) {
                                 valori[i] = tabellaVoli.getValueAt(row, i);
                             }
+                            // Apre la finestra Prenota per effettuare la prenotazione del volo selezionato
                             Prenota prenotazione = new Prenota(frame, valori, sistema);
                             Prenota.frame.setVisible(true);
                             frame.setVisible(false);
                         } else {
+                            // Mostra messaggio di errore se il volo non è prenotabile
                             JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo " + stato.toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE);
                         }
                     }
@@ -138,6 +150,7 @@ public class HomeUtente {
             }
         });
 
+        // Azione per il bottone logout: esegue logout, apre la finestra Login e chiude questa finestra
         logout.addActionListener(e -> {
             sistema.logout(sistema.utente);
             Login login = new Login(frameChiamante, sistema);
@@ -149,12 +162,14 @@ public class HomeUtente {
     }
 
     private void personalizzaBottoneCerca() {
+        // Imposta colori e stile personalizzato al bottone cercaBigliettoButton
         cercaBigliettoButton.setBackground(new Color(33, 150, 243));
         cercaBigliettoButton.setForeground(Color.WHITE);
         cercaBigliettoButton.setFocusPainted(false);
         cercaBigliettoButton.setBorderPainted(false);
         cercaBigliettoButton.setOpaque(true);
 
+        // Cambia colore del bottone al passaggio del mouse
         cercaBigliettoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {

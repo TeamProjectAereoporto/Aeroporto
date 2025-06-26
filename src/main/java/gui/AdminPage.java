@@ -1,20 +1,22 @@
 package gui;
 
-import controller.Sistema;
-import model.Volo;
+import controller.Sistema;      // Controller del sistema (pattern Controller dell'architettura BCE)
+import model.Volo;             // Modello che rappresenta un volo
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
 
-
+/*
+  Classe AdminPage - Interfaccia grafica per l'amministratore.
+  Permette di visualizzare, aggiungere, modificare ed eliminare voli.
+  collegata al controller 'Sistema' che gestisce la logica dell'applicazione.
+ */
 public class AdminPage {
+    // Componenti GUI
     private JPanel principale;
     private JLabel adminTitle;
     private JButton aggiungiVoloButton;
@@ -25,19 +27,26 @@ public class AdminPage {
     private JButton modificaVoloButton;
     private JLabel logoutLabel;
     private JPanel logOutPanel;
-    public final static JFrame frame = new JFrame("AdminDashboard");
-    private final Sistema sistema;
+    public final static JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
+    private final Sistema sistema; // Controller per interfacciarsi con il Model
 
+    /*Costruttore della pagina Admin.
+     chiamante JFrame della schermata di login, da riaprire al logout.
+     controller Oggetto Sistema per gestire i dati e le operazioni.
+     model Modello della tabella da visualizzare (DefaultTableModel).
+     */
     public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel model) {
         this.sistema = controller;
-        //sistema.generaContenutiCasuali();
+
+        // Popolamento iniziale della tabella dei voli
         popolaTabellaVoli(model);
         tabellaVoli.setModel(model);
 
+        // Listener per il pulsante "Aggiungi Volo"
         aggiungiVoloButton.addActionListener(e -> {
-            AggiungiVolo av = new AggiungiVolo(model, sistema, this);
+            AggiungiVolo av = new AggiungiVolo(model, sistema, this); // nuova finestra di inserimento volo
             JFrame frame = new JFrame("Aggiungi Volo");
-            frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton());
+            frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton()); // Invio attiva il bottone
             frame.setContentPane(av.getPrincipale());
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.pack();
@@ -46,16 +55,17 @@ public class AdminPage {
             frame.setVisible(true);
         });
 
+        // Listener per il pulsante "Elimina Volo"
         eliminaVoloButton.addActionListener(e -> {
             int rigaSelezionata = tabellaVoli.getSelectedRow();
             if (rigaSelezionata != -1) {
-                System.out.println(rigaSelezionata);
                 int conferma = JOptionPane.showConfirmDialog(null,
                         "Sei sicuro di voler eliminare il volo selezionato?",
                         "Conferma eliminazione",
                         JOptionPane.YES_NO_OPTION);
 
                 if (conferma == JOptionPane.YES_OPTION) {
+                    // Estrae il codice del volo dalla prima colonna della riga selezionata
                     Object valoreCodice = tabellaVoli.getValueAt(rigaSelezionata, 0);
                     int codiceVolo = -1;
                     if (valoreCodice instanceof Integer) {
@@ -68,8 +78,13 @@ public class AdminPage {
                             return;
                         }
                     }
+
+                    // Chiamata al controller per eliminare il volo
                     sistema.eliminaVolo(codiceVolo);
+
+                    // Rimuove la riga dal modello grafico (tabella)
                     model.removeRow(rigaSelezionata);
+                    //Rimuove la riga dall'arrayList interno
                     sistema.visualizzaVoli().remove(rigaSelezionata);
                 }
             } else {
@@ -80,19 +95,24 @@ public class AdminPage {
             }
         });
 
+        // Imposta il frame principale della dashboard
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
 
+        // Listener per "Modifica Volo"
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tabellaVoli.getSelectedRow();
                 if (selectedRow != -1) {
+                    // Ottiene il volo selezionato dal sistema
                     Volo voloSelezionato = sistema.visualizzaVoli().get(selectedRow);
                     ModificaVolo modificaVoloPanel = new ModificaVolo(model , sistema, voloSelezionato);
+
+                    // Finestra per modificare i dati del volo
                     JFrame frameVolo = new JFrame("Modifica Volo");
                     frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
                     frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
@@ -101,20 +121,25 @@ public class AdminPage {
                     frameVolo.setSize(700, 500);
                     frameVolo.setLocation(400, 150);
                     frameVolo.setVisible(true);
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        applyStyles(chiamante);
 
+        // Applica lo stile grafico alla finestra
+        applyStyles(chiamante);
     }
 
+    // Getter per accedere alla tabella da altre classi
     public JTable getTabellaVoli(){
         return tabellaVoli;
     }
 
+    /*
+     Popola il modello della tabella con i voli presenti nel sistema.
+     Evita di mantenere una struttura in memoria duplicata, recuperando direttamente i dati dal controller.
+     */
     private void popolaTabellaVoli(DefaultTableModel model) {
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         for (Volo v : voli) {
@@ -126,52 +151,47 @@ public class AdminPage {
                     v.getOrarioArrivo(),
                     v.getRitardo(),
                     v.getStato(),
-                    v.getGate()  // Se lo hai rimosso dal DB e dal model, togli anche da qui
+                    v.getGate()
             });
         }
     }
 
-
-
-
+    /*
+     Applica uno stile coerente a tutti gli elementi della GUI.
+     Palette colori ispirata a sistemi aeroportuali.
+     Font leggibili e colori con buon contrasto.
+     */
     private void applyStyles(JFrame chiamante) {
-        // Palette colori aeroportuale
         Color primaryBlue = new Color(0, 95, 135);
         Color secondaryBlue = new Color(0, 120, 167);
         Color background = new Color(245, 245, 245);
         Color errorRed = new Color(231, 76, 60);
         Color successGreen = new Color(76, 175, 80);
 
-        // Font
         final String name = "Segoe UI";
         Font titleFont = new Font(name, Font.BOLD, 24);
         Font labelFont = new Font(name, Font.BOLD, 14);
         Font buttonFont = new Font(name, Font.BOLD, 14);
         Font tableFont = new Font(name, Font.PLAIN, 12);
 
-        // Stile generale
         principale.setBackground(background);
         principale.setBorder(new EmptyBorder(15, 15, 15, 15));
         voliPanel.setBackground(background);
         logOutPanel.setBackground(secondaryBlue);
 
-        // Titolo
         adminTitle.setFont(titleFont);
         adminTitle.setForeground(primaryBlue);
         adminTitle.setBorder(new EmptyBorder(0, 0, 15, 0));
 
-        // Etichette
         voliLable.setFont(labelFont);
         voliLable.setForeground(primaryBlue);
         logoutLabel.setFont(labelFont);
         logoutLabel.setForeground(background);
 
-        // Stile pulsanti
         styleButton(aggiungiVoloButton, successGreen, Color.WHITE, buttonFont);
         styleButton(modificaVoloButton, secondaryBlue, Color.WHITE, buttonFont);
         styleButton(eliminaVoloButton, errorRed, Color.WHITE, buttonFont);
 
-        // Stile tabella
         tabellaVoli.setFont(tableFont);
         tabellaVoli.setRowHeight(25);
         tabellaVoli.setShowGrid(false);
@@ -181,15 +201,17 @@ public class AdminPage {
         tabellaVoli.getTableHeader().setBackground(primaryBlue);
         tabellaVoli.getTableHeader().setForeground(Color.WHITE);
         tabellaVoli.getTableHeader().setReorderingAllowed(false);
+
+        // Comportamento logout con effetto hover
         logOutPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logOutPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 logOutPanel.setBackground(successGreen);
-                chiamante.setVisible(true);
+                chiamante.setVisible(true); // Torna alla schermata di login
                 Window window = SwingUtilities.getWindowAncestor(principale);
                 if (window != null) {
-                    window.dispose();
+                    window.dispose(); // Chiude la finestra corrente
                 }
             }
 
@@ -203,9 +225,9 @@ public class AdminPage {
                 logOutPanel.setBackground(secondaryBlue);
             }
         });
-
     }
 
+    //Applica stile uniforme ai pulsanti (font, colori, effetto hover).
     private void styleButton(JButton button, Color bg, Color fg, Font font) {
         button.setFont(font);
         button.setBackground(bg);
@@ -214,7 +236,7 @@ public class AdminPage {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Effetto hover
+        // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -226,5 +248,4 @@ public class AdminPage {
             }
         });
     }
-
 }
