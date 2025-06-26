@@ -44,7 +44,7 @@ public class Biglietto {
      */
     private void inizializzaFrame() {
         frame.setContentPane(finestraPrincipale);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setSize(900, 600);
         frame.setResizable(false);
@@ -173,7 +173,6 @@ public class Biglietto {
         DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
         modificaBiglietto modifica = new modificaBiglietto(sistema, bigliettoDaModificare, model, frame);
         modificaBiglietto.frame.setVisible(true);
-        frame.setVisible(false);
     }
 
     /*

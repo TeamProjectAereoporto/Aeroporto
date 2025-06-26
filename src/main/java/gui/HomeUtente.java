@@ -116,7 +116,6 @@ public class HomeUtente {
                 // Crea e mostra la finestra Biglietto e nasconde quella attuale
                 Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
                 Biglietto.frame.setVisible(true);
-                frame.setVisible(false);
             }
         });
 

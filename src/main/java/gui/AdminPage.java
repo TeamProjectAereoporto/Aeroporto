@@ -37,7 +37,6 @@ public class AdminPage {
      */
     public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel model) {
         this.sistema = controller;
-
         // Popolamento iniziale della tabella dei voli
         popolaTabellaVoli(model);
         tabellaVoli.setModel(model);

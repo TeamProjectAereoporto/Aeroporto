@@ -72,10 +72,16 @@ public class Prenota {
                                 ),sistema.utente);
                         try {
                             sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci));
+                            JOptionPane.showMessageDialog(finestraPrincipale,
+                                    "Prenotazione n°" + numeroBiglietto + " avvenuta con successo",
+                                    "Prenotazione riuscita",
+                                    JOptionPane.INFORMATION_MESSAGE);
+
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
                         sistema.aggiungiBiglietto(biglietto);
+
                         chiamante.setVisible(true);
                         frame.setVisible(false);
                         frame.dispose();

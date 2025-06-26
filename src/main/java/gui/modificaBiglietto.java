@@ -20,6 +20,7 @@ public class modificaBiglietto {
     private JTextField postoField;      // campo per inserire il posto assegnato
     private JButton invioButton;        // bottone per confermare la modifica
     private JPanel finestraPrincipale;  // pannello principale della finestra
+    private JButton annullaButton;
 
     private final Sistema sistema;      // riferimento al sistema di controllo
     public final static JFrame frame  = new JFrame("Modifica Biglietto");  // frame della finestra
@@ -96,6 +97,14 @@ public class modificaBiglietto {
             @Override
             public void windowClosing(WindowEvent e) {
                 chiamante.setVisible(true);
+                frame.dispose();
+            }
+        });
+        annullaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chiamante.setVisible(true);
+                frame.setVisible(false);
                 frame.dispose();
             }
         });
