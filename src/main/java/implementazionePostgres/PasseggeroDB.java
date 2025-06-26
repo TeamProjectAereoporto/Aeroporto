@@ -48,13 +48,13 @@ public class PasseggeroDB implements PasseggeroDao {
 
     // Metodo per ottenere un passeggero dal database (non ancora implementato)
     @Override
-    public Passeggero getPasseggero(String cdf) throws SQLException {
-        String sql = "SELECT * FROM passeggero WHERE numero_documento = ?";
+    public Passeggero getPasseggero(int id) throws SQLException {
+        String sql = "SELECT * FROM passeggero WHERE id_passeggero = ?";
 
         try (Connection conn = ConnessioneDB.getInstance().connection;
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, cdf);
+            ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Passeggero(
@@ -69,5 +69,14 @@ public class PasseggeroDB implements PasseggeroDao {
             throw e;
         }
         return null;  // Se non trovato
+    }
+    public int getIdPasseggero(long numeroBiglietto) throws SQLException{
+        String sqlGetTicket ="SELECT id_passeggero from prenotazione where numero_biglietto = ?";
+        try(Connection connection= ConnessioneDB.getInstance().connection;
+            PreparedStatement stmt = connection.prepareStatement(sqlGetTicket)){
+            stmt.setLong(1,numeroBiglietto);
+            ResultSet rs = stmt.executeQuery();
+            return rs.getInt("id_passeggero");
+        }
     }
 }

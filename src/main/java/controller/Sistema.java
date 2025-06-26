@@ -91,7 +91,8 @@ public class Sistema {
     //aggiungi il biglietto tra i biglietti acquistati dell'utente e tutti i biglietti
     public void aggiungiBiglietto(Prenotazione biglietto){
         if (utente != null) {
-            prenotazioneDB.addTicket(biglietto.getNumeroBiglietto(),biglietto.getPasseggero(),biglietto.getPostoAssegnato(),biglietto.getVolo(),biglietto.getStato().toString(),biglietto.getAcquirente());
+            // 1 = variabile id_passeggero da correggere
+            prenotazioneDB.addTicket(biglietto.getNumeroBiglietto(),1,biglietto.getPostoAssegnato(),biglietto.getVolo(),biglietto.getStato().toString(),biglietto.getAcquirente());
             utente.prenotaVolo(biglietto);
             tuttiIBiglietti.add(biglietto);
         } else {

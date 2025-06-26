@@ -9,5 +9,5 @@ import java.sql.SQLException;
 //in classi che non ne avessero bisogno.
 public interface PasseggeroDao {
     public void aggiungiPasseggero(Passeggero passeggero) throws SQLException;
-    public Passeggero getPasseggero(String Username) throws SQLException;
+    public Passeggero getPasseggero(int id) throws SQLException;
 }

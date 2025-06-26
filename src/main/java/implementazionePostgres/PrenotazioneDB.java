@@ -7,6 +7,7 @@ import model.Prenotazione;
 import model.Utente;
 import model.Volo;
 
+import java.awt.desktop.ScreenSleepEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,9 +34,9 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per aggiungere una prenotazione (biglietto) nel database
-    public void addTicket(long numeroBiglietto, Passeggero passeggero, String postoAssegnato, Volo volo, String stato, Utente utente) {
+    public void addTicket(long numeroBiglietto, int id, String postoAssegnato, Volo volo, String stato, Utente utente) {
         // Query SQL per inserire una nuova prenotazione nella tabella "prenotazione"
-        String sqlAddTicket = "INSERT INTO prenotazione (numero_biglietto, posto_assegnato,stato_prenotazione, numero_documento, id_utente, codice_volo) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlAddTicket = "INSERT INTO prenotazione (numero_biglietto, posto_assegnato,stato_prenotazione, id_passeggero, id_utente, codice_volo) VALUES (?, ?, ?, ?, ?, ?)";
 
         // Uso di try-with-resources per la gestione sicura di connessione e statement
         try (Connection connection = ConnessioneDB.getInstance().connection;
@@ -48,9 +49,9 @@ public class PrenotazioneDB implements PrenotazioneDAO {
             stmt.setLong(1, numeroBiglietto);
             stmt.setString(2, postoAssegnato);
             stmt.setString(3, stato.trim());
-            stmt.setString(4, passeggero.getNumeroDocumento());
+            stmt.setInt(4, id);
             stmt.setString(5, utente.getNomeUtente());
-            stmt.setLong(6, volo.getCodiceVolo());
+            stmt.setInt(6, volo.getCodiceVolo());
 
             // Debug per mostrare lo stato della prenotazione
             System.out.println("DEBUG stato = [" + stato + "]");
@@ -95,39 +96,55 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per modificare una prenotazione (non ancora implementato)
-    public void modifyTicket(long numeroBiglietto, String postoAssegnato, String cdf) {
+    public boolean modifyTicket(long numeroBiglietto, String postoAssegnato, String cdf) {
         String sqlModifyTickt = "UPDATE prenotazione\n" +
-                "SET posto_assegnato = ?,\n" +
+                "SET posto_assegnato = ?,\n"+
                 "numero_documento = ?\n" +
                 "WHERE numero_biglietto = ?";
-
-
+        try(Connection connection = ConnessioneDB.getInstance().connection;
+            PreparedStatement deleteTicket = connection.prepareStatement(sqlModifyTickt)){
+            deleteTicket.setString(1,postoAssegnato);
+            deleteTicket.setString(2, cdf);
+            deleteTicket.setLong(3,numeroBiglietto);
+            int i = deleteTicket.executeUpdate();
+            if(i>0){
+                System.out.println("Righe modificate: "+i);
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            return false;
     }
 
     // Metodo per recuperare tutte le prenotazioni
     public ArrayList getTickets(String username, String nome, int codiceVolo) throws  SQLException{
-        String sqlGetTickets= "SELECT p.*\n" +
-                "FROM prenotazione p\n" +
-                "JOIN passeggero pa ON p.numero_documento = pa.numero_documento\n" +
-                "WHERE p.id_utente = ? AND pa.nome = ?;\n";
-
         ArrayList<Prenotazione> biglietti = new ArrayList<>();
-        try(Connection connection = ConnessioneDB.getInstance().connection;
-            PreparedStatement stmt = connection.prepareStatement(sqlGetTickets)){
-            stmt.setString(1, username);
-            stmt.setString(2,nome);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                Prenotazione p = new Prenotazione();
-                p.setNumeroBiglietto(rs.getLong("numero_biglietto"));
-                p.setStato(Prenotazione.StatoPrenotazione.valueOf(rs.getString("stato_prenotazione")));
-                p.setPostoAssegnato(rs.getString("posto_assegnato"));
-                p.setVolo(voloDB.getVolo(rs.getInt("codice_volo")));
-                p.setPasseggero(passeggeroDB.getPasseggero(rs.getString("numero_documento")));
-                p.setAcquirente(utenteDB.getUtenteByUsername(rs.getString("id_utente")));
-                biglietti.add(p);
+        if(codiceVolo == 0 || !nome.isEmpty()) {
+            String sqlGetTickets = "SELECT p.*\n" +
+                    "FROM prenotazione p\n" +
+                    "JOIN passeggero pa ON p.id_passeggero = pa.id_passeggero\n" +
+                    "WHERE p.id_utente = ? AND pa.nome = ?;\n";
+
+            try (Connection connection = ConnessioneDB.getInstance().connection;
+                 PreparedStatement stmt = connection.prepareStatement(sqlGetTickets)) {
+                stmt.setString(1, username);
+                stmt.setString(2, nome);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    Prenotazione p = new Prenotazione();
+                    p.setNumeroBiglietto(rs.getLong("numero_biglietto"));
+                    p.setStato(Prenotazione.StatoPrenotazione.valueOf(rs.getString("stato_prenotazione")));
+                    p.setPostoAssegnato(rs.getString("posto_assegnato"));
+                    p.setVolo(voloDB.getVolo(rs.getInt("codice_volo")));
+                    p.setPasseggero(passeggeroDB.getPasseggero(rs.getInt("id_passeggero")));
+                    p.setAcquirente(utenteDB.getUtenteByUsername(rs.getString("id_utente")));
+                    biglietti.add(p);
+                }
             }
-            return biglietti;
+        }else{
+
         }
+        return biglietti;
     }
 }
