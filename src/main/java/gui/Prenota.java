@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 
 public class Prenota {
@@ -68,7 +69,12 @@ public class Prenota {
                                         Integer.parseInt(ritardoField.getText()),
                                         Volo.statoVolo.valueOf(statoField.getText()),
                                         gateField.getText()//si deve correggere
-                                ));
+                                ),sistema.utente);
+                        try {
+                            sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         sistema.aggiungiBiglietto(biglietto);
                         chiamante.setVisible(true);
                         frame.setVisible(false);

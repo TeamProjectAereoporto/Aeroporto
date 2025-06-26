@@ -9,6 +9,7 @@ public class Prenotazione {
     private StatoPrenotazione stato;
     private Passeggero passeggero;
     private Volo volo;
+    private Utente acquirente;
     public enum StatoPrenotazione {
         CONFERMATA(1),
         IN_ATTESA(2),
@@ -26,12 +27,13 @@ public class Prenotazione {
     }
     //Costruttore
     public Prenotazione(){}
-    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero, Volo volo) {
+    public Prenotazione(long numeroBiglietto, String postoAssegnato, StatoPrenotazione stato, Passeggero passeggero, Volo volo, Utente acquirente) {
         this.numeroBiglietto = numeroBiglietto;
         this.postoAssegnato = postoAssegnato;
         this.stato = stato;
         this.passeggero=passeggero;
         this.volo=volo;
+        this.acquirente = acquirente;
     }
     //get statoPrenotazione
     public StatoPrenotazione getStato() {
@@ -69,6 +71,14 @@ public class Prenotazione {
     public void setVolo(Volo volo) {this.volo = volo;}
     //return passeggero
     public Volo getVolo() {return volo;}
+    //set acquirente
+    public void setAcquirente(Utente u){
+        acquirente =u;
+    }
+    //get
+    public Utente getAcquirente(){
+        return acquirente;
+    }
     //crea numeroBiglietto
     public long creaNumeroBiglietto(ArrayList<Prenotazione> biglietti){
         Random casuale = new Random();

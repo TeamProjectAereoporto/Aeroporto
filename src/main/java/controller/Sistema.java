@@ -16,12 +16,16 @@ public class Sistema {
     private final Random casuale= new Random();
     private VoloDB voloDB;
     private UtenteDB utenteDB;
+    private PrenotazioneDB prenotazioneDB;
+    private PasseggeroDB passeggeroDB;
     public Sistema(){
         utenti = new ArrayList<>();
         tuttiIBiglietti = new ArrayList<>();
         biglietto = new Prenotazione();
         voloDB = new VoloDB();
         utenteDB = new UtenteDB();
+        prenotazioneDB = new PrenotazioneDB();
+        passeggeroDB =  new PasseggeroDB();
     }
     public void aggiungiUtente(Utente ug){
             utenti.add(ug);
@@ -65,6 +69,7 @@ public class Sistema {
     //aggiungi il biglietto tra i biglietti acquistati dell'utente e tutti i biglietti
     public void aggiungiBiglietto(Prenotazione biglietto){
         if (utente != null) {
+            prenotazioneDB.addTicket(biglietto.getNumeroBiglietto(),biglietto.getPasseggero(),biglietto.getPostoAssegnato(),biglietto.getVolo(),biglietto.getStato().toString(),biglietto.getAcquirente());
             utente.prenotaVolo(biglietto);
             tuttiIBiglietti.add(biglietto);
         } else {
@@ -74,7 +79,8 @@ public class Sistema {
 
 
     public boolean cancellaBiglietto(long numeroBiglietto){
-        return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati);
+        return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati)
+                && prenotazioneDB.deleteTicket(numeroBiglietto);
     }
 
 
@@ -99,7 +105,9 @@ public class Sistema {
         }
         return 0; // login fallito
     }
-
+    public void aggiungiPasseggero(Passeggero passeggero) throws SQLException {
+        passeggeroDB.aggiungiPasseggero(passeggero);
+    }
 
     public boolean verificaUtenteUnivoco(String username){
         for(Utente u : utenti){

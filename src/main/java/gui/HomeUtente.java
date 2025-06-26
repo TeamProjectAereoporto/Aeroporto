@@ -50,7 +50,7 @@ public class HomeUtente {
         frame.setContentPane(FinestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(900, 600);
+        frame.setSize(1100, 700);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -62,6 +62,7 @@ public class HomeUtente {
         tabellaVoli.setModel(model);
         tabellaVoli.getTableHeader().setReorderingAllowed(false);
         tabellaVoli.getTableHeader().setResizingAllowed(false);
+        tabellaVoli.setRowHeight(20); // 30 pixel
     }
 
     private void caricaVoli() {
