@@ -140,7 +140,6 @@ public class HomeUtente {
                             // Apre la finestra Prenota per effettuare la prenotazione del volo selezionato
                             Prenota prenotazione = new Prenota(frame, valori, sistema);
                             Prenota.frame.setVisible(true);
-                            frame.setVisible(false);
                         } else {
                             // Mostra messaggio di errore se il volo non è prenotabile
                             JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo " + stato.toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE);

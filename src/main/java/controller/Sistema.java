@@ -100,8 +100,13 @@ public class Sistema {
         return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
     }
     //metodo necessario alla tabella dell'area personale dell'utente generico che vuole visualizzare tutti i suoi voli prenotati
-    public ArrayList getBiglietti(String nome, int codiceVolo){
-        return utente.cercaBiglietto(nome,codiceVolo);
+    public ArrayList getBiglietti(String username,String nome, int codiceVolo){
+
+        try {
+            return prenotazioneDB.getTickets(username, nome,codiceVolo);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //Il metodo serve a verificare se l'utente è un admin o un utente generico

@@ -3,22 +3,30 @@ package implementazionePostgres;
 import connessioneDB.ConnessioneDB;
 import dao.PrenotazioneDAO;
 import model.Passeggero;
+import model.Prenotazione;
 import model.Utente;
 import model.Volo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PrenotazioneDB implements PrenotazioneDAO {
     // Connessione al database
     Connection connection = null;
+    VoloDB voloDB;
+    PasseggeroDB passeggeroDB;
+    UtenteDB utenteDB;
 
     // Costruttore: ottiene l'istanza della connessione al database
     public PrenotazioneDB(){
         try{
             connection = ConnessioneDB.getInstance().connection;
+            voloDB = new VoloDB();
+            passeggeroDB = new PasseggeroDB();
+            utenteDB = new UtenteDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,12 +95,39 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per modificare una prenotazione (non ancora implementato)
-    public void modifyTicket(String postoAssegnato, Passeggero passeggero) {
-        //da fare
+    public void modifyTicket(long numeroBiglietto, String postoAssegnato, String cdf) {
+        String sqlModifyTickt = "UPDATE prenotazione\n" +
+                "SET posto_assegnato = ?,\n" +
+                "numero_documento = ?\n" +
+                "WHERE numero_biglietto = ?";
+
+
     }
 
-    // Metodo per recuperare tutte le prenotazioni (non ancora implementato)
-    public void getTickets() {
-        //da fare
+    // Metodo per recuperare tutte le prenotazioni
+    public ArrayList getTickets(String username, String nome, int codiceVolo) throws  SQLException{
+        String sqlGetTickets= "SELECT p.*\n" +
+                "FROM prenotazione p\n" +
+                "JOIN passeggero pa ON p.numero_documento = pa.numero_documento\n" +
+                "WHERE p.id_utente = ? AND pa.nome = ?;\n";
+
+        ArrayList<Prenotazione> biglietti = new ArrayList<>();
+        try(Connection connection = ConnessioneDB.getInstance().connection;
+            PreparedStatement stmt = connection.prepareStatement(sqlGetTickets)){
+            stmt.setString(1, username);
+            stmt.setString(2,nome);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                Prenotazione p = new Prenotazione();
+                p.setNumeroBiglietto(rs.getLong("numero_biglietto"));
+                p.setStato(Prenotazione.StatoPrenotazione.valueOf(rs.getString("stato_prenotazione")));
+                p.setPostoAssegnato(rs.getString("posto_assegnato"));
+                p.setVolo(voloDB.getVolo(rs.getInt("codice_volo")));
+                p.setPasseggero(passeggeroDB.getPasseggero(rs.getString("numero_documento")));
+                p.setAcquirente(utenteDB.getUtenteByUsername(rs.getString("id_utente")));
+                biglietti.add(p);
+            }
+            return biglietti;
+        }
     }
 }

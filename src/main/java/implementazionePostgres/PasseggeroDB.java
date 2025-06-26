@@ -3,9 +3,11 @@ package implementazionePostgres;
 import connessioneDB.ConnessioneDB;
 import dao.PasseggeroDao;
 import model.Passeggero;
+import model.Volo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PasseggeroDB implements PasseggeroDao {
@@ -46,7 +48,26 @@ public class PasseggeroDB implements PasseggeroDao {
 
     // Metodo per ottenere un passeggero dal database (non ancora implementato)
     @Override
-    public Passeggero getPasseggero(String Nome, String Cognome) throws SQLException {
-        return null;
+    public Passeggero getPasseggero(String cdf) throws SQLException {
+        String sql = "SELECT * FROM passeggero WHERE numero_documento = ?";
+
+        try (Connection conn = ConnessioneDB.getInstance().connection;
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, cdf);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Passeggero(
+                            rs.getString("nome"),
+                            rs.getString("cognome"),
+                            rs.getString("numero_documento")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore durante il recupero del Passeggero: " + e.getMessage());
+            throw e;
+        }
+        return null;  // Se non trovato
     }
 }

@@ -85,7 +85,7 @@ public class Biglietto {
      * Carica i biglietti dal sistema filtrando per nome e codice volo e li inserisce nella tabella.
      */
     private void caricaBiglietti(String nome, int codiceVolo) {
-        biglietti = sistema.getBiglietti(nome, codiceVolo);
+        biglietti = sistema.getBiglietti(sistema.utente.getNomeUtente(),nome, codiceVolo);
         DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
         model.setRowCount(0); // Pulisce la tabella prima di caricare i dati
         if (biglietti != null) {
