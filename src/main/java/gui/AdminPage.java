@@ -108,19 +108,45 @@ public class AdminPage {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tabellaVoli.getSelectedRow();
                 if (selectedRow != -1) {
-                    // Ottiene il volo selezionato dal sistema
-                    Volo voloSelezionato = sistema.visualizzaVoli().get(selectedRow);
-                    ModificaVolo modificaVoloPanel = new ModificaVolo(model , sistema, voloSelezionato);
+                    // Ottiene il codice del volo dalla tabella
+                    Object codiceObj = tabellaVoli.getValueAt(selectedRow, 0);
+                    int codiceVolo = -1;
 
-                    // Finestra per modificare i dati del volo
-                    JFrame frameVolo = new JFrame("Modifica Volo");
-                    frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
-                    frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
-                    frameVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                    frameVolo.pack();
-                    frameVolo.setSize(700, 500);
-                    frameVolo.setLocation(400, 150);
-                    frameVolo.setVisible(true);
+                    if (codiceObj instanceof Integer) {
+                        codiceVolo = (Integer) codiceObj;
+                    } else if (codiceObj instanceof String) {
+                        try {
+                            codiceVolo = Integer.parseInt((String) codiceObj);
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(null, "Errore nel formato del codice volo");
+                            return;
+                        }
+                    }
+
+                    // Cerca il volo corrispondente nel sistema
+                    Volo voloSelezionato = null;
+                    for (Volo v : sistema.visualizzaVoli()) {
+                        if (v.getCodiceVolo() == codiceVolo) {
+                            voloSelezionato = v;
+                            break;
+                        }
+                    }
+
+                    if (voloSelezionato != null) {
+                        ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
+
+                        // Finestra per modificare i dati del volo
+                        JFrame frameVolo = new JFrame("Modifica Volo");
+                        frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
+                        frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
+                        frameVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        frameVolo.pack();
+                        frameVolo.setSize(700, 500);
+                        frameVolo.setLocation(400, 150);
+                        frameVolo.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", "Errore", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
