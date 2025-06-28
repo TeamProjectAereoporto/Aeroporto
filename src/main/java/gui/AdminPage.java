@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.border.EmptyBorder;
 
@@ -28,7 +27,7 @@ public class AdminPage {
     private JButton modificaVoloButton;
     private JLabel logoutLabel;
     private JPanel logOutPanel;
-    public final static JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
+    public static final JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
     private final Sistema sistema; // Controller per interfacciarsi con il Model
     private final String errorMessage= "Errore";
     /*Costruttore della pagina Admin.
