@@ -13,11 +13,10 @@ public class Passeggero {
 
     private int id_passeggero;
     // Costruttore per creare un oggetto Passeggero con nome, cognome e numero documento
-    public Passeggero(String nome, String cognome, String numeroDocumento, int id){
+    public Passeggero(String nome, String cognome, String numeroDocumento){
         this.nome = nome;
         this.cognome = cognome;
         this.numeroDocumento = numeroDocumento;
-        this.id_passeggero= id;
     }
 
     // Metodi getter per ottenere i valori dei campi

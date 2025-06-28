@@ -59,36 +59,40 @@ public class Prenota {
                         int id = 0;
                         try{
                         if (!sistema.controlloPasseggeroInVolo(ci, Integer.parseInt(codiceVoloField.getText()))) {
-                            try {
-                                id = sistema.getLastId() + 1;
-                                System.out.println("id:" + id);
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
-                            }
-                            Prenotazione biglietto = new Prenotazione(numeroBiglietto,
-                                    "A5",
-                                    Prenotazione.StatoPrenotazione.CONFERMATA,
-                                    new Passeggero(nome, cognome, ci, id),
-                                    new Volo(
-                                            Integer.parseInt(codiceVoloField.getText()),
-                                            compagniaAereaField.getText(),
-                                            origineField.getText(),
-                                            arrivoField.getText(),
-                                            orarioField.getText(),
-                                            Integer.parseInt(ritardoField.getText()),
-                                            Volo.statoVolo.valueOf(statoField.getText()),
-                                            gateField.getText()//si deve correggere
-                                    ), sistema.getUtente());
-                                sistema.aggiungiPasseggero(new Passeggero(nome, cognome, ci, id));
+                            Passeggero passeggero =  new Passeggero(nome, cognome, ci);
+                            id= sistema.aggiungiPasseggero(passeggero);
+                            if(id==0){
+                                JOptionPane.showMessageDialog(finestraPrincipale,
+                                        "Errore gennerico inserimento del passeggero  ",
+                                        "Errore inserimento passeggero",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }else {
+                                passeggero.setId_passeggero(id);
+                                Prenotazione biglietto = new Prenotazione(numeroBiglietto,
+                                        "A5",
+                                        Prenotazione.StatoPrenotazione.CONFERMATA,
+                                        passeggero,
+                                        new Volo(
+                                                Integer.parseInt(codiceVoloField.getText()),
+                                                compagniaAereaField.getText(),
+                                                origineField.getText(),
+                                                arrivoField.getText(),
+                                                orarioField.getText(),
+                                                Integer.parseInt(ritardoField.getText()),
+                                                Volo.statoVolo.valueOf(statoField.getText()),
+                                                gateField.getText()//si deve correggere
+                                        ),
+                                        sistema.getUtente());
                                 sistema.aggiungiBiglietto(biglietto);
                                 JOptionPane.showMessageDialog(finestraPrincipale,
                                         "Prenotazione n°" + numeroBiglietto + " avvenuta con successo",
                                         "Prenotazione riuscita",
                                         JOptionPane.INFORMATION_MESSAGE);
-                            chiamante.setVisible(true);
-                            frame.setVisible(false);
-                            frame.dispose();
-                        }else{
+                                chiamante.setVisible(true);
+                                frame.setVisible(false);
+                                frame.dispose();
+                            }
+                            }else{
                             JOptionPane.showMessageDialog(finestraPrincipale,
                                     "Il passeggero "+ci+" è già passeggero del seguente volo, codice: "+codiceVoloField.getText(),
                                     "Passeggero già prenotato",

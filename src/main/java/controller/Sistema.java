@@ -144,8 +144,8 @@ public class Sistema {
     }
 
     //aggiunge un passeggero al DB
-    public void aggiungiPasseggero(Passeggero passeggero) throws SQLException {
-        passeggeroDB.aggiungiPasseggero(passeggero);
+    public int aggiungiPasseggero(Passeggero passeggero) throws SQLException {
+        return passeggeroDB.aggiungiPasseggero(passeggero);
     }
     //metodo per eliminare un biglietto disponibile per l'utente generico che prenota per sé o per un eventuale passeggero
     public boolean cancellaBiglietto(long numeroBiglietto){

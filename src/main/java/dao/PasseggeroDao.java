@@ -8,6 +8,6 @@ import java.sql.SQLException;
 //si è deciso di specializzare le diverse interfacce per non trovarci nella condizione di dover implementare metodi non necessari
 //in classi che non ne avessero bisogno.
 public interface PasseggeroDao {
-    public void aggiungiPasseggero(Passeggero passeggero) throws SQLException;
+    public int aggiungiPasseggero(Passeggero passeggero) throws SQLException;
     public Passeggero getPasseggero(int id) throws SQLException;
 }

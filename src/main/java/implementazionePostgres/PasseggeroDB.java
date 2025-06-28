@@ -25,9 +25,9 @@ public class PasseggeroDB implements PasseggeroDao {
 
     // Metodo per aggiungere un passeggero al database
     @Override
-    public void aggiungiPasseggero(Passeggero passeggero) throws SQLException {
+    public int aggiungiPasseggero(Passeggero passeggero) throws SQLException {
         // Query SQL per inserire un nuovo passeggero nella tabella "passeggero"
-        String sqlInsertClient = "INSERT INTO passeggero(nome, cognome, numero_documento) VALUES(?,?,?)";
+        String sqlInsertClient = "INSERT INTO passeggero (nome, cognome, numero_documento) VALUES (?, ?, ?) RETURNING id_passeggero";
 
         // Uso di try-with-resources per chiudere automaticamente risorse JDBC
         try(Connection connection = ConnessioneDB.getInstance().connection;
@@ -39,11 +39,16 @@ public class PasseggeroDB implements PasseggeroDao {
             stmt.setString(3, passeggero.getNumeroDocumento());
 
             // Esecuzione dell'update per inserire i dati nel database
-            stmt.executeUpdate();
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         }catch (SQLException e){
             // Stampa eventuale errore SQL sulla console
             e.printStackTrace();
         }
+        return 0;
     }
 
     // Metodo per ottenere un passeggero dal database (non ancora implementato)
@@ -60,8 +65,7 @@ public class PasseggeroDB implements PasseggeroDao {
                     return new Passeggero(
                             rs.getString("nome"),
                             rs.getString("cognome"),
-                            rs.getString("numero_documento"),
-                            rs.getInt("id_passeggero")
+                            rs.getString("numero_documento")
                     );
                 }
             }
