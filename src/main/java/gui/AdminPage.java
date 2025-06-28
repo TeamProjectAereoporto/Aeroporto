@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.border.EmptyBorder;
 
 /*
@@ -29,7 +30,7 @@ public class AdminPage {
     private JPanel logOutPanel;
     public final static JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
     private final Sistema sistema; // Controller per interfacciarsi con il Model
-
+    private final String errorMessage= "Errore";
     /*Costruttore della pagina Admin.
      chiamante JFrame della schermata di login, da riaprire al logout.
      controller Oggetto Sistema per gestire i dati e le operazioni.
@@ -37,13 +38,9 @@ public class AdminPage {
      */
     public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel model) {
         this.sistema = controller;
-
-
-
         // Popolamento iniziale della tabella dei voli
         popolaTabellaVoli(model);
         tabellaVoli.setModel(model);
-
         // Listener per il pulsante "Aggiungi Volo"
         aggiungiVoloButton.addActionListener(e -> {
             AggiungiVolo av = new AggiungiVolo(model, sistema, this); // nuova finestra di inserimento volo
@@ -56,7 +53,6 @@ public class AdminPage {
             frame.setLocation(400, 150);
             frame.setVisible(true);
         });
-
         // Listener per il pulsante "Elimina Volo"
         eliminaVoloButton.addActionListener(e -> {
             int rigaSelezionata = tabellaVoli.getSelectedRow();
@@ -76,14 +72,12 @@ public class AdminPage {
                         try {
                             codiceVolo = Integer.parseInt((String) valoreCodice);
                         } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "Errore nel formato del codice volo");
+                            JOptionPane.showMessageDialog(null, errorMessage+ " nel formato del codice volo");
                             return;
                         }
                     }
-
                     // Chiamata al controller per eliminare il volo
                     sistema.eliminaVolo(codiceVolo);
-
                     // Rimuove la riga dal modello grafico (tabella)
                     model.removeRow(rigaSelezionata);
                     //Rimuove la riga dall'arrayList interno
@@ -92,18 +86,16 @@ public class AdminPage {
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Seleziona un volo da eliminare!",
-                        "Errore",
+                        errorMessage,
                         JOptionPane.WARNING_MESSAGE);
             }
         });
-
         // Imposta il frame principale della dashboard
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
-
         // Listener per "Modifica Volo"
         modificaVoloButton.addActionListener(new ActionListener() {
             @Override
@@ -113,18 +105,16 @@ public class AdminPage {
                     // Ottiene il codice del volo dalla tabella
                     Object codiceObj = tabellaVoli.getValueAt(selectedRow, 0);
                     int codiceVolo = -1;
-
                     if (codiceObj instanceof Integer) {
                         codiceVolo = (Integer) codiceObj;
                     } else if (codiceObj instanceof String) {
                         try {
                             codiceVolo = Integer.parseInt((String) codiceObj);
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "Errore nel formato del codice volo");
+                        } catch (NumberFormatException _) {
+                            JOptionPane.showMessageDialog(null, errorMessage+ "nel formato del codice volo");
                             return;
                         }
                     }
-
                     // Cerca il volo corrispondente nel sistema
                     Volo voloSelezionato = null;
                     for (Volo v : sistema.visualizzaVoli()) {
@@ -133,10 +123,8 @@ public class AdminPage {
                             break;
                         }
                     }
-
                     if (voloSelezionato != null) {
                         ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
-
                         // Finestra per modificare i dati del volo
                         JFrame frameVolo = new JFrame("Modifica Volo");
                         frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
@@ -147,29 +135,26 @@ public class AdminPage {
                         frameVolo.setLocation(400, 150);
                         frameVolo.setVisible(true);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", "Errore", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", errorMessage, JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", errorMessage, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
         // Applica lo stile grafico alla finestra
         applyStyles(chiamante);
     }
-
     // Getter per accedere alla tabella da altre classi
     public JTable getTabellaVoli(){
         return tabellaVoli;
     }
-
     /*
      Popola il modello della tabella con i voli presenti nel sistema.
      Evita di mantenere una struttura in memoria duplicata, recuperando direttamente i dati dal controller.
      */
     private void popolaTabellaVoli(DefaultTableModel model) {
-        ArrayList<Volo> voli = sistema.visualizzaVoli();
+        List<Volo> voli = sistema.visualizzaVoli();
         for (Volo v : voli) {
             model.addRow(new Object[]{
                     v.getCodiceVolo(),

@@ -9,7 +9,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Classe che rappresenta la finestra per cercare, modificare ed eliminare biglietti (prenotazioni).
@@ -24,7 +24,7 @@ public class Biglietto {
     private JPanel navbar;
     private JLabel titolo;
 
-    private ArrayList<Prenotazione> biglietti; // Lista dei biglietti caricati nella tabella
+    private List<Prenotazione> biglietti; // Lista dei biglietti caricati nella tabella
 
     public final static JFrame frame = new JFrame("Cerca e modifica biglietto");
 
@@ -85,7 +85,7 @@ public class Biglietto {
      * Carica i biglietti dal sistema filtrando per nome e codice volo e li inserisce nella tabella.
      */
     private void caricaBiglietti(String nome, int codiceVolo) {
-        biglietti = sistema.getBiglietti(sistema.utente.getNomeUtente(),nome, codiceVolo);
+        biglietti = sistema.getBiglietti(sistema.getUtente().getNomeUtente(),nome, codiceVolo);
         DefaultTableModel model = (DefaultTableModel) tabellaBiglietti.getModel();
         model.setRowCount(0); // Pulisce la tabella prima di caricare i dati
         if (biglietti != null) {

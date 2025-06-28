@@ -72,13 +72,14 @@ public class Login {
 
                     int ruolo = 0; // variabile per ruolo utente
                     // determina il ruolo in base all'oggetto utente o admin nel sistema
-                    if (sistema.utente != null) {
+                    if (sistema.getUtente()!= null) {
                         ruolo = 1; // utente generico
-                    } else if (sistema.admin != null) {
+                    } else if (sistema.getAdmin() != null) {
                         ruolo = 2; // admin
                     } else {
                         ruolo = 0; // nessun ruolo
                     }
+
 
                     // definisce le colonne per la tabella voli
                     String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",

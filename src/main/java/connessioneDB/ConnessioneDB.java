@@ -4,6 +4,7 @@ package connessioneDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 //classe dedicata alla creazione della connessione al DB.
 //segue il pattern singleton per la connessione al database.
@@ -14,16 +15,17 @@ public class ConnessioneDB {
     private static ConnessioneDB instance; //Implementa il pattern Singleton
     public Connection connection = null; //Oggetto JDBC che rappresenta la connessione attiva con il database
     private String nome = "postgres";
-    private String password = "kira";
-    private String url = "jdbc:postgresql://localhost:5451/Aeroporto";
+    private String password = "postgres";
+    private String url = "jdbc:postgresql://localhost:5432/Aeroporto";
     private String driver = "org.postgresql.Driver";
+    Logger logger = Logger.getLogger(getClass().getName());
 
     private ConnessioneDB() throws SQLException {
         try {
             Class.forName(driver);
             connection = (Connection)DriverManager.getConnection(url, nome, password);
         } catch (ClassNotFoundException ex) {
-            System.out.println("Connessione DB fallita: "+ ex.getMessage());
+            logger.info("Connessione DB fallita: "+ ex.getMessage());
             ex.printStackTrace();
         }
     }

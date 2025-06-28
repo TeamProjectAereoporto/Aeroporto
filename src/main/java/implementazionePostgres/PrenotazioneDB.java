@@ -2,12 +2,10 @@ package implementazionePostgres;
 
 import connessioneDB.ConnessioneDB;
 import dao.PrenotazioneDAO;
-import model.Passeggero;
 import model.Prenotazione;
 import model.Utente;
 import model.Volo;
 
-import java.awt.desktop.ScreenSleepEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,7 +116,7 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per recuperare tutte le prenotazioni
-    public ArrayList getTickets(String username, String nome, int codiceVolo) throws  SQLException{
+    public ArrayList<Prenotazione> getTickets(String username, String nome, int codiceVolo) throws  SQLException{
         ArrayList<Prenotazione> biglietti = new ArrayList<>();
         if(codiceVolo == 0 || !nome.isEmpty()) {
             String sqlGetTickets = "SELECT p.*\n" +

@@ -37,6 +37,7 @@ public class ModificaVolo {
     private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
+    final String errorMessage = "Errore";
 
 
     public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare) {
@@ -127,8 +128,10 @@ public class ModificaVolo {
             aggiornaTabella(codice);
             sistema.modificaVolo(voloModificato);
             chiudiFinestra();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", "Errore", JOptionPane.ERROR_MESSAGE);
+
+        } catch (Exception exception) {
+
+            JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", errorMessage, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -137,25 +140,25 @@ public class ModificaVolo {
     private boolean convalidaCampi(String codice, String compagnia, String origine, String destinazione, String orario, String ritardo, String gate, String stato) {
         if (codice.isEmpty() || compagnia.isEmpty() || origine.isEmpty() || destinazione.isEmpty() ||
                 orario.isEmpty() || ritardo.isEmpty() || (partenzaButton.isSelected() && gate.isEmpty()) || stato == null || stato.isEmpty()) {
-            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere compilati", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere compilati", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!codice.matches("\\d{4}")) {
-            JOptionPane.showMessageDialog(principale, "Codice volo non valido", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Codice volo non valido", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!orario.matches("([01]?\\d|2[0-3]):[0-5]\\d")) {
-            JOptionPane.showMessageDialog(principale, "Formato orario errato (HH:mm)", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Formato orario errato (HH:mm)", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!gate.matches("[A-Z][1-9]") && partenzaButton.isSelected()) {
-            JOptionPane.showMessageDialog(principale, "Formato gate errato (es. A1)", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principale, "Formato gate errato (es. A1)", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String codiceTabella = tableModel.getValueAt(i, 0).toString();
             if (codiceTabella.equals(codice) && voloModificato.getCodiceVolo() != Integer.parseInt(codice)) {
-                JOptionPane.showMessageDialog(principale, "Codice volo già esistente", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(principale, "Codice volo già esistente", errorMessage, JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
@@ -200,15 +203,14 @@ public class ModificaVolo {
     private void applyStyles() {
         // Palette colori aeroportuale
         Color primaryBlue = new Color(0, 95, 135);
-        Color secondaryBlue = new Color(0, 120, 167);
         Color background = new Color(245, 245, 245);
-        Color errorRed = new Color(231, 76, 60);
         Color successGreen = new Color(76, 175, 80);
 
         // Font
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
+        final String fontName = "Segoe UI";
+        Font labelFont = new Font(fontName, Font.BOLD, 14);
+        Font fieldFont = new Font(fontName, Font.PLAIN, 14);
+        Font buttonFont = new Font(fontName, Font.BOLD, 14);
 
         // Stile generale
         principale.setBackground(background);

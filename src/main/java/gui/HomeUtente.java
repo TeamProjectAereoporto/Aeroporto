@@ -150,7 +150,7 @@ public class HomeUtente {
 
         // Azione per il bottone logout: esegue logout, apre la finestra Login e chiude questa finestra
         logout.addActionListener(e -> {
-            sistema.logout(sistema.utente);
+            sistema.logout();
             Login login = new Login(frameChiamante, sistema);
             Login.frame.getRootPane().setDefaultButton(login.getInvio());
             Login.frame.setVisible(true);

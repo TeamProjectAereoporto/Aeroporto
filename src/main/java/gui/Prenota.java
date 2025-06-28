@@ -69,7 +69,7 @@ public class Prenota {
                                         Integer.parseInt(ritardoField.getText()),
                                         Volo.statoVolo.valueOf(statoField.getText()),
                                         gateField.getText()//si deve correggere
-                                ),sistema.utente);
+                                ),sistema.getUtente());
                         try {
                             sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci));
                             JOptionPane.showMessageDialog(finestraPrincipale,

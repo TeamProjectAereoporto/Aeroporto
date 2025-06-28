@@ -4,7 +4,9 @@ import model.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 //la classe controller si occupa della gestione e della logica delle operazioni svolte dalle classi del model.
 /*normalmente ci sarebbe stata la necessità di creare e lavorare con più controller ognuno specializzato nella gestione di
@@ -12,16 +14,17 @@ una singola operazione o in un campo specifo. Per attenerci alla traccia si è p
  */
 public class Sistema {
 
-    public static ArrayList<Utente> utenti;
-    public Prenotazione biglietto;
-    public UtenteGenerico utente;
-    public Admin admin;
-    public ArrayList<Prenotazione> tuttiIBiglietti;
+    private static List<Utente> utenti;
+    private Prenotazione biglietto;
+    private UtenteGenerico utente;
+    private Admin admin;
+    private List<Prenotazione> tuttiIBiglietti;
     private final Random casuale= new Random();
     private VoloDB voloDB;
     private UtenteDB utenteDB;
     private PrenotazioneDB prenotazioneDB;
     private PasseggeroDB passeggeroDB;
+    Logger logger = Logger.getLogger(getClass().getName());
     public Sistema(){
         utenti = new ArrayList<>();
         tuttiIBiglietti = new ArrayList<>();
@@ -33,11 +36,20 @@ public class Sistema {
         creaAdmin();
     }
 
-    //se non esiste crea admin
+    //metodo per ricevere admin
+    public Admin getAdmin(){
+        return admin;
+    }
+    //metodo per ricevere utente
+    public Utente getUtente(){
+        return utente;
+    }
+
+    //se non esiste crea un admin
     public void creaAdmin(){
         if(!utenteDB.esisteAlmenoUnAdmin()){
-            Admin admin = new Admin("admin", "admin123", 2);
-            System.out.println("admin creato: \nUsername: " + admin.getNomeUtente() + "\nPassword: "+ admin.getPsw());
+            Admin primoAdminCreatoPerIlSistema = new Admin("admin", "admin123", 2);
+            logger.info("admin creato: \nUsername: " + admin.getNomeUtente() + "\nPassword: "+ admin.getPsw());
         }
     }
 
@@ -47,7 +59,7 @@ public class Sistema {
         try {
             utenteDB.aggiungiUtenteDB(ug); // aggiungi anche nel DB
         } catch (SQLException e) {
-            System.err.println("Errore aggiungendo utente al DB: " + e.getMessage());
+            logger.info("Errore aggiungendo utente al DB: " + e.getMessage());
         }
     }
 
@@ -57,7 +69,7 @@ public class Sistema {
             voloDB.aggiungiVoloDB(v);
             admin.aggiungiVoli(v);
         } catch (SQLException e) {
-            System.err.println("Errore aggiungendo volo: " + e.getMessage());
+            logger.info("Errore aggiungendo volo: " + e.getMessage());
         }
     }
 
@@ -66,8 +78,8 @@ public class Sistema {
         try {
             return voloDB.getTuttiVoli();
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero voli: " + e.getMessage());
-            return new ArrayList<>();
+            logger.info("Errore nel recupero voli: " + e.getMessage());
+            return new ArrayList<Volo>();
         }
     }
 
@@ -76,7 +88,7 @@ public class Sistema {
         try {
             voloDB.eliminaVolo(codiceVolo);
         } catch (SQLException e) {
-            System.err.println("Errore eliminando volo: " + e.getMessage());
+            logger.info("Errore eliminando volo: " + e.getMessage());
         }
     }
 
@@ -85,7 +97,7 @@ public class Sistema {
         try {
             voloDB.modificaVoloDB(v);
         } catch (SQLException e) {
-            System.err.println("Errore modificando volo: " + e.getMessage());
+            logger.info("Errore modificando volo: " + e.getMessage());
         }
     }
     //aggiungi il biglietto tra i biglietti acquistati dell'utente e tutti i biglietti
@@ -96,7 +108,7 @@ public class Sistema {
             utente.prenotaVolo(biglietto);
             tuttiIBiglietti.add(biglietto);
         } else {
-            System.err.println("Errore: nessun utente generico loggato.");
+            logger.info("Errore: nessun utente generico loggato.");
         }
     }
 
@@ -107,17 +119,17 @@ public class Sistema {
     }
     //metodo finalizzato alla creazione di un numero biglietto univoco e random
     public Long creaNumBiglietto(){
-        return biglietto.creaNumeroBiglietto(tuttiIBiglietti);
+        return biglietto.creaNumeroBiglietto((ArrayList<Prenotazione>) tuttiIBiglietti);
     }
     //metodo necessario alla tabella dell'area personale dell'utente generico che vuole visualizzare tutti i suoi voli prenotati
-    public ArrayList getBiglietti(String username,String nome, int codiceVolo){
-
+    public List<Prenotazione> getBiglietti(String username, String nome, int codiceVolo) {
         try {
-            return prenotazioneDB.getTickets(username, nome,codiceVolo);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return prenotazioneDB.getTickets(username, nome, codiceVolo);
+        } catch (SQLException _) {
+            return new ArrayList<>();
         }
     }
+
 
     //Il metodo serve a verificare se l'utente è un admin o un utente generico
     public int verificaUtenteP(String username, String psw) {
@@ -151,13 +163,14 @@ public class Sistema {
         return true;
     }
 
-    public void setUtenteLoggato(Utente u){
-        if (u instanceof UtenteGenerico) {
-            this.utente = (UtenteGenerico) u;
-        } else if (u instanceof Admin) {
-            this.admin = (Admin) u;
+    public void setUtenteLoggato(Utente u) {
+        if (u instanceof UtenteGenerico ug) {
+            this.utente = (UtenteGenerico) ug;
+        } else if (u instanceof Admin a) {
+            this.admin = (Admin) a;
         }
     }
+
 
     public void modificaBiglietto(Prenotazione b){
         biglietto.modificaBiglietto(b, UtenteGenerico.bigliettiAcquistati);
@@ -174,17 +187,28 @@ public class Sistema {
 
 
     //effettua il logout dal sistema.
-    public void logout(Utente utente){
+    public void logout(){
         this.utente = null;
     }
 
     //questo metodo è stato utilizzato una volta sola volta per riempire il db di voli automaticamente e poi cancellato
     //al fine di simulare il progetto "a regime".
+
     public void generaContenutiCasuali() {
+        int codiceVolo;
+        int ritardo;
+        String statoVolo = "";
+        String compagnia;
+        String aeroportoOrigine;
+        String aeroportoDestinazione;
+        String orarioArrivo;
+        String gate1;
+        int possibilita;
+        final String Capodichino = "Capodichino";
         String[] nomiCompagnie = {"Aircampnia","RaynAir","AliItalia","AirRoma","AliGermany",
                 "AirRomania","FlyNaples","FlyRomenia","FlyHighIT","FranceFly","SpainFly","AirTool",
                 "AmericaFly","NYflyHigh","NigeriaFly","JapanFly","TokyoFly"};
-        String[] Aeroporti= {"Capodichino", "Roma", "Latina","Heathrow Airport","John F. Kennedy International Airport",
+        String[] aeroporti = {Capodichino, "Roma", "Latina","Heathrow Airport","John F. Kennedy International Airport",
                 "Charles de Gaulle Airport","Frankfurt Airport ","Tokyo Haneda Airport","Los Angeles International Airport ",
                 "Dubai International Airport","Singapore Changi Airport","Incheon International Airport","Beijing Capital International Airport"};
         String[] orari = {
@@ -202,28 +226,19 @@ public class Sistema {
                 "ATTERRATO",
                 "CANCELLATO"};
 
-        int codiceVolo;
-        int ritardo;
-        String statoVolo = "";
-        String compagnia;
-        String aeroportoOrigine;
-        String aeroportoDestinazione;
-        String orarioArrivo;
-        String gate1;
-        int possibilita;
         for(int i=0;i<40;i++){
             ritardo =0;
             codiceVolo = casuale.nextInt(9000) + 1000;
             possibilita = casuale.nextInt(6);
-            System.out.println(possibilita);
+           System.out.println(possibilita);
 
             // Modifica per garantire che almeno uno dei due aeroporti sia "Capodichino"
             if(casuale.nextBoolean()) {
-                aeroportoOrigine = "Capodichino";
-                aeroportoDestinazione = Aeroporti[casuale.nextInt(Aeroporti.length)];
+                aeroportoOrigine = Capodichino;
+                aeroportoDestinazione = aeroporti[casuale.nextInt(aeroporti.length)];
             } else {
-                aeroportoOrigine = Aeroporti[casuale.nextInt(Aeroporti.length)];
-                aeroportoDestinazione = "Capodichino";
+                aeroportoOrigine = aeroporti[casuale.nextInt(aeroporti.length)];
+                aeroportoDestinazione = Capodichino;
             }
 
             // Gestione ritardo e stato
@@ -235,7 +250,7 @@ public class Sistema {
             }
 
             // Gestione gate per voli in arrivo a Capodichino
-            if(aeroportoDestinazione.equals("Capodichino")) {
+            if(aeroportoDestinazione.equals(Capodichino)) {
                 gate1 = ""; // Voli in arrivo a Capodichino non hanno gate
             } else {
                 gate1 = gate[casuale.nextInt(gate.length)];
@@ -258,7 +273,7 @@ public class Sistema {
             try {
                 voloDB.aggiungiVoloDB(v);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+               logger.info("Errore nella generazione di contenuti casuali nel DB"+ e.getMessage());
             }
         }
     }
