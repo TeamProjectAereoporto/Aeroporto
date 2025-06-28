@@ -11,11 +11,13 @@ public class Passeggero {
     // Numero del documento identificativo del passeggero (es. passaporto, carta d'identità)
     private String numeroDocumento;
 
+    private int id_passeggero;
     // Costruttore per creare un oggetto Passeggero con nome, cognome e numero documento
-    public Passeggero(String nome, String cognome, String numeroDocumento){
+    public Passeggero(String nome, String cognome, String numeroDocumento, int id){
         this.nome = nome;
         this.cognome = cognome;
         this.numeroDocumento = numeroDocumento;
+        this.id_passeggero= id;
     }
 
     // Metodi getter per ottenere i valori dei campi
@@ -31,6 +33,9 @@ public class Passeggero {
         return numeroDocumento;
     }
 
+    public int getId_passeggero() {
+        return id_passeggero;
+    }
     // Metodi setter per modificare i valori dei campi
     public void setNome(String nome) {
         this.nome = nome;
@@ -42,5 +47,9 @@ public class Passeggero {
 
     public void setNumeroDocumento(String numeroDocumento) {
         this.numeroDocumento = numeroDocumento;
+    }
+
+    public void setId_passeggero(int id_passeggero) {
+        this.id_passeggero = id_passeggero;
     }
 }

@@ -60,7 +60,8 @@ public class PasseggeroDB implements PasseggeroDao {
                     return new Passeggero(
                             rs.getString("nome"),
                             rs.getString("cognome"),
-                            rs.getString("numero_documento")
+                            rs.getString("numero_documento"),
+                            rs.getInt("id_passeggero")
                     );
                 }
             }
@@ -79,4 +80,19 @@ public class PasseggeroDB implements PasseggeroDao {
             return rs.getInt("id_passeggero");
         }
     }
+    public int getLastId() throws SQLException {
+        String sqlGetLastId = "SELECT id_passeggero FROM passeggero ORDER BY id_passeggero DESC LIMIT 1;";
+        int id = 0;
+        try (Connection connection = ConnessioneDB.getInstance().connection;
+             PreparedStatement stmt = connection.prepareStatement(sqlGetLastId);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                id = rs.getInt("id_passeggero");
+            }
+
+        }
+        return id;
+    }
+
 }

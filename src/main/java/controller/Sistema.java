@@ -104,7 +104,7 @@ public class Sistema {
     public void aggiungiBiglietto(Prenotazione biglietto){
         if (utente != null) {
             // 1 = variabile id_passeggero da correggere
-            prenotazioneDB.addTicket(biglietto.getNumeroBiglietto(),1,biglietto.getPostoAssegnato(),biglietto.getVolo(),biglietto.getStato().toString(),biglietto.getAcquirente());
+            prenotazioneDB.addTicket(biglietto.getNumeroBiglietto(),biglietto.getPasseggero().getId_passeggero(),biglietto.getPostoAssegnato(),biglietto.getVolo(),biglietto.getStato().toString(),biglietto.getAcquirente());
             utente.prenotaVolo(biglietto);
             tuttiIBiglietti.add(biglietto);
         } else {
@@ -112,11 +112,6 @@ public class Sistema {
         }
     }
 
-    //metodo per eliminare un biglietto disponibile per l'utente generico che prenota per sé o per un eventuale passeggero
-    public boolean cancellaBiglietto(long numeroBiglietto){
-        return biglietto.cancellaBiglietto(numeroBiglietto, UtenteGenerico.bigliettiAcquistati)
-                && prenotazioneDB.deleteTicket(numeroBiglietto);
-    }
     //metodo finalizzato alla creazione di un numero biglietto univoco e random
     public Long creaNumBiglietto(){
         return biglietto.creaNumeroBiglietto((ArrayList<Prenotazione>) tuttiIBiglietti);
@@ -151,6 +146,10 @@ public class Sistema {
     //aggiunge un passeggero al DB
     public void aggiungiPasseggero(Passeggero passeggero) throws SQLException {
         passeggeroDB.aggiungiPasseggero(passeggero);
+    }
+    //metodo per eliminare un biglietto disponibile per l'utente generico che prenota per sé o per un eventuale passeggero
+    public boolean cancellaBiglietto(long numeroBiglietto){
+        return prenotazioneDB.deleteTicket(numeroBiglietto);
     }
 
     //si assicura che l'username dell'utente sia univoco e non duplicato
@@ -193,7 +192,9 @@ public class Sistema {
 
     //questo metodo è stato utilizzato una volta sola volta per riempire il db di voli automaticamente e poi cancellato
     //al fine di simulare il progetto "a regime".
-
+    public int getLastId() throws SQLException{
+        return passeggeroDB.getLastId();
+    }
     public void generaContenutiCasuali() {
         int codiceVolo;
         int ritardo;

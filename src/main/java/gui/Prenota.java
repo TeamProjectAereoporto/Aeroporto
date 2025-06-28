@@ -56,22 +56,30 @@ public class Prenota {
                 if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
                     if (ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                         Long numeroBiglietto = sistema.creaNumBiglietto();
-                        Prenotazione biglietto = new Prenotazione(numeroBiglietto,
-                                "A5",
-                                Prenotazione.StatoPrenotazione.CONFERMATA,
-                                new Passeggero(nome, cognome, ci),
-                                new Volo(
-                                        Integer.parseInt(codiceVoloField.getText()),
-                                        compagniaAereaField.getText(),
-                                        origineField.getText(),
-                                        arrivoField.getText(),
-                                        orarioField.getText(),
-                                        Integer.parseInt(ritardoField.getText()),
-                                        Volo.statoVolo.valueOf(statoField.getText()),
-                                        gateField.getText()//si deve correggere
-                                ),sistema.getUtente());
+                        int id=0;
+                        try{
+                            id= sistema.getLastId()+1;
+                            System.out.println("id:" +id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                            Prenotazione biglietto = new Prenotazione(numeroBiglietto,
+                                    "A5",
+                                    Prenotazione.StatoPrenotazione.CONFERMATA,
+                                    new Passeggero(nome, cognome, ci, id),
+                                    new Volo(
+                                            Integer.parseInt(codiceVoloField.getText()),
+                                            compagniaAereaField.getText(),
+                                            origineField.getText(),
+                                            arrivoField.getText(),
+                                            orarioField.getText(),
+                                            Integer.parseInt(ritardoField.getText()),
+                                            Volo.statoVolo.valueOf(statoField.getText()),
+                                            gateField.getText()//si deve correggere
+                                    ), sistema.getUtente());
                         try {
-                            sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci));
+                            sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci,id));
+                            sistema.aggiungiBiglietto(biglietto);
                             JOptionPane.showMessageDialog(finestraPrincipale,
                                     "Prenotazione n°" + numeroBiglietto + " avvenuta con successo",
                                     "Prenotazione riuscita",
@@ -80,7 +88,6 @@ public class Prenota {
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
-                        sistema.aggiungiBiglietto(biglietto);
 
                         chiamante.setVisible(true);
                         frame.setVisible(false);
