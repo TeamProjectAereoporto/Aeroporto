@@ -9,9 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class VoloDB implements VoloDao {
 
+    Logger logger = Logger.getLogger(getClass().getName());
     // Connessione condivisa
     private Connection connection;
 
@@ -19,7 +21,7 @@ public class VoloDB implements VoloDao {
         try {
             connection = ConnessioneDB.getInstance().connection;
         } catch (SQLException e) {
-            System.err.println("Errore nella connessione al DB: " + e.getMessage());
+           logger.info("Errore nella connessione al DB: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -42,12 +44,10 @@ public class VoloDB implements VoloDao {
             ps.setString(8, volo.getGate());
 
             int righeInserite = ps.executeUpdate();
-            System.out.println("Numero di righe aggiunte: " + righeInserite);
+            logger.info("Numero di righe aggiunte: " + righeInserite);
 
         } catch (SQLException e) {
-            System.err.println("Errore durante l'aggiunta del volo: " + e.getMessage());
-            throw e;  // Rilancia l'eccezione se vuoi gestirla a livelli superiori
-        }
+            logger.info("Errore durante l'aggiunta del volo: " + e.getMessage());}
     }
 
     // Modifica un volo esistente nel DB
@@ -68,11 +68,10 @@ public class VoloDB implements VoloDao {
             ps.setInt(8, volo.getCodiceVolo());
 
             int righeModificate = ps.executeUpdate();
-            System.out.println("Numero di righe modificate: " + righeModificate);
+            logger.info("Numero di righe modificate: " + righeModificate);
 
         } catch (SQLException e) {
-            System.err.println("Errore durante la modifica del volo: " + e.getMessage());
-            throw e;
+            logger.info("Errore durante la modifica del volo: " + e.getMessage());
         }
     }
 
@@ -87,18 +86,18 @@ public class VoloDB implements VoloDao {
             ps.setInt(1, codiceVolo);
 
             int righeEliminate = ps.executeUpdate();
-            System.out.println("Numero di righe eliminate: " + righeEliminate);
+            logger.info("Numero di righe eliminate: " + righeEliminate);
 
         } catch (SQLException e) {
-            System.err.println("Errore durante l'eliminazione del volo: " + e.getMessage());
-            throw e;
+            logger.info("Errore durante l'eliminazione del volo: " + e.getMessage());
         }
     }
 
     // Recupera un singolo volo dal DB
     @Override
     public Volo getVolo(int codiceVolo) throws SQLException {
-        String sql = "SELECT * FROM volo WHERE codice_volo = ?";
+        String sql = "SELECT * "+
+                "FROM volo WHERE codice_volo = ?";
 
         try (Connection conn = ConnessioneDB.getInstance().connection;
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -119,8 +118,8 @@ public class VoloDB implements VoloDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero del volo: " + e.getMessage());
-            throw e;
+            logger.info("Errore durante il recupero del volo: " + e.getMessage());
+
         }
         return null;  // Se non trovato
     }
@@ -128,7 +127,8 @@ public class VoloDB implements VoloDao {
     // Recupera tutti i voli dal DB
     @Override
     public ArrayList<Volo> getTuttiVoli() throws SQLException {
-        String sql = "SELECT * FROM volo";
+        String sql = "SELECT *" +
+                "FROM volo";
         ArrayList<Volo> listaVoli = new ArrayList<>();
 
         try (Connection conn = ConnessioneDB.getInstance().connection;
@@ -150,8 +150,7 @@ public class VoloDB implements VoloDao {
             }
 
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero dei voli: " + e.getMessage());
-            throw e;
+          logger.info("Errore durante il recupero dei voli: " + e.getMessage());
         }
         return listaVoli;
     }
