@@ -94,5 +94,29 @@ public class PasseggeroDB implements PasseggeroDao {
         }
         return id;
     }
+    public boolean passeggeroGiaPrenotato(String numeroDocumento, int codiceVolo) throws SQLException {
+        String query = """
+        SELECT EXISTS (
+            SELECT 1
+            FROM prenotazione p
+            JOIN passeggero ps ON p.id_passeggero = ps.id_passeggero
+            WHERE ps.numero_documento = ? AND p.codice_volo = ?
+        )
+        """;
+
+        try (Connection conn = ConnessioneDB.getInstance().connection;
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, numeroDocumento);
+            stmt.setInt(2, codiceVolo);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean(1); // true se esiste già
+            }
+        }
+
+        return false;
+    }
 
 }

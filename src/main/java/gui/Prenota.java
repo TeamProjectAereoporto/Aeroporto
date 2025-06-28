@@ -56,13 +56,15 @@ public class Prenota {
                 if(!nome.isEmpty() && !cognome.isEmpty() && !ci.isEmpty()) {
                     if (ci.matches("[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}")) {
                         Long numeroBiglietto = sistema.creaNumBiglietto();
-                        int id=0;
+                        int id = 0;
                         try{
-                            id= sistema.getLastId()+1;
-                            System.out.println("id:" +id);
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
+                        if (!sistema.controlloPasseggeroInVolo(ci, Integer.parseInt(codiceVoloField.getText()))) {
+                            try {
+                                id = sistema.getLastId() + 1;
+                                System.out.println("id:" + id);
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
                             Prenotazione biglietto = new Prenotazione(numeroBiglietto,
                                     "A5",
                                     Prenotazione.StatoPrenotazione.CONFERMATA,
@@ -77,27 +79,30 @@ public class Prenota {
                                             Volo.statoVolo.valueOf(statoField.getText()),
                                             gateField.getText()//si deve correggere
                                     ), sistema.getUtente());
-                        try {
-                            sistema.aggiungiPasseggero(new Passeggero(nome,cognome,ci,id));
-                            sistema.aggiungiBiglietto(biglietto);
+                                sistema.aggiungiPasseggero(new Passeggero(nome, cognome, ci, id));
+                                sistema.aggiungiBiglietto(biglietto);
+                                JOptionPane.showMessageDialog(finestraPrincipale,
+                                        "Prenotazione n°" + numeroBiglietto + " avvenuta con successo",
+                                        "Prenotazione riuscita",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            chiamante.setVisible(true);
+                            frame.setVisible(false);
+                            frame.dispose();
+                        }else{
                             JOptionPane.showMessageDialog(finestraPrincipale,
-                                    "Prenotazione n°" + numeroBiglietto + " avvenuta con successo",
-                                    "Prenotazione riuscita",
-                                    JOptionPane.INFORMATION_MESSAGE);
-
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                                    "Il passeggero "+ci+" è già passeggero del seguente volo, codice: "+codiceVoloField.getText(),
+                                    "Passeggero già prenotato",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
-
-                        chiamante.setVisible(true);
-                        frame.setVisible(false);
-                        frame.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(finestraPrincipale,
-                                "formato Carta d'identità non valida rispettare il seguente formato: AA12345BC",
-                                "errore",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
+                        }catch (SQLException ex){
+                            ex.printStackTrace();
+                        }
+                        } else {
+                            JOptionPane.showMessageDialog(finestraPrincipale,
+                                    "formato Carta d'identità non valida rispettare il seguente formato: AA12345BC",
+                                    "errore",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
                 }
 
             }

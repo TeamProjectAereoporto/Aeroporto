@@ -151,7 +151,9 @@ public class Sistema {
     public boolean cancellaBiglietto(long numeroBiglietto){
         return prenotazioneDB.deleteTicket(numeroBiglietto);
     }
-
+    public boolean controlloPasseggeroInVolo(String cdf,int codice_volo) throws SQLException {
+        return passeggeroDB.passeggeroGiaPrenotato(cdf,codice_volo);
+    }
     //si assicura che l'username dell'utente sia univoco e non duplicato
     public boolean verificaUtenteUnivoco(String username){
         for(Utente u : utenti){
