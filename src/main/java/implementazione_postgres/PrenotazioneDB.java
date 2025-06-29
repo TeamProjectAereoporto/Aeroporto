@@ -114,10 +114,11 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per recuperare tutte le prenotazioni
-    public ArrayList<Prenotazione> getTickets(String username, String nome, int codiceVolo) throws  SQLException{
+    public ArrayList<Prenotazione> getTickets(String username, String nome, int codiceVolo) throws  SQLException {
         ArrayList<Prenotazione> biglietti = new ArrayList<>();
-        if(codiceVolo == 0 || !nome.isEmpty()) {
-            String sqlGetTickets = "SELECT p.*\n" +
+        String sqlGetTickets;
+        if (codiceVolo == -1 && !nome.isEmpty()) {
+             sqlGetTickets = "SELECT p.*\n" +
                     "FROM prenotazione p\n" +
                     "JOIN passeggero pa ON p.id_passeggero = pa.id_passeggero\n" +
                     "WHERE p.id_utente = ? AND pa.nome = ?;\n";
@@ -138,8 +139,51 @@ public class PrenotazioneDB implements PrenotazioneDAO {
                     biglietti.add(p);
                 }
             }
+        } else if(codiceVolo != -1 && nome.isEmpty()){
+            sqlGetTickets = "SELECT p.*\n" +
+                    "FROM prenotazione p\n" +
+                    "JOIN volo vo ON p.codice_volo = vo.codice_volo\n" +
+                    "WHERE p.id_utente = ? AND vo.codice_volo = ?;\n";
+            try (Connection connGetTickets = ConnessioneDB.getInstance().connection;
+                 PreparedStatement stmt = connGetTickets.prepareStatement(sqlGetTickets)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, codiceVolo);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    Prenotazione p = new Prenotazione();
+                    p.setNumeroBiglietto(rs.getLong("numero_biglietto"));
+                    p.setStato(Prenotazione.StatoPrenotazione.valueOf(rs.getString("stato_prenotazione")));
+                    p.setPostoAssegnato(rs.getString("posto_assegnato"));
+                    p.setVolo(voloDB.getVolo(rs.getInt("codice_volo")));
+                    p.setPasseggero(passeggeroDB.getPasseggero(rs.getInt("id_passeggero")));
+                    p.setAcquirente(utenteDB.getUtenteByUsername(rs.getString("id_utente")));
+                    biglietti.add(p);
+                }
+            }
         }else{
-            // da implementare codice_volo
+            sqlGetTickets = "SELECT p.*\n" +
+                    "FROM prenotazione p\n" +
+                    "JOIN passeggero pa ON p.id_passeggero = pa.id_passeggero\n" +
+                    "JOIN volo vo ON p.codice_volo = vo.codice_volo\n" +
+                    "WHERE p.id_utente = ? AND vo.codice_volo = ? AND pa.nome = ?;";
+
+            try (Connection connGetTickets = ConnessioneDB.getInstance().connection;
+                 PreparedStatement stmt = connGetTickets.prepareStatement(sqlGetTickets)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, codiceVolo);
+                stmt.setString(3, nome);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    Prenotazione p = new Prenotazione();
+                    p.setNumeroBiglietto(rs.getLong("numero_biglietto"));
+                    p.setStato(Prenotazione.StatoPrenotazione.valueOf(rs.getString("stato_prenotazione")));
+                    p.setPostoAssegnato(rs.getString("posto_assegnato"));
+                    p.setVolo(voloDB.getVolo(rs.getInt("codice_volo")));
+                    p.setPasseggero(passeggeroDB.getPasseggero(rs.getInt("id_passeggero")));
+                    p.setAcquirente(utenteDB.getUtenteByUsername(rs.getString("id_utente")));
+                    biglietti.add(p);
+                }
+            }
         }
         return biglietti;
     }
