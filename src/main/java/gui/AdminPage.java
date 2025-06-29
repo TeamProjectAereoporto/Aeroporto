@@ -29,7 +29,7 @@ public class AdminPage {
     private JPanel logOutPanel;
     public static final JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
     private final Sistema sistema; // Controller per interfacciarsi con il Model
-    private final String errorMessage= "Errore";
+    private static final String ERRORMESSAGE= "Errore";
     /*Costruttore della pagina Admin.
      chiamante JFrame della schermata di login, da riaprire al logout.
      controller Oggetto Sistema per gestire i dati e le operazioni.
@@ -41,108 +41,102 @@ public class AdminPage {
         popolaTabellaVoli(model);
         tabellaVoli.setModel(model);
         // Listener per il pulsante "Aggiungi Volo"
-        aggiungiVoloButton.addActionListener(e -> {
-            AggiungiVolo av = new AggiungiVolo(model, sistema, this); // nuova finestra di inserimento volo
-            JFrame frame = new JFrame("Aggiungi Volo");
-            frame.getRootPane().setDefaultButton(av.getAggiungiVoloButton()); // Invio attiva il bottone
-            frame.setContentPane(av.getPrincipale());
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.pack();
-            frame.setSize(700, 500);
-            frame.setLocation(400, 150);
-            frame.setVisible(true);
-        });
-        // Listener per il pulsante "Elimina Volo"
-        eliminaVoloButton.addActionListener(e -> {
-            int rigaSelezionata = tabellaVoli.getSelectedRow();
-            if (rigaSelezionata != -1) {
-                int conferma = JOptionPane.showConfirmDialog(null,
-                        "Sei sicuro di voler eliminare il volo selezionato?",
-                        "Conferma eliminazione",
-                        JOptionPane.YES_NO_OPTION);
+        aggiungiVoloButton.addActionListener(e -> inizializzaAggiungiVolo(model));
 
-                if (conferma == JOptionPane.YES_OPTION) {
-                    // Estrae il codice del volo dalla prima colonna della riga selezionata
-                    Object valoreCodice = tabellaVoli.getValueAt(rigaSelezionata, 0);
-                    int codiceVolo = -1;
-                    if (valoreCodice instanceof Integer) {
-                        codiceVolo = (Integer) valoreCodice;
-                    } else if (valoreCodice instanceof String) {
-                        try {
-                            codiceVolo = Integer.parseInt((String) valoreCodice);
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, errorMessage+ " nel formato del codice volo");
-                            return;
-                        }
-                    }
-                    // Chiamata al controller per eliminare il volo
-                    sistema.eliminaVolo(codiceVolo);
-                    // Rimuove la riga dal modello grafico (tabella)
-                    model.removeRow(rigaSelezionata);
-                    //Rimuove la riga dall'arrayList interno
-                    sistema.visualizzaVoli().remove(rigaSelezionata);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        "Seleziona un volo da eliminare!",
-                        errorMessage,
-                        JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        // Listener per il pulsante "Elimina Volo"
+        eliminaVoloButton.addActionListener(e -> eliminaVoloSelezionato(model));
+
         // Imposta il frame principale della dashboard
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
         // Listener per "Modifica Volo"
-        modificaVoloButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = tabellaVoli.getSelectedRow();
-                if (selectedRow != -1) {
-                    // Ottiene il codice del volo dalla tabella
-                    Object codiceObj = tabellaVoli.getValueAt(selectedRow, 0);
-                    int codiceVolo = -1;
-                    if (codiceObj instanceof Integer) {
-                        codiceVolo = (Integer) codiceObj;
-                    } else if (codiceObj instanceof String) {
-                        try {
-                            codiceVolo = Integer.parseInt((String) codiceObj);
-                        } catch (NumberFormatException _) {
-                            JOptionPane.showMessageDialog(null, errorMessage+ "nel formato del codice volo");
-                            return;
-                        }
-                    }
-                    // Cerca il volo corrispondente nel sistema
-                    Volo voloSelezionato = null;
-                    for (Volo v : sistema.visualizzaVoli()) {
-                        if (v.getCodiceVolo() == codiceVolo) {
-                            voloSelezionato = v;
-                            break;
-                        }
-                    }
-                    if (voloSelezionato != null) {
-                        ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
-                        // Finestra per modificare i dati del volo
-                        JFrame frameVolo = new JFrame("Modifica Volo");
-                        frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
-                        frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
-                        frameVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                        frameVolo.pack();
-                        frameVolo.setSize(700, 500);
-                        frameVolo.setLocation(400, 150);
-                        frameVolo.setVisible(true);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", errorMessage, JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare", errorMessage, JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        modificaVoloButton.addActionListener(e -> modificaVoloSelezionato(model));
         // Applica lo stile grafico alla finestra
         applyStyles(chiamante);
+    }
+    private void inizializzaAggiungiVolo(DefaultTableModel model){
+        AggiungiVolo av = new AggiungiVolo(model, sistema, this); // nuova finestra di inserimento volo
+        JFrame frameAddVolo = new JFrame("Aggiungi Volo");
+        frameAddVolo.getRootPane().setDefaultButton(av.getAggiungiVoloButton()); // Invio attiva il bottone
+        frameAddVolo.setContentPane(av.getPrincipale());
+        frameAddVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frameAddVolo.pack();
+        frameAddVolo.setSize(700, 500);
+        frameAddVolo.setLocation(400, 150);
+        frameAddVolo.setVisible(true);
+    }
+    private void modificaVoloSelezionato(DefaultTableModel model){
+        int rigaSelezionata = tabellaVoli.getSelectedRow();
+        if (rigaSelezionata == -1) {
+            mostraMessaggio("Seleziona un volo da modificare!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Ottiene il codice del volo dalla tabella
+        int codiceVolo = ottieniCodiceVoloDaRiga(rigaSelezionata);
+        if (codiceVolo == -1) return;
+        // Cerca il volo corrispondente nel sistema
+        Volo voloSelezionato = null;
+        for (Volo v : sistema.visualizzaVoli()) {
+            if (v.getCodiceVolo() == codiceVolo) {
+                voloSelezionato = v;
+                break;
+            }
+        }
+        if (voloSelezionato != null) {
+            ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
+            // Finestra per modificare i dati del volo
+            JFrame frameVolo = new JFrame("Modifica Volo");
+            frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
+            frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
+            frameVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            frameVolo.pack();
+            frameVolo.setSize(700, 500);
+            frameVolo.setLocation(400, 150);
+            frameVolo.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", ERRORMESSAGE, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void eliminaVoloSelezionato(DefaultTableModel model){
+        int rigaSelezionata = tabellaVoli.getSelectedRow();
+        if (rigaSelezionata == -1) {
+            mostraMessaggio("Seleziona un volo da eliminare!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int conferma = JOptionPane.showConfirmDialog(null,
+                "Sei sicuro di voler eliminare il volo selezionato?",
+                "Conferma eliminazione",
+                JOptionPane.YES_NO_OPTION);
+
+        if (conferma != JOptionPane.YES_OPTION) return;
+
+        int codiceVolo = ottieniCodiceVoloDaRiga(rigaSelezionata);
+        if (codiceVolo == -1) return;
+
+        sistema.eliminaVolo(codiceVolo);
+        model.removeRow(rigaSelezionata);
+        sistema.visualizzaVoli().remove(rigaSelezionata);
+    }
+    // metodo per ottenre il codice Volo dalla riga utile per eliminaVoloSelezionato
+    private int ottieniCodiceVoloDaRiga(int riga) {
+        Object valoreCodice = tabellaVoli.getValueAt(riga, 0);
+        try {
+            if (valoreCodice instanceof Integer) {
+                return (Integer) valoreCodice;
+            } else if (valoreCodice instanceof String) {
+                return Integer.parseInt((String) valoreCodice);
+            }
+        } catch (NumberFormatException e) {
+            mostraMessaggio(ERRORMESSAGE + " nel formato del codice volo", JOptionPane.ERROR_MESSAGE);
+        }
+        return -1;
+    }
+    // metodo per mostrare una Message Dialog utile per eliminaVoloSelezionato
+    private void mostraMessaggio(String messaggio, int tipo) {
+        JOptionPane.showMessageDialog(null, messaggio, ERRORMESSAGE, tipo);
     }
     // Getter per accedere alla tabella da altre classi
     public JTable getTabellaVoli(){

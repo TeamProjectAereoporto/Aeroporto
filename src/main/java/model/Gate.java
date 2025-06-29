@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Gate {
 
     // Codice identificativo univoco del gate

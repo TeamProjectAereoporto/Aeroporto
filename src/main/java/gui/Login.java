@@ -1,14 +1,10 @@
 package gui;
 
 import controller.Sistema;
-import model.Admin;
-import model.UtenteGenerico;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
@@ -40,9 +36,7 @@ public class Login {
         Login.frame = frame; // assegna il frame passato
         frame.getRootPane().setDefaultButton(invio);// imposta il bottone invio come predefinito per Enter
         // aggiunge l'azione di login al bottone invio
-        invio.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        invio.addActionListener(e-> {
                 String username = campoUsername.getText(); // prende username dal campo testo
                 String password = new String(campoPassword.getPassword()); // prende password dal campo mascherato
 
@@ -96,14 +90,14 @@ public class Login {
                     switch (ruolo) {
                         case 1: // se utente generico
                             HomeUtente home = new HomeUtente(frame, sistema, model); // crea schermata home utente
-                            HomeUtente.frame.setVisible(true); // mostra la finestra home utente
+                            home.frame.setVisible(true); // mostra la finestra home utente
                             frame.setVisible(false); // nasconde la finestra login
                             logger.info("Login effettuato come Utente Generico"); // log evento
                             frame.dispose(); // distrugge il frame login
                             break;
                         case 2: // se admin
                             AdminPage homeAdmin = new AdminPage(frame, sistema, model); // crea schermata admin
-                            AdminPage.frame.setVisible(true); // mostra finestra admin
+                            homeAdmin.frame.setVisible(true); // mostra finestra admin
                             frame.setVisible(false); // nasconde login
                             logger.info("Login effettuato come Admin"); // log evento
                             frame.dispose(); // distrugge frame login
@@ -117,7 +111,6 @@ public class Login {
                             );
                     }
                 }
-            }
         });
 
         // cambia colore del bottone invio al passaggio del mouse (hover)
@@ -134,13 +127,10 @@ public class Login {
         });
 
         // azione per il bottone registrati che apre la schermata di registrazione
-        registratiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        registratiButton.addActionListener(e-> {
                 Register register = new Register(frame, sistema); // crea schermata registrazione
                 register.frame.setVisible(true); // mostra finestra registrazione
                 frame.setVisible(false); // nasconde login
-            }
         });
     }
 

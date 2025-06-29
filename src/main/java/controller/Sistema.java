@@ -1,5 +1,5 @@
 package controller;
-import implementazionePostgres.*;
+import implementazione_postgres.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -79,7 +79,7 @@ public class Sistema {
             return voloDB.getTuttiVoli();
         } catch (SQLException e) {
             logger.info("Errore nel recupero voli: " + e.getMessage());
-            return new ArrayList<Volo>();
+            return new ArrayList<>();
         }
     }
 
@@ -151,8 +151,8 @@ public class Sistema {
     public boolean cancellaBiglietto(long numeroBiglietto){
         return prenotazioneDB.deleteTicket(numeroBiglietto);
     }
-    public boolean controlloPasseggeroInVolo(String cdf,int codice_volo) throws SQLException {
-        return passeggeroDB.passeggeroGiaPrenotato(cdf,codice_volo);
+    public boolean controlloPasseggeroInVolo(String cdf,int codiceVolo) throws SQLException {
+        return passeggeroDB.passeggeroGiaPrenotato(cdf,codiceVolo);
     }
     //si assicura che l'username dell'utente sia univoco e non duplicato
     public boolean verificaUtenteUnivoco(String username){
@@ -166,9 +166,9 @@ public class Sistema {
 
     public void setUtenteLoggato(Utente u) {
         if (u instanceof UtenteGenerico ug) {
-            this.utente = (UtenteGenerico) ug;
+            this.utente = ug;
         } else if (u instanceof Admin a) {
-            this.admin = (Admin) a;
+            this.admin = a;
         }
     }
 
@@ -233,7 +233,7 @@ public class Sistema {
             ritardo =0;
             codiceVolo = casuale.nextInt(9000) + 1000;
             possibilita = casuale.nextInt(6);
-           System.out.println(possibilita);
+            logger.info("possibilità ritardo: "+possibilita);
 
             // Modifica per garantire che almeno uno dei due aeroporti sia "Capodichino"
             if(casuale.nextBoolean()) {

@@ -1,4 +1,4 @@
-package implementazionePostgres;
+package implementazione_postgres;
 
 import connessioneDB.ConnessioneDB;
 import dao.PrenotazioneDAO;
@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class PrenotazioneDB implements PrenotazioneDAO {
     // Connessione al database
@@ -18,7 +19,7 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     VoloDB voloDB;
     PasseggeroDB passeggeroDB;
     UtenteDB utenteDB;
-
+    Logger logger = Logger.getLogger(getClass().getName());
     // Costruttore: ottiene l'istanza della connessione al database
     public PrenotazioneDB(){
         try{
@@ -37,11 +38,8 @@ public class PrenotazioneDB implements PrenotazioneDAO {
         String sqlAddTicket = "INSERT INTO prenotazione (numero_biglietto, posto_assegnato,stato_prenotazione, id_passeggero, id_utente, codice_volo) VALUES (?, ?, ?, ?, ?, ?)";
 
         // Uso di try-with-resources per la gestione sicura di connessione e statement
-        try (Connection connection = ConnessioneDB.getInstance().connection;
-             PreparedStatement stmt = connection.prepareStatement(sqlAddTicket)){
-
-            // Debug per verificare se la connessione è aperta
-            System.out.println("Connessione aperta? " + (connection != null && !connection.isClosed()));
+        try (Connection connAddTicket = ConnessioneDB.getInstance().connection;
+             PreparedStatement stmt = connAddTicket.prepareStatement(sqlAddTicket)){
 
             // Impostazione parametri della query con i dati della prenotazione
             stmt.setLong(1, numeroBiglietto);
@@ -52,15 +50,15 @@ public class PrenotazioneDB implements PrenotazioneDAO {
             stmt.setInt(6, volo.getCodiceVolo());
 
             // Debug per mostrare lo stato della prenotazione
-            System.out.println("DEBUG stato = [" + stato + "]");
+            logger.info("DEBUG stato = [" + stato + "]");
 
             // Esecuzione dell'inserimento nel database
             stmt.executeUpdate();
-            System.out.println("Prenotazione inserita con successo.");
+            logger.info("Prenotazione inserita con successo.");
 
         } catch (SQLException e) {
             // Stampa eventuali errori durante l'inserimento
-            System.err.println("Errore durante l'inserimento della prenotazione: " + e.getMessage());
+            logger.info("Errore durante l'inserimento della prenotazione: " + e.getMessage());
         }
     }
 
@@ -70,8 +68,8 @@ public class PrenotazioneDB implements PrenotazioneDAO {
         String sqlDeleteTicket = "DELETE FROM prenotazione where numero_biglietto = ?";
 
         // Gestione sicura della connessione e statement
-        try(Connection connection = ConnessioneDB.getInstance().connection;
-            PreparedStatement deleteTicket = connection.prepareStatement(sqlDeleteTicket)){
+        try(Connection connDeleteTicket = ConnessioneDB.getInstance().connection;
+            PreparedStatement deleteTicket = connDeleteTicket.prepareStatement(sqlDeleteTicket)){
 
             // Impostazione parametro per la query
             deleteTicket.setLong(1,numeroBiglietto);
@@ -81,10 +79,10 @@ public class PrenotazioneDB implements PrenotazioneDAO {
 
             // Controllo se la cancellazione ha avuto successo
             if(effectRows>0){
-                System.out.println("Prenotazione cancellata con successo");
+                logger.info("Prenotazione cancellata con successo");
                 return true;
             }else{
-                System.out.println("Si sono verificati dei problemi durante l'eliminazione");
+                logger.info("Si sono verificati dei problemi durante l'eliminazione");
             }
         }catch (SQLException e){
             // Stampa eventuali errori SQL
@@ -99,14 +97,14 @@ public class PrenotazioneDB implements PrenotazioneDAO {
                 "SET posto_assegnato = ?,\n"+
                 "numero_documento = ?\n" +
                 "WHERE numero_biglietto = ?";
-        try(Connection connection = ConnessioneDB.getInstance().connection;
-            PreparedStatement deleteTicket = connection.prepareStatement(sqlModifyTickt)){
+        try(Connection connModifyTicket = ConnessioneDB.getInstance().connection;
+            PreparedStatement deleteTicket = connModifyTicket.prepareStatement(sqlModifyTickt)){
             deleteTicket.setString(1,postoAssegnato);
             deleteTicket.setString(2, cdf);
             deleteTicket.setLong(3,numeroBiglietto);
             int i = deleteTicket.executeUpdate();
             if(i>0){
-                System.out.println("Righe modificate: "+i);
+                logger.info("Righe modificate: "+i);
                 return true;
             }
         } catch (SQLException e) {
@@ -124,8 +122,8 @@ public class PrenotazioneDB implements PrenotazioneDAO {
                     "JOIN passeggero pa ON p.id_passeggero = pa.id_passeggero\n" +
                     "WHERE p.id_utente = ? AND pa.nome = ?;\n";
 
-            try (Connection connection = ConnessioneDB.getInstance().connection;
-                 PreparedStatement stmt = connection.prepareStatement(sqlGetTickets)) {
+            try (Connection connGetTickets = ConnessioneDB.getInstance().connection;
+                 PreparedStatement stmt = connGetTickets.prepareStatement(sqlGetTickets)) {
                 stmt.setString(1, username);
                 stmt.setString(2, nome);
                 ResultSet rs = stmt.executeQuery();
@@ -141,7 +139,7 @@ public class PrenotazioneDB implements PrenotazioneDAO {
                 }
             }
         }else{
-
+            // da implementare codice_volo
         }
         return biglietti;
     }

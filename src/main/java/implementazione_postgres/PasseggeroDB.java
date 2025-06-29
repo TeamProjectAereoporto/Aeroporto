@@ -1,9 +1,8 @@
-package implementazionePostgres;
+package implementazione_postgres;
 
 import connessioneDB.ConnessioneDB;
 import dao.PasseggeroDao;
 import model.Passeggero;
-import model.Volo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

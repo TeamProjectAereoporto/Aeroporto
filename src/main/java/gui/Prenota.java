@@ -6,8 +6,6 @@ import model.Prenotazione;
 import model.Volo;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -47,9 +45,7 @@ public class Prenota {
         frame.getRootPane().setDefaultButton(prenotaButton);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        prenotaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        prenotaButton.addActionListener(e ->{
                 String nome= nomeField.getText().trim().toLowerCase();
                 String cognome = cognomeField.getText().trim().toLowerCase();
                 String ci = ciFIeld.getText().trim().toUpperCase();
@@ -108,8 +104,6 @@ public class Prenota {
                                     JOptionPane.ERROR_MESSAGE);
                         }
                 }
-
-            }
         });
         frame.addWindowListener(new WindowAdapter() {
             @Override

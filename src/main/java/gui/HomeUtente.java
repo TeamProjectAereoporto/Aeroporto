@@ -17,7 +17,7 @@ public class HomeUtente {
     private final Sistema sistema;
     private JButton cercaBigliettoButton;
     private JPanel navbar;
-    private JPanel FinestraPrincipale;
+    private JPanel finestraPrincipale;
     private JTable tabellaVoli;
     private JPanel voliPanel;
     private JTextField numeroBiglietto;
@@ -32,7 +32,7 @@ public class HomeUtente {
 
     public JPanel getPanel() {
         // Ritorna il pannello principale della finestra
-        return FinestraPrincipale;
+        return finestraPrincipale;
     }
 
     /**
@@ -49,7 +49,7 @@ public class HomeUtente {
 
     private void inizializzaFrame() {
         // Imposta il contenuto della finestra, le proprietà base e la rende visibile
-        frame.setContentPane(FinestraPrincipale);
+        frame.setContentPane(finestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(1100, 700);
@@ -60,8 +60,6 @@ public class HomeUtente {
 
     private void configuraTabella(DefaultTableModel model) {
         // Imposta le colonne della tabella e configura proprietà come riordinamento, dimensione e altezza righe
-        String[] colonne = {"Codice Volo", "Compagnia Aerea", "Aeroporto di Origine",
-                "Aeroporto Destinazione", "Orario di Arrivo", "Ritardo", "Stato del Volo", "Gate"};
         tabellaVoli.setModel(model);
         tabellaVoli.getTableHeader().setReorderingAllowed(false);  // Disabilita il riordinamento delle colonne
         tabellaVoli.getTableHeader().setResizingAllowed(false);    // Disabilita il ridimensionamento delle colonne
@@ -108,14 +106,14 @@ public class HomeUtente {
                 if (!numeroBiglietto.getText().isEmpty()) {
                     if (!numeroBiglietto.getText().trim().matches("\\d{4}")) {
                         // Mostra errore se il codice volo non è un numero di 4 cifre
-                        JOptionPane.showMessageDialog(FinestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(finestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     numero = Integer.parseInt(numeroBiglietto.getText().trim());
                 }
                 // Crea e mostra la finestra Biglietto e nasconde quella attuale
                 Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
-                Biglietto.frame.setVisible(true);
+                biglietto.frame.setVisible(true);
             }
         });
 
@@ -138,7 +136,7 @@ public class HomeUtente {
                             }
                             // Apre la finestra Prenota per effettuare la prenotazione del volo selezionato
                             Prenota prenotazione = new Prenota(frame, valori, sistema);
-                            Prenota.frame.setVisible(true);
+                            prenotazione.frame.setVisible(true);
                         } else {
                             // Mostra messaggio di errore se il volo non è prenotabile
                             JOptionPane.showMessageDialog(null, "Non puoi prenotare un volo " + stato.toLowerCase(), "Errore", JOptionPane.ERROR_MESSAGE);
