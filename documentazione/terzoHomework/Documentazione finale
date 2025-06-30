@@ -177,7 +177,8 @@ La classe `Sistema` agisce come il controller principale del sistema, coordinand
 4.  **DAO (PrenotazioneDB):** Il controller `Sistema` chiama `PrenotazioneDB.addTicket()` per inserire la nuova prenotazione nel database.
 5.  **Database:** `PrenotazioneDB` esegue la query SQL `INSERT` nel database.
 6.  **Risposta e Conferma (GUI):** Il database risponde con l'esito dell'operazione. Il controller `Sistema` gestisce la risposta e aggiorna la GUI per mostrare una conferma all'utente o un messaggio di errore.
-
 --
+
+
 
 Questo sistema è progettato per essere scalabile e manutenibile, con una chiara separazione delle responsabilità tra il modello dati, la logica di accesso al database e l'interfaccia utente.
