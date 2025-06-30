@@ -1,0 +1,183 @@
+# Sistema di Gestione Aeroportuale
+
+Questo documento descrive l'architettura e le funzionalità principali di un sistema di gestione aeroportuale, focalizzandosi su tre componenti chiave: la gestione dei voli, la gestione delle prenotazioni e l'interfaccia amministrativa. Il sistema è progettato per essere robusto, sicuro e facile da usare, impiegando pattern di design consolidati e best practice di programmazione.
+
+---
+
+## 1. Gestione dei Voli
+
+La gestione dei voli è affidata a due classi principali: `Volo.java` e `VoloDB.java`.
+
+### Volo.java (Modello Dati)
+
+La classe `Volo` rappresenta un volo aeroportuale e incapsula tutti i suoi attributi e possibili stati.
+
+* **Attributi Principali:**
+    * `codiceVolo` (int): Identificativo univoco del volo.
+    * `compagniaAerea` (String): Compagnia che opera il volo.
+    * `aeroportoOrigine` (String): Aeroporto di partenza.
+    * `aeroportoDestinazione` (String): Aeroporto di arrivo.
+    * `orarioArrivo` (String): Orario previsto di arrivo.
+    * `ritardo` (int): Ritardo in minuti (0 se in orario).
+    * `stato` (statoVolo): Stato attuale del volo.
+    * `gate` (String): Gate di imbarco/sbarco.
+
+* **Enumerazione `statoVolo`:**
+    Definisce i possibili stati di un volo con una codifica numerica per facilitare la gestione interna e la persistenza nel database:
+    * `DECOLLATO` (1)
+    * `PROGRAMMATO` (2)
+    * `INRITARDO` (3)
+    * `INORARIO` (4)
+    * `ATTERRATO` (5)
+    * `CANCELLATO` (6)
+    * **Esempio d'uso:** `Volo.statoVolo stato = Volo.statoVolo.DECOLLATO;`
+
+* **Costruttori:**
+    * **Completo:** Permette di istanziare un volo specificando anche il ritardo.
+    * **Senza Ritardo:** Imposta automaticamente il ritardo a `0`.
+
+* **Metodo `toString()`:**
+    Fornisce una rappresentazione testuale chiara del volo, come:
+    "Volo 1234 da Roma a Napoli con arrivo previsto alle 14:30 (DECOLLATO) al gate A1"
+
+### VoloDB.java (Data Access Object - DAO)
+
+La classe `VoloDB` gestisce tutte le interazioni con il database PostgreSQL per le operazioni relative ai voli. Segue il **Pattern DAO** per astrarre la logica di accesso ai dati.
+
+* **Metodi Principali:**
+    * `aggiungiVoloDB(Volo volo)`: Inserisce un nuovo volo nel database.
+    * `modificaVoloDB(Volo volo)`: Aggiorna i dati di un volo esistente.
+    * `getTuttiVoli()`: Recupera tutti i voli dal database e li restituisce come un `ArrayList<Volo>`.
+
+* **Pattern Utilizzati:**
+    * **Singleton:** La connessione al database è gestita tramite un'unica istanza di `ConnessioneDB.getInstance()`.
+    * **DAO:** Separa la logica di accesso ai dati dalla business logic.
+
+* **Best Practices:**
+    * **Logging:** Le eccezioni SQL sono loggate dettagliatamente (`logger.severe`).
+    * **Resource Management:** Utilizza `try-with-resources` per garantire la corretta chiusura di `PreparedStatement` e `ResultSet`.
+
+---
+
+## 2. Gestione delle Prenotazioni
+
+La gestione delle prenotazioni è gestita dalle classi `Prenotazione.java` e `PrenotazioneDB.java`.
+
+### Prenotazione.java (Modello Dati)
+
+La classe `Prenotazione` rappresenta una prenotazione di volo, includendo tutti i dettagli relativi al biglietto, al passeggero e al volo.
+
+* **Attributi Principali:**
+    * `numeroBiglietto` (long): Numero univoco del biglietto.
+    * `postoAssegnato` (String): Posto assegnato al passeggero.
+    * `stato` (StatoPrenotazione): Stato attuale della prenotazione.
+    * `passeggero` (Passeggero): Dettagli del passeggero.
+    * `volo` (Volo): Il volo associato alla prenotazione.
+    * `acquirente` (Utente): L'utente che ha effettuato la prenotazione.
+
+* **Enumerazione `StatoPrenotazione`:**
+    Definisce i possibili stati di una prenotazione:
+    * `CONFERMATA` (1)
+    * `IN_ATTESA` (2)
+    * `CANCELLATA` (3)
+
+* **Metodi Principali:**
+    * `creaNumeroBiglietto()`: Genera un numero biglietto univoco.
+    * `controlloNumeroBigliettoEsistenti()`: Verifica l'unicità del numero generato.
+    * `cancellaBiglietto()`: Rimuove una prenotazione.
+    * `modificaBiglietto()`: Aggiorna una prenotazione esistente.
+    * `toString()`: Formatta i dati della prenotazione in una stringa leggibile.
+
+### PrenotazioneDB.java (Data Access Object - DAO)
+
+Questa classe implementa il **Pattern DAO** per le operazioni CRUD (Create, Read, Update, Delete) sulle prenotazioni nel database PostgreSQL.
+
+* **Dipendenze:**
+    * `ConnessioneDB` (Singleton): Per la gestione della connessione al DB.
+    * Collabora con `VoloDB`, `PasseggeroDB` e `UtenteDB` per recuperare le informazioni correlate.
+
+* **Metodi Principali:**
+    * `addTicket()`: Inserisce una nuova prenotazione nel database.
+    * `deleteTicket()`: Cancella una prenotazione tramite il numero del biglietto.
+    * `getTickets()`: Recupera le prenotazioni, con la possibilità di applicare filtri (username, nome passeggero, codice volo) attraverso una query dinamica. Restituisce un `ArrayList<Prenotazione>`.
+
+* **Pattern Utilizzati:**
+    * **DAO:** Astrazione dell'accesso al database.
+    * **Singleton:** Per la connessione al database.
+
+* **Best Practices:**
+    * **Resource Management:** Uso di `try-with-resources`.
+    * **Logging Dettagliato:** Per tracciare le operazioni e gli errori.
+    * **Query Parametrizzate:** Per prevenire attacchi di tipo SQL Injection.
+
+---
+
+## 3. Componenti del Sistema e Flusso Integrato
+
+### AdminPage.java (Interfaccia Grafica - View)
+
+`AdminPage` è l'interfaccia utente grafica (Swing) dedicata all'amministratore per la gestione dei voli.
+
+* **Componenti Principali:**
+    * `JTable tabellaVoli`: Visualizza tutti i voli.
+    * `JButton aggiungiVoloButton`: Per aggiungere un nuovo volo.
+    * `JButton modificaVoloButton`: Per modificare un volo selezionato.
+    * `JButton eliminaVoloButton`: Per eliminare un volo selezionato.
+    * `JPanel logOutPanel`: Area per il logout con effetti visivi.
+
+* **Funzionalità Principali:**
+    * **Visualizzazione Voli:** La tabella viene popolata automaticamente all'avvio e mostra tutti i dettagli dei voli.
+    * **Gestione Voli:** Permette di aprire finestre di dialogo per aggiungere, modificare o eliminare voli.
+    * **Stile e UX:** Utilizza una palette di colori aeroportuali e include effetti hover sui pulsanti.
+
+* **Pattern Utilizzati:**
+    * **MVC (Model-View-Controller):** Si collega al controller `Sistema` per le operazioni.
+    * **Observer Implicito:** La tabella viene aggiornata dopo ogni modifica.
+
+### Sistema.java (Controller)
+
+La classe `Sistema` agisce come il controller principale del sistema, coordinando il modello (classi `Volo`, `Prenotazione`, ecc.) e la vista (`AdminPage`).
+
+* **Componenti Chiave:**
+    * DAO: Contiene istanze di `VoloDB`, `PrenotazioneDB`, `UtenteDB`, `PasseggeroDB` per l'interazione con il database.
+    * Registry: Gestisce liste interne di `Utente` e `Prenotazione`.
+
+* **Funzionalità Principali:**
+    * **Gestione Autenticazione:** Include metodi per il `login()`, la creazione di un admin di default (`creaAdmin()`) e la verifica del tipo di utente (`verificaUtenteP()`).
+    * **Gestione Voli:** Fornisce metodi per `aggiungiVolo()`, `visualizzaVoli()`, `modificaVolo()` ed `eliminaVolo()`.
+    * **Gestione Prenotazioni:** Include `aggiungiBiglietto()`, `creaNumBiglietto()` (per generare ID univoci) e `getBiglietti()`.
+    * **Utilità:** Possibilità di generare contenuti casuali per popolare il DB a scopo di test.
+
+* **Architettura e Pattern:**
+    * **Singleton Implicito:** Tipicamente, esiste una sola istanza del controller `Sistema`.
+    * **Facade:** Offre un'interfaccia unificata per le operazioni sul modello.
+    * **DAO Pattern:** Utilizza le classi *DB per l'astrazione del database.
+
+* **Best Practices Implementate:**
+    * **Gestione Errori:** Tutte le operazioni SQL sono avvolte in blocchi `try-catch` con logging dettagliato.
+    * **Sicurezza:** Validazione dell'input a livello del controller e uso di transazioni atomiche per le operazioni sul database.
+
+---
+
+## Flusso Operativo Esempio: Amministratore Aggiunge un Volo
+
+1.  **Interazione Utente (AdminPage):** L'amministratore fa clic sul pulsante "Aggiungi Volo" sull'interfaccia grafica.
+2.  **Controller (Sistema):** L'`AdminPage` invoca il metodo `aggiungiVolo(Volo v)` del controller `Sistema`.
+3.  **DAO (VoloDB):** Il controller `Sistema` chiama `VoloDB.aggiungiVoloDB(v)` per persistere il nuovo volo nel database.
+4.  **Database:** `VoloDB` esegue la query SQL `INSERT` nel database PostgreSQL.
+5.  **Risposta e Aggiornamento (AdminPage):** `VoloDB` notifica l'esito al controller, che a sua volta aggiorna la lista interna dei voli (`admin.aggiungiVoli(v)`) e istruisce la GUI (`AdminPage`) a mostrare una conferma o un messaggio di errore all'utente.
+
+---
+
+## Flusso Operativo Esempio: Utente Effettua una Prenotazione
+
+1.  **Interazione Utente:** L'utente seleziona un volo e inserisce i propri dati da una UI dedicata (non descritta in dettaglio qui).
+2.  **Generazione Biglietto (Sistema):** Il sistema, tramite il controller `Sistema`, chiama `creaNumBiglietto()` (eventualmente delegando a `Prenotazione`) per generare un numero di biglietto univoco.
+3.  **Controller (Sistema):** Il controller raccoglie tutti i dati della prenotazione e crea un oggetto `Prenotazione`.
+4.  **DAO (PrenotazioneDB):** Il controller `Sistema` chiama `PrenotazioneDB.addTicket()` per inserire la nuova prenotazione nel database.
+5.  **Database:** `PrenotazioneDB` esegue la query SQL `INSERT` nel database.
+6.  **Risposta e Conferma (GUI):** Il database risponde con l'esito dell'operazione. Il controller `Sistema` gestisce la risposta e aggiorna la GUI per mostrare una conferma all'utente o un messaggio di errore.
+
+--
+
+Questo sistema è progettato per essere scalabile e manutenibile, con una chiara separazione delle responsabilità tra il modello dati, la logica di accesso al database e l'interfaccia utente.
