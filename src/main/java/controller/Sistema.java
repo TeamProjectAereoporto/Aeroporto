@@ -173,8 +173,9 @@ public class Sistema {
     }
 
 
-    public void modificaBiglietto(Prenotazione b){
+    public boolean modificaBiglietto(Prenotazione b, String nome,String cognome,String cdf){
         biglietto.modificaBiglietto(b, UtenteGenerico.bigliettiAcquistati);
+        return  prenotazioneDB.modifyTicket(b.getNumeroBiglietto(),b.getPostoAssegnato(),nome,cognome,cdf);
     }
     public boolean login(String username, String psw) throws SQLException {
         Utente u = utenteDB.verificaCredenziali(username, psw);

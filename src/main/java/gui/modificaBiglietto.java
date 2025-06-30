@@ -86,7 +86,12 @@ public class modificaBiglietto {
                     break;
                 }
             }
-
+            if(sistema.modificaBiglietto(bigliettoDaModificare, bigliettoDaModificare.getPasseggero().getNome(),bigliettoDaModificare.getPasseggero().getCognome(),bigliettoDaModificare.getPasseggero().getNumeroDocumento())){
+                JOptionPane.showMessageDialog(finestraPrincipale,
+                        "Modifica biglietto n°"+bigliettoDaModificare.getNumeroBiglietto(),
+                        "Modifica biglietto riuscita",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
             // Rende visibile la finestra chiamante e chiude questa
             chiamante.setVisible(true);
             frame.dispose();

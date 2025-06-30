@@ -92,26 +92,55 @@ public class PrenotazioneDB implements PrenotazioneDAO {
     }
 
     // Metodo per modificare una prenotazione (non ancora implementato)
-    public boolean modifyTicket(long numeroBiglietto, String postoAssegnato, String cdf) {
-        String sqlModifyTickt = "UPDATE prenotazione\n" +
-                "SET posto_assegnato = ?,\n"+
-                "numero_documento = ?\n" +
-                "WHERE numero_biglietto = ?";
-        try(Connection connModifyTicket = ConnessioneDB.getInstance().connection;
-            PreparedStatement deleteTicket = connModifyTicket.prepareStatement(sqlModifyTickt)){
-            deleteTicket.setString(1,postoAssegnato);
-            deleteTicket.setString(2, cdf);
-            deleteTicket.setLong(3,numeroBiglietto);
-            int i = deleteTicket.executeUpdate();
-            if(i>0){
-                logger.info("Righe modificate: "+i);
-                return true;
+    public boolean modifyTicket(long numeroBiglietto, String nuovoPosto,String nome,String cognome, String nuovoNumeroDocumento) {
+        String updatePostoSql = """
+        UPDATE prenotazione
+        SET posto_assegnato = ?
+        WHERE numero_biglietto = ?
+        """;
+
+        String updatePasseggeroSql = """
+        UPDATE passeggero
+        SET numero_documento = ?,
+            nome = ?,
+            cognome = ?
+        WHERE id_passeggero = (
+            SELECT id_passeggero
+            FROM prenotazione
+            WHERE numero_biglietto = ?
+        )
+        """;
+
+        try (Connection conn = ConnessioneDB.getInstance().connection) {
+            conn.setAutoCommit(false); // Start transaction
+
+            // 1. Aggiorna numero_documento del passeggero associato
+            try (PreparedStatement stmt2 = conn.prepareStatement(updatePasseggeroSql)) {
+                stmt2.setString(1, nuovoNumeroDocumento);
+                stmt2.setString(2,nome);
+                stmt2.setString(3,cognome);
+                stmt2.setLong(4, numeroBiglietto);
+                stmt2.executeUpdate();
             }
+            // 2. Aggiorna posto_assegnato
+            try (PreparedStatement stmt1 = conn.prepareStatement(updatePostoSql)) {
+                stmt1.setString(1, nuovoPosto);
+                stmt1.setLong(2, numeroBiglietto);
+                stmt1.executeUpdate();
+            }
+            return true;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                ConnessioneDB.getInstance().connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-            return false;
+        return false;
     }
+
 
     // Metodo per recuperare tutte le prenotazioni
     public ArrayList<Prenotazione> getTickets(String username, String nome, int codiceVolo) throws  SQLException {
