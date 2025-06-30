@@ -84,6 +84,7 @@ public class AdminPage {
                 voloSelezionato = v;
                 break;
             }
+
         }
         if (voloSelezionato != null) {
             ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
@@ -99,6 +100,12 @@ public class AdminPage {
         } else {
             JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", ERRORMESSAGE, JOptionPane.ERROR_MESSAGE);
         }
+        aggiornaTabella(model);
+
+    }
+    private void aggiornaTabella(DefaultTableModel model) {
+        model.setRowCount(0); // Svuota la tabella
+        popolaTabellaVoli(model); // Ricarica i voli aggiornati
     }
     private void eliminaVoloSelezionato(DefaultTableModel model){
         int rigaSelezionata = tabellaVoli.getSelectedRow();
