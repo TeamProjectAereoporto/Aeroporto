@@ -281,4 +281,32 @@ public class Sistema {
             }
         }
     }
+
+    public Volo getVolo(int codice){
+        try {
+            return voloDB.getVolo(codice);
+        } catch (SQLException e) {
+            logger.info("Non sono riuscito a ottenere il volo dal DB tramite codice: "+ e.getMessage());
+        }
+        return null;
+    }
+    // Metodo per visualizzare solo voli in partenza da Capodichino
+    public ArrayList<Volo> visualizzaVoliInPartenza() {
+        try {
+            return voloDB.getVoliInPartenza();
+        } catch (SQLException e) {
+            logger.info("Errore nel recupero voli in partenza: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    // Metodo per visualizzare solo voli in arrivo a Capodichino
+    public ArrayList<Volo> visualizzaVoliInArrivo() {
+        try {
+            return voloDB.getVoliInArrivo();
+        } catch (SQLException e) {
+            logger.info("Errore nel recupero voli in arrivo: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 }

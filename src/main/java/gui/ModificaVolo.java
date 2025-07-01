@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class ModificaVolo {
     private JPanel principale;
@@ -37,18 +38,20 @@ public class ModificaVolo {
     private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
+    private AdminPage adminPage;
     final String errorMessage = "Errore";
 
-
-    public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare) {
+    public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare, AdminPage adminPage) {
         this.tableModel = tableModel;
         this.voloModificato = voloDaModificare;
         this.sistema = sistema;
+        this.adminPage = adminPage;
 
         caricaDatiVolo();
         applyStyles();
         aggiungiAzioni();
     }
+
     private void caricaDatiVolo() {
         codiceVoloField.setText(String.format("%04d", voloModificato.getCodiceVolo()));
         compagniaAereaField.setText(voloModificato.getCompagniaAerea());
@@ -66,7 +69,6 @@ public class ModificaVolo {
         }
     }
 
-
     private void aggiungiAzioni() {
         ButtonGroup partenzaArrivo = new ButtonGroup();
         partenzaArrivo.add(partenzaButton);
@@ -74,7 +76,7 @@ public class ModificaVolo {
 
         arrivoButton.addActionListener(e -> impostaComeArrivo(voloModificato));
         partenzaButton.addActionListener(e -> impostaComePartenza(voloModificato));
-        salvaButton.addActionListener(e -> salvaVolo());
+        salvaButton.addActionListener(this::salvaVolo);
         annullaButton.addActionListener(e -> chiudiFinestra());
     }
 
@@ -86,7 +88,6 @@ public class ModificaVolo {
         gateLabel.setVisible(false);
         aeroportoDestinazioneField.setText("Capodichino");
         aeroportoOrigineField.setText(volo.getAeroportoOrigine());
-
     }
 
     private void impostaComePartenza(Volo volo) {
@@ -97,10 +98,9 @@ public class ModificaVolo {
         gateLabel.setVisible(true);
         aeroportoOrigineField.setText("Capodichino");
         aeroportoDestinazioneField.setText(volo.getAeroportoDestinazione());
-
     }
 
-    private void salvaVolo() {
+    private void salvaVolo(ActionEvent e) {
         String codiceVolo = codiceVoloField.getText().trim();
         String compagnia = compagniaAereaField.getText().trim();
         String origine = aeroportoOrigineField.getText().trim();
@@ -116,6 +116,12 @@ public class ModificaVolo {
             int codice = Integer.parseInt(codiceVolo);
             int rit = Integer.parseInt(ritardo);
 
+            // Determina se il tipo di volo è cambiato
+            boolean eraArrivo = voloModificato.getAeroportoDestinazione().equalsIgnoreCase("Capodichino");
+            boolean oraArrivo = destinazione.equalsIgnoreCase("Capodichino");
+            boolean tipoCambiato = (eraArrivo != oraArrivo);
+
+            // Aggiorna il volo
             voloModificato.setCodiceVolo(codice);
             voloModificato.setCompagniaAerea(compagnia);
             voloModificato.setAeroportoOrigine(origine);
@@ -125,17 +131,21 @@ public class ModificaVolo {
             voloModificato.setGate(gate);
             voloModificato.setStato(Volo.statoVolo.valueOf(stato));
 
-            aggiornaTabella(codice);
+            // Gestisci il cambio di tabella se necessario
+            if (tipoCambiato) {
+                adminPage.rimuoviVoloDaTabelle(codice);
+                adminPage.aggiungiVoloATabellaCorretta(voloModificato);
+            } else {
+                adminPage.aggiornaVoloInTabelle(voloModificato);
+            }
+
             sistema.modificaVolo(voloModificato);
             chiudiFinestra();
 
         } catch (Exception exception) {
-
             JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", errorMessage, JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
 
     private boolean convalidaCampi(String codice, String compagnia, String origine, String destinazione, String orario, String ritardo, String gate, String stato) {
         if (codice.isEmpty() || compagnia.isEmpty() || origine.isEmpty() || destinazione.isEmpty() ||
@@ -155,31 +165,7 @@ public class ModificaVolo {
             JOptionPane.showMessageDialog(principale, "Formato gate errato (es. A1)", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String codiceTabella = tableModel.getValueAt(i, 0).toString();
-            if (codiceTabella.equals(codice) && voloModificato.getCodiceVolo() != Integer.parseInt(codice)) {
-                JOptionPane.showMessageDialog(principale, "Codice volo già esistente", errorMessage, JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
         return true;
-    }
-
-    private void aggiornaTabella(int codice) {
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            if (tableModel.getValueAt(i, 0).toString().equals(String.format("%04d", codice))) {
-                tableModel.setValueAt(String.format("%04d", codice), i, 0);
-                tableModel.setValueAt(compagniaAereaField.getText(), i, 1);
-                tableModel.setValueAt(aeroportoOrigineField.getText(), i, 2);
-                tableModel.setValueAt(aeroportoDestinazioneField.getText(), i, 3);
-                tableModel.setValueAt(orarioField.getText(), i, 4);
-                tableModel.setValueAt(ritardoField.getText(), i, 5);
-                tableModel.setValueAt(statoVoloCombo.getSelectedItem(), i, 6);
-                tableModel.setValueAt(gateField.getText(), i, 7);
-
-                break;
-            }
-        }
     }
 
     private void chiudiFinestra() {
@@ -193,11 +179,6 @@ public class ModificaVolo {
 
     public JButton getSalvaButton() {
         return salvaButton;
-    }
-
-    public void impostaDefaultButton() {
-        JFrame frame = (JFrame) principale.getTopLevelAncestor();
-        if (frame != null) frame.getRootPane().setDefaultButton(salvaButton);
     }
 
     private void applyStyles() {
@@ -275,5 +256,4 @@ public class ModificaVolo {
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-}
+    }}

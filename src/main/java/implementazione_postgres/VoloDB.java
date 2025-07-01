@@ -17,6 +17,7 @@ public class VoloDB implements VoloDao {
     // Connessione condivisa
     private Connection connection;
 
+
     public VoloDB() {
         try {
             connection = ConnessioneDB.getInstance().connection;
@@ -26,6 +27,44 @@ public class VoloDB implements VoloDao {
         }
     }
 
+    // Metodo per ottenere voli in partenza (Capodichino = origine)
+    public ArrayList<Volo> getVoliInPartenza() throws SQLException {
+        String sql = "SELECT * FROM volo WHERE aeroporto_origine = 'Capodichino'";
+        return getVoliByQuery(sql);
+    }
+
+    // Metodo per ottenere voli in arrivo (Capodichino = destinazione)
+    public ArrayList<Volo> getVoliInArrivo() throws SQLException {
+        String sql = "SELECT * FROM volo WHERE aeroporto_destinazione = 'Capodichino'";
+        return getVoliByQuery(sql);
+    }
+
+    // Metodo helper per eseguire query e costruire lista voli
+    private ArrayList<Volo> getVoliByQuery(String sql) throws SQLException {
+        ArrayList<Volo> listaVoli = new ArrayList<>();
+
+        try (Connection conn = ConnessioneDB.getInstance().connection;
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Volo volo = new Volo(
+                        rs.getInt("codice_volo"),
+                        rs.getString("compagnia_aerea"),
+                        rs.getString("aeroporto_origine"),
+                        rs.getString("aeroporto_destinazione"),
+                        rs.getString("orario_partenza_arrivo"),
+                        rs.getInt("ritardo"),
+                        Volo.statoVolo.valueOf(rs.getString("stato")),
+                        rs.getString("id_gate")
+                );
+                listaVoli.add(volo);
+            }
+        } catch (SQLException e) {
+            logger.info("Errore durante il recupero dei voli: " + e.getMessage());
+        }
+        return listaVoli;
+    }
     // Inserisce un volo nel DB
     @Override
     public void aggiungiVoloDB(Volo volo) throws SQLException {

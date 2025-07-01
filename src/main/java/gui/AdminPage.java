@@ -1,7 +1,7 @@
 package gui;
 
-import controller.Sistema;      // Controller del sistema (pattern Controller dell'architettura BCE)
-import model.Volo;             // Modello che rappresenta un volo
+import controller.Sistema;
+import model.Volo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,57 +10,108 @@ import java.awt.event.*;
 import java.util.List;
 import javax.swing.border.EmptyBorder;
 
-/*
-  Classe AdminPage - Interfaccia grafica per l'amministratore.
-  Permette di visualizzare, aggiungere, modificare ed eliminare voli.
-  collegata al controller 'Sistema' che gestisce la logica dell'applicazione.
- */
 public class AdminPage {
-    // Componenti GUI
     private JPanel principale;
     private JLabel adminTitle;
     private JButton aggiungiVoloButton;
     private JButton eliminaVoloButton;
     private JPanel voliPanel;
-    private JLabel voliLable;
-    private JTable tabellaVoli;
+    private JLabel voliArrivoLabel;
+    private JTable tabellaVolArrivo;
     private JButton modificaVoloButton;
     private JLabel logoutLabel;
     private JPanel logOutPanel;
-    public static final JFrame frame = new JFrame("AdminDashboard"); // Finestra principale della pagina Admin
-    private final Sistema sistema; // Controller per interfacciarsi con il Model
-    private static final String ERRORMESSAGE= "Errore";
-    /*Costruttore della pagina Admin.
-     chiamante JFrame della schermata di login, da riaprire al logout.
-     controller Oggetto Sistema per gestire i dati e le operazioni.
-     model Modello della tabella da visualizzare (DefaultTableModel).
-     */
-    public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel model) {
+    private JPanel pannelloTuttiVoli;
+    private JPanel voliArrivoPanel;
+    private JTable tabellaVoliPartenza;
+    private JLabel voliPartenzaLabel;
+    public static final JFrame frame = new JFrame("AdminDashboard");
+    private final Sistema sistema;
+    private static final String ERRORMESSAGE = "Errore";
+
+    public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel modelArrivi, DefaultTableModel modelPartenze) {
         this.sistema = controller;
-        // Popolamento iniziale della tabella dei voli
-        popolaTabellaVoli(model);
-        tabellaVoli.setModel(model);
-        // Listener per il pulsante "Aggiungi Volo"
-        aggiungiVoloButton.addActionListener(e -> inizializzaAggiungiVolo(model));
 
-        // Listener per il pulsante "Elimina Volo"
-        eliminaVoloButton.addActionListener(e -> eliminaVoloSelezionato(model));
+        // Popolamento tabelle
+        popolaTabellaVoliArrivo(modelArrivi);
+        popolaTabellaVoliPartenza(modelPartenze);
 
-        // Imposta il frame principale della dashboard
+        tabellaVolArrivo.setModel(modelArrivi);
+        tabellaVoliPartenza.setModel(modelPartenze);
+
+        aggiungiVoloButton.addActionListener(e -> inizializzaAggiungiVolo(modelArrivi, modelPartenze));
+        eliminaVoloButton.addActionListener(e -> eliminaVoloSelezionato());
+        modificaVoloButton.addActionListener(e -> modificaVoloSelezionato());
+
         frame.setContentPane(principale);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setVisible(true);
-        // Listener per "Modifica Volo"
-        modificaVoloButton.addActionListener(e -> modificaVoloSelezionato(model));
-        // Applica lo stile grafico alla finestra
+
         applyStyles(chiamante);
     }
-    private void inizializzaAggiungiVolo(DefaultTableModel model){
-        AggiungiVolo av = new AggiungiVolo(model, sistema, this); // nuova finestra di inserimento volo
+
+    // METODI HELPER PER GESTIONE TABELLE
+    public void rimuoviVoloDaTabelle(int codiceVolo) {
+        rimuoviVoloDaModello((DefaultTableModel)tabellaVolArrivo.getModel(), codiceVolo);
+        rimuoviVoloDaModello((DefaultTableModel)tabellaVoliPartenza.getModel(), codiceVolo);
+    }
+
+    private void rimuoviVoloDaModello(DefaultTableModel model, int codiceVolo) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if ((int)model.getValueAt(i, 0) == codiceVolo) {
+                model.removeRow(i);
+                break;
+            }
+        }
+    }
+
+    public void aggiungiVoloATabellaCorretta(Volo volo) {
+        DefaultTableModel model;
+        if (volo.getAeroportoDestinazione().equalsIgnoreCase("Capodichino")) {
+            model = (DefaultTableModel)tabellaVolArrivo.getModel();
+        } else {
+            model = (DefaultTableModel)tabellaVoliPartenza.getModel();
+        }
+
+        model.addRow(new Object[]{
+                volo.getCodiceVolo(),
+                volo.getCompagniaAerea(),
+                volo.getAeroportoOrigine(),
+                volo.getAeroportoDestinazione(),
+                volo.getOrarioArrivo(),
+                volo.getRitardo(),
+                volo.getStato().toString(),
+                volo.getGate()
+        });
+    }
+
+    public void aggiornaVoloInTabelle(Volo volo) {
+        aggiornaVoloInModello((DefaultTableModel)tabellaVolArrivo.getModel(), volo);
+        aggiornaVoloInModello((DefaultTableModel)tabellaVoliPartenza.getModel(), volo);
+    }
+
+    private void aggiornaVoloInModello(DefaultTableModel model, Volo volo) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if ((int)model.getValueAt(i, 0) == volo.getCodiceVolo()) {
+                model.setValueAt(volo.getCompagniaAerea(), i, 1);
+                model.setValueAt(volo.getAeroportoOrigine(), i, 2);
+                model.setValueAt(volo.getAeroportoDestinazione(), i, 3);
+                model.setValueAt(volo.getOrarioArrivo(), i, 4);
+                model.setValueAt(volo.getRitardo(), i, 5);
+                model.setValueAt(volo.getStato().toString(), i, 6);
+                model.setValueAt(volo.getGate(), i, 7);
+                break;
+            }
+        }
+    }
+
+    // METODI PRINCIPALI
+    private void inizializzaAggiungiVolo(DefaultTableModel modelArrivi, DefaultTableModel modelPartenze) {
+        AggiungiVolo av = new AggiungiVolo(modelArrivi, modelPartenze, sistema, this);
         JFrame frameAddVolo = new JFrame("Aggiungi Volo");
-        frameAddVolo.getRootPane().setDefaultButton(av.getAggiungiVoloButton()); // Invio attiva il bottone
+        frameAddVolo.getRootPane().setDefaultButton(av.getAggiungiVoloButton());
         frameAddVolo.setContentPane(av.getPrincipale());
         frameAddVolo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frameAddVolo.pack();
@@ -68,27 +119,28 @@ public class AdminPage {
         frameAddVolo.setLocation(400, 150);
         frameAddVolo.setVisible(true);
     }
-    private void modificaVoloSelezionato(DefaultTableModel model){
-        int rigaSelezionata = tabellaVoli.getSelectedRow();
+
+    private void modificaVoloSelezionato() {
+        JTable tabellaCorrente = getTabellaAttiva();
+        if (tabellaCorrente == null) {
+            mostraMessaggio("Seleziona un volo da modificare!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int rigaSelezionata = tabellaCorrente.getSelectedRow();
         if (rigaSelezionata == -1) {
             mostraMessaggio("Seleziona un volo da modificare!", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // Ottiene il codice del volo dalla tabella
-        int codiceVolo = ottieniCodiceVoloDaRiga(rigaSelezionata);
-        if (codiceVolo == -1) return;
-        // Cerca il volo corrispondente nel sistema
-        Volo voloSelezionato = null;
-        for (Volo v : sistema.visualizzaVoli()) {
-            if (v.getCodiceVolo() == codiceVolo) {
-                voloSelezionato = v;
-                break;
-            }
 
-        }
+        int codiceVolo = ottieniCodiceVoloDaRiga(tabellaCorrente, rigaSelezionata);
+        if (codiceVolo == -1) return;
+
+        Volo voloSelezionato = sistema.getVolo(codiceVolo);
         if (voloSelezionato != null) {
-            ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato);
-            // Finestra per modificare i dati del volo
+            DefaultTableModel model = (DefaultTableModel) tabellaCorrente.getModel();
+            ModificaVolo modificaVoloPanel = new ModificaVolo(model, sistema, voloSelezionato, this);
+
             JFrame frameVolo = new JFrame("Modifica Volo");
             frameVolo.setContentPane(modificaVoloPanel.getPrincipale());
             frameVolo.getRootPane().setDefaultButton(modificaVoloPanel.getSalvaButton());
@@ -100,19 +152,21 @@ public class AdminPage {
         } else {
             JOptionPane.showMessageDialog(null, "Volo non trovato nel sistema", ERRORMESSAGE, JOptionPane.ERROR_MESSAGE);
         }
-        aggiornaTabella(model);
+    }
 
-    }
-    private void aggiornaTabella(DefaultTableModel model) {
-        model.setRowCount(0); // Svuota la tabella
-        popolaTabellaVoli(model); // Ricarica i voli aggiornati
-    }
-    private void eliminaVoloSelezionato(DefaultTableModel model){
-        int rigaSelezionata = tabellaVoli.getSelectedRow();
+    private void eliminaVoloSelezionato() {
+        JTable tabellaCorrente = getTabellaAttiva();
+        if (tabellaCorrente == null) {
+            mostraMessaggio("Seleziona un volo da eliminare!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int rigaSelezionata = tabellaCorrente.getSelectedRow();
         if (rigaSelezionata == -1) {
             mostraMessaggio("Seleziona un volo da eliminare!", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         int conferma = JOptionPane.showConfirmDialog(null,
                 "Sei sicuro di voler eliminare il volo selezionato?",
                 "Conferma eliminazione",
@@ -120,16 +174,25 @@ public class AdminPage {
 
         if (conferma != JOptionPane.YES_OPTION) return;
 
-        int codiceVolo = ottieniCodiceVoloDaRiga(rigaSelezionata);
+        int codiceVolo = ottieniCodiceVoloDaRiga(tabellaCorrente, rigaSelezionata);
         if (codiceVolo == -1) return;
 
         sistema.eliminaVolo(codiceVolo);
-        model.removeRow(rigaSelezionata);
-        sistema.visualizzaVoli().remove(rigaSelezionata);
+        ((DefaultTableModel)tabellaCorrente.getModel()).removeRow(rigaSelezionata);
     }
-    // metodo per ottenre il codice Volo dalla riga utile per eliminaVoloSelezionato
-    private int ottieniCodiceVoloDaRiga(int riga) {
-        Object valoreCodice = tabellaVoli.getValueAt(riga, 0);
+
+    // METODI DI SUPPORTO
+    private JTable getTabellaAttiva() {
+        if (tabellaVolArrivo.getSelectedRow() != -1) {
+            return tabellaVolArrivo;
+        } else if (tabellaVoliPartenza.getSelectedRow() != -1) {
+            return tabellaVoliPartenza;
+        }
+        return null;
+    }
+
+    private int ottieniCodiceVoloDaRiga(JTable tabella, int riga) {
+        Object valoreCodice = tabella.getValueAt(riga, 0);
         try {
             if (valoreCodice instanceof Integer) {
                 return (Integer) valoreCodice;
@@ -141,21 +204,11 @@ public class AdminPage {
         }
         return -1;
     }
-    // metodo per mostrare una Message Dialog utile per eliminaVoloSelezionato
-    private void mostraMessaggio(String messaggio, int tipo) {
-        JOptionPane.showMessageDialog(null, messaggio, ERRORMESSAGE, tipo);
-    }
-    // Getter per accedere alla tabella da altre classi
-    public JTable getTabellaVoli(){
-        return tabellaVoli;
-    }
-    /*
-     Popola il modello della tabella con i voli presenti nel sistema.
-     Evita di mantenere una struttura in memoria duplicata, recuperando direttamente i dati dal controller.
-     */
-    private void popolaTabellaVoli(DefaultTableModel model) {
-        List<Volo> voli = sistema.visualizzaVoli();
-        for (Volo v : voli) {
+
+    private void popolaTabellaVoliArrivo(DefaultTableModel model) {
+        model.setRowCount(0);
+        List<Volo> voliArrivo = sistema.visualizzaVoliInArrivo();
+        for (Volo v : voliArrivo) {
             model.addRow(new Object[]{
                     v.getCodiceVolo(),
                     v.getCompagniaAerea(),
@@ -163,17 +216,34 @@ public class AdminPage {
                     v.getAeroportoDestinazione(),
                     v.getOrarioArrivo(),
                     v.getRitardo(),
-                    v.getStato(),
+                    v.getStato().toString(),
                     v.getGate()
             });
         }
     }
 
-    /*
-     Applica uno stile coerente a tutti gli elementi della GUI.
-     Palette colori ispirata a sistemi aeroportuali.
-     Font leggibili e colori con buon contrasto.
-     */
+    private void popolaTabellaVoliPartenza(DefaultTableModel model) {
+        model.setRowCount(0);
+        List<Volo> voliPartenza = sistema.visualizzaVoliInPartenza();
+        for (Volo v : voliPartenza) {
+            model.addRow(new Object[]{
+                    v.getCodiceVolo(),
+                    v.getCompagniaAerea(),
+                    v.getAeroportoOrigine(),
+                    v.getAeroportoDestinazione(),
+                    v.getOrarioArrivo(),
+                    v.getRitardo(),
+                    v.getStato().toString(),
+                    v.getGate()
+            });
+        }
+    }
+
+    private void mostraMessaggio(String messaggio, int tipo) {
+        JOptionPane.showMessageDialog(null, messaggio, ERRORMESSAGE, tipo);
+    }
+
+    // STILI
     private void applyStyles(JFrame chiamante) {
         Color primaryBlue = new Color(0, 95, 135);
         Color secondaryBlue = new Color(0, 120, 167);
@@ -196,8 +266,10 @@ public class AdminPage {
         adminTitle.setForeground(primaryBlue);
         adminTitle.setBorder(new EmptyBorder(0, 0, 15, 0));
 
-        voliLable.setFont(labelFont);
-        voliLable.setForeground(primaryBlue);
+        voliArrivoLabel.setFont(labelFont);
+        voliArrivoLabel.setForeground(primaryBlue);
+        voliPartenzaLabel.setFont(labelFont);
+        voliPartenzaLabel.setForeground(primaryBlue);
         logoutLabel.setFont(labelFont);
         logoutLabel.setForeground(background);
 
@@ -205,26 +277,37 @@ public class AdminPage {
         styleButton(modificaVoloButton, secondaryBlue, Color.WHITE, buttonFont);
         styleButton(eliminaVoloButton, errorRed, Color.WHITE, buttonFont);
 
-        tabellaVoli.setFont(tableFont);
-        tabellaVoli.setRowHeight(25);
-        tabellaVoli.setShowGrid(false);
-        tabellaVoli.setIntercellSpacing(new Dimension(0, 0));
-        tabellaVoli.setSelectionBackground(new Color(220, 240, 255));
-        tabellaVoli.getTableHeader().setFont(labelFont);
-        tabellaVoli.getTableHeader().setBackground(primaryBlue);
-        tabellaVoli.getTableHeader().setForeground(Color.WHITE);
-        tabellaVoli.getTableHeader().setReorderingAllowed(false);
+        // Stile tabella arrivi
+        tabellaVolArrivo.setFont(tableFont);
+        tabellaVolArrivo.setRowHeight(25);
+        tabellaVolArrivo.setShowGrid(false);
+        tabellaVolArrivo.setIntercellSpacing(new Dimension(0, 0));
+        tabellaVolArrivo.setSelectionBackground(new Color(220, 240, 255));
+        tabellaVolArrivo.getTableHeader().setFont(labelFont);
+        tabellaVolArrivo.getTableHeader().setBackground(primaryBlue);
+        tabellaVolArrivo.getTableHeader().setForeground(Color.WHITE);
+        tabellaVolArrivo.getTableHeader().setReorderingAllowed(false);
 
-        // Comportamento logout con effetto hover
+        // Stile tabella partenze
+        tabellaVoliPartenza.setFont(tableFont);
+        tabellaVoliPartenza.setRowHeight(25);
+        tabellaVoliPartenza.setShowGrid(false);
+        tabellaVoliPartenza.setIntercellSpacing(new Dimension(0, 0));
+        tabellaVoliPartenza.setSelectionBackground(new Color(220, 240, 255));
+        tabellaVoliPartenza.getTableHeader().setFont(labelFont);
+        tabellaVoliPartenza.getTableHeader().setBackground(primaryBlue);
+        tabellaVoliPartenza.getTableHeader().setForeground(Color.WHITE);
+        tabellaVoliPartenza.getTableHeader().setReorderingAllowed(false);
+
         logOutPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logOutPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 logOutPanel.setBackground(successGreen);
-                chiamante.setVisible(true); // Torna alla schermata di login
+                chiamante.setVisible(true);
                 Window window = SwingUtilities.getWindowAncestor(principale);
                 if (window != null) {
-                    window.dispose(); // Chiude la finestra corrente
+                    window.dispose();
                 }
             }
 
@@ -240,7 +323,6 @@ public class AdminPage {
         });
     }
 
-    //Applica stile uniforme ai pulsanti (font, colori, effetto hover).
     private void styleButton(JButton button, Color bg, Color fg, Font font) {
         button.setFont(font);
         button.setBackground(bg);
@@ -249,16 +331,24 @@ public class AdminPage {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 button.setBackground(bg.darker());
             }
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 button.setBackground(bg);
             }
         });
+    }
+
+    // GETTER
+    public JTable getTabellaVoliArrivo() {
+        return tabellaVolArrivo;
+    }
+
+    public JTable getTabellaVoliPartenza() {
+        return tabellaVoliPartenza;
     }
 }
