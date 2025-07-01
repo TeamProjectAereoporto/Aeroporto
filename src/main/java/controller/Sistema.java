@@ -33,7 +33,7 @@ public class Sistema {
         utenteDB = new UtenteDB();
         prenotazioneDB = new PrenotazioneDB();
         passeggeroDB =  new PasseggeroDB();
-        creaAdmin();
+        admin = creaAdmin();
     }
 
     //metodo per ricevere admin
@@ -46,11 +46,19 @@ public class Sistema {
     }
 
     //se non esiste crea un admin
-    public void creaAdmin(){
+    public Admin creaAdmin(){
         if(!utenteDB.esisteAlmenoUnAdmin()){
             Admin primoAdminCreatoPerIlSistema = new Admin("admin", "admin123", 2);
-            logger.info("admin creato: \nUsername: " + admin.getNomeUtente() + "\nPassword: "+ admin.getPsw());
+            try {
+                utenteDB.aggiungiUtenteDB(primoAdminCreatoPerIlSistema);
+                logger.info("admin creato e salvato nel DB: \nUsername: " + primoAdminCreatoPerIlSistema.getNomeUtente() + "\nPassword: "+ primoAdminCreatoPerIlSistema.getPsw());
+            } catch (SQLException e) {
+                logger.severe("Errore salvando admin nel DB: " + e.getMessage());
+                return null;
+            }
+            return primoAdminCreatoPerIlSistema;
         }
+        return null;
     }
 
     //il sistema aggiunge un utente.
