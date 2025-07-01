@@ -74,15 +74,7 @@ public class PasseggeroDB implements PasseggeroDao {
         }
         return null;  // Se non trovato
     }
-    public int getIdPasseggero(long numeroBiglietto) throws SQLException{
-        String sqlGetTicket ="SELECT id_passeggero from prenotazione where numero_biglietto = ?";
-        try(Connection connection= ConnessioneDB.getInstance().connection;
-            PreparedStatement stmt = connection.prepareStatement(sqlGetTicket)){
-            stmt.setLong(1,numeroBiglietto);
-            ResultSet rs = stmt.executeQuery();
-            return rs.getInt("id_passeggero");
-        }
-    }
+    @Override
     public int getLastId() throws SQLException {
         String sqlGetLastId = "SELECT id_passeggero FROM passeggero ORDER BY id_passeggero DESC LIMIT 1;";
         int id = 0;
@@ -97,6 +89,7 @@ public class PasseggeroDB implements PasseggeroDao {
         }
         return id;
     }
+    @Override
     public boolean passeggeroGiaPrenotato(String numeroDocumento, int codiceVolo) throws SQLException {
         String query = """
         SELECT EXISTS (
