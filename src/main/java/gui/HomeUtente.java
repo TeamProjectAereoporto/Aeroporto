@@ -6,6 +6,8 @@ import model.Volo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class HomeUtente {
     private JTextField nome;
     private JLabel titoloB;
     private JButton logout;
+    private JComboBox comboBox1;
+    private JButton visualizzaButton;
+    private JPanel filterFly;
 
     /**
      * The constant frame.
@@ -38,13 +43,24 @@ public class HomeUtente {
     /**
      * Instantiates a new Home utente.
      */
-    public HomeUtente(JFrame frameChiamante, Sistema sistema, DefaultTableModel model) {
+    public HomeUtente(JFrame frameChiamante, Sistema sistema, DefaultTableModel modelPartenza, DefaultTableModel modelArrivo) {
         this.sistema = sistema;
 
         inizializzaFrame();        // Inizializza le impostazioni della finestra JFrame
-        configuraTabella(model);   // Configura la tabella per visualizzare i voli
         caricaVoli();              // Carica i dati dei voli nel modello della tabella
         impostaAzioni(frameChiamante);  // Imposta le azioni per i vari bottoni e componenti
+        configuraTabella(modelArrivo);
+        visualizzaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String voliScelti = comboBox1.getSelectedItem().toString();
+                if(voliScelti.equalsIgnoreCase("Voli in Partenza")) {
+                    configuraTabella(modelPartenza);   // Configura la tabella per visualizzare i voli
+                }else{
+                    configuraTabella(modelArrivo);
+                }
+            }
+        });
     }
 
     private void inizializzaFrame() {

@@ -135,7 +135,7 @@ public class Login {
 
                 switch (ruolo) {
                     case 1:
-                        HomeUtente home = new HomeUtente(frame, sistema, modelUtente);
+                        HomeUtente home = new HomeUtente(frame, sistema, modelPartenze, modelArrivi);
                         home.frame.setVisible(true);
                         frame.setVisible(false);
                         logger.info("Login effettuato come Utente Generico");

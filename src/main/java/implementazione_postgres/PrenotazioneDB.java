@@ -147,7 +147,7 @@ public class PrenotazioneDB implements PrenotazioneDAO {
         ArrayList<Prenotazione> biglietti = new ArrayList<>();
         String sqlGetTickets;
         if (codiceVolo == -1 && !nome.isEmpty()) {
-             sqlGetTickets = "SELECT p.*\n" +
+            sqlGetTickets = "SELECT p.*\n" +
                     "FROM prenotazione p\n" +
                     "JOIN passeggero pa ON p.id_passeggero = pa.id_passeggero\n" +
                     "WHERE p.id_utente = ? AND pa.nome = ?;\n";

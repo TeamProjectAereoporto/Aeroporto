@@ -87,7 +87,9 @@ public class ModificaVolo {
         gateField.setText("");
         gateLabel.setVisible(false);
         aeroportoDestinazioneField.setText("Capodichino");
-        aeroportoOrigineField.setText(volo.getAeroportoOrigine());
+        aeroportoDestinazioneField.setEditable(false);
+        aeroportoOrigineField.setEditable(true);
+        aeroportoOrigineField.setText("");
     }
 
     private void impostaComePartenza(Volo volo) {
@@ -97,10 +99,13 @@ public class ModificaVolo {
         gateField.setText(volo.getGate());
         gateLabel.setVisible(true);
         aeroportoOrigineField.setText("Capodichino");
-        aeroportoDestinazioneField.setText(volo.getAeroportoDestinazione());
+        aeroportoOrigineField.setEditable(false);
+        aeroportoDestinazioneField.setEditable(true);
+        aeroportoDestinazioneField.setText("");
     }
 
     private void salvaVolo(ActionEvent e) {
+
         String codiceVolo = codiceVoloField.getText().trim();
         String compagnia = compagniaAereaField.getText().trim();
         String origine = aeroportoOrigineField.getText().trim();

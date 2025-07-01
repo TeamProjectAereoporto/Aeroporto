@@ -55,7 +55,7 @@ public class Sistema {
 
     //il sistema aggiunge un utente.
     public void aggiungiUtente(Utente ug){
-            utenti.add(ug);
+        utenti.add(ug);
         try {
             utenteDB.aggiungiUtenteDB(ug); // aggiungi anche nel DB
         } catch (SQLException e) {
@@ -158,7 +158,7 @@ public class Sistema {
     public boolean verificaUtenteUnivoco(String username){
         for(Utente u : utenti){
             if(u.getNomeUtente().equals(username) ){
-               return false;
+                return false;
             }
         }
         return true;
@@ -277,7 +277,7 @@ public class Sistema {
             try {
                 voloDB.aggiungiVoloDB(v);
             } catch (SQLException e) {
-               logger.info("Errore nella generazione di contenuti casuali nel DB"+ e.getMessage());
+                logger.info("Errore nella generazione di contenuti casuali nel DB"+ e.getMessage());
             }
         }
     }
