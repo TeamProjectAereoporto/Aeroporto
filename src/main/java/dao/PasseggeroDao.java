@@ -10,4 +10,7 @@ import java.sql.SQLException;
 public interface PasseggeroDao {
     public int aggiungiPasseggero(Passeggero passeggero) throws SQLException;
     public Passeggero getPasseggero(int id) throws SQLException;
+    public int getLastId() throws SQLException;
+    public boolean passeggeroGiaPrenotato(String numeroDocumento, int codiceVolo) throws SQLException;
+
 }
