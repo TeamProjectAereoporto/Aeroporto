@@ -1,5 +1,8 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 // Classe che rappresenta un volo con i suoi attributi principali
 public class Volo {
     // Codice identificativo univoco del volo
@@ -18,6 +21,8 @@ public class Volo {
     private statoVolo stato;
     // Gate di imbarco associato al volo
     private String gate;
+    //data di arrivo o partenza del volo
+    private LocalDate dataVolo;
 
     // Enumerazione per rappresentare i possibili stati di un volo
     public enum statoVolo{
@@ -75,6 +80,9 @@ public class Volo {
     public String getGate(){
         return gate;
     }
+    public LocalDate getDataVolo() {
+        return dataVolo;
+    }
 
     // Metodi setter per modificare i valori degli attributi privati
 
@@ -110,9 +118,13 @@ public class Volo {
         this.gate = gate;
     }
 
+    public void setDataVolo(LocalDate dataVolo){
+        this.dataVolo = dataVolo;
+    }
+
     // Costruttore completo con tutti i parametri inclusi
     public Volo(int codiceVolo, String compagniaAerea, String aeroportoOrigine, String aeroportoDestinazione,
-                String orarioArrivo, int ritardo, statoVolo stato, String gate) {
+                String orarioArrivo, int ritardo, statoVolo stato, String gate,  LocalDate dataVolo) {
         this.codiceVolo = codiceVolo;
         this.compagniaAerea = compagniaAerea;
         this.aeroportoOrigine = aeroportoOrigine;
@@ -121,13 +133,15 @@ public class Volo {
         this.ritardo = ritardo;
         this.stato = stato;
         this.gate = gate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.dataVolo = LocalDate.parse(dataVolo.format(formatter), formatter);
     }
 
     // Costruttore senza ritardo, imposta ritardo a zero di default
     public Volo(int codiceVolo, String compagniaAerea, String aeroportoOrigine, String aeroportoDestinazione,
-                String orarioArrivo, statoVolo stato, String gate) {
+                String orarioArrivo, statoVolo stato, String gate, LocalDate dataVolo) {
         this(codiceVolo, compagniaAerea, aeroportoOrigine, aeroportoDestinazione,
-                orarioArrivo, 0, stato, gate);
+                orarioArrivo, 0, stato, gate, dataVolo);
     }
 
     // Metodo per rappresentare l'oggetto come stringa in modo leggibile

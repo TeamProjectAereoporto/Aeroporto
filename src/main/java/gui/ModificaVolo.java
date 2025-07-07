@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ModificaVolo {
     private JPanel principale;
@@ -35,11 +38,14 @@ public class ModificaVolo {
     private JButton salvaButton;
     private JButton salvaVoloButton;
     private JButton annullaButton;
+    private JLabel dataVoloLabel;
+    private JTextField dataVoloField;
     private Sistema sistema;
     private DefaultTableModel tableModel;
     private Volo voloModificato;
     private AdminPage adminPage;
     final String errorMessage = "Errore";
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public ModificaVolo(DefaultTableModel tableModel, Sistema sistema, Volo voloDaModificare, AdminPage adminPage) {
         this.tableModel = tableModel;
@@ -61,6 +67,7 @@ public class ModificaVolo {
         ritardoField.setText(String.valueOf(voloModificato.getRitardo()));
         gateField.setText(voloModificato.getGate());
         statoVoloCombo.setSelectedItem(voloModificato.getStato().toString());
+        dataVoloField.setText(voloModificato.getDataVolo().format(dateFormatter));
 
         if (voloModificato.getGate() == null || voloModificato.getGate().isEmpty()) {
             impostaComeArrivo(voloModificato);
@@ -105,7 +112,6 @@ public class ModificaVolo {
     }
 
     private void salvaVolo(ActionEvent e) {
-
         String codiceVolo = codiceVoloField.getText().trim();
         String compagnia = compagniaAereaField.getText().trim();
         String origine = aeroportoOrigineField.getText().trim();
@@ -114,12 +120,16 @@ public class ModificaVolo {
         String ritardo = ritardoField.getText().trim();
         String gate = gateField.getText().trim();
         String stato = (String) statoVoloCombo.getSelectedItem();
+        String dataVoloStr = dataVoloField.getText().trim();
 
-        if (!convalidaCampi(codiceVolo, compagnia, origine, destinazione, orario, ritardo, gate, stato)) return;
+        if (!convalidaCampi(codiceVolo, compagnia, origine, destinazione, orario, ritardo, gate, stato, dataVoloStr)) {
+            return;
+        }
 
         try {
             int codice = Integer.parseInt(codiceVolo);
             int rit = Integer.parseInt(ritardo);
+            LocalDate dataVolo = LocalDate.parse(dataVoloStr, dateFormatter);
 
             // Determina se il tipo di volo è cambiato
             boolean eraArrivo = voloModificato.getAeroportoDestinazione().equalsIgnoreCase("Capodichino");
@@ -135,6 +145,7 @@ public class ModificaVolo {
             voloModificato.setRitardo(rit);
             voloModificato.setGate(gate);
             voloModificato.setStato(Volo.statoVolo.valueOf(stato));
+            voloModificato.setDataVolo(dataVolo);
 
             // Gestisci il cambio di tabella se necessario
             if (tipoCambiato) {
@@ -147,14 +158,18 @@ public class ModificaVolo {
             sistema.modificaVolo(voloModificato);
             chiudiFinestra();
 
+        } catch (DateTimeParseException dtpe) {
+            JOptionPane.showMessageDialog(principale, "Formato data non valido (dd/MM/yyyy)", errorMessage, JOptionPane.ERROR_MESSAGE);
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(principale, "Errore nei dati inseriti", errorMessage, JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private boolean convalidaCampi(String codice, String compagnia, String origine, String destinazione, String orario, String ritardo, String gate, String stato) {
+    private boolean convalidaCampi(String codice, String compagnia, String origine, String destinazione,
+                                   String orario, String ritardo, String gate, String stato, String dataVolo) {
         if (codice.isEmpty() || compagnia.isEmpty() || origine.isEmpty() || destinazione.isEmpty() ||
-                orario.isEmpty() || ritardo.isEmpty() || (partenzaButton.isSelected() && gate.isEmpty()) || stato == null || stato.isEmpty()) {
+                orario.isEmpty() || ritardo.isEmpty() || (partenzaButton.isSelected() && gate.isEmpty()) ||
+                stato == null || stato.isEmpty() || dataVolo.isEmpty()) {
             JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere compilati", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -168,6 +183,12 @@ public class ModificaVolo {
         }
         if (!gate.matches("[A-Z][1-9]") && partenzaButton.isSelected()) {
             JOptionPane.showMessageDialog(principale, "Formato gate errato (es. A1)", errorMessage, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            LocalDate.parse(dataVolo, dateFormatter);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(principale, "Formato data non valido (dd/MM/yyyy)", errorMessage, JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -207,7 +228,7 @@ public class ModificaVolo {
         for (JLabel label : new JLabel[]{
                 modificaVoloLabel, codiceVoloLabel, compagniaAereaLabel,
                 aeroportoOrigineLabel, aeroportoDestinazioneLabel, orarioDiArrivoLabel,
-                ritardoLabel, gateLabel, voloInLabel, statoVoloLabel
+                ritardoLabel, gateLabel, voloInLabel, statoVoloLabel, dataVoloLabel
         }) {
             label.setFont(labelFont);
             label.setForeground(primaryBlue);
@@ -216,7 +237,7 @@ public class ModificaVolo {
         // Stile campi testo
         for (JTextField field : new JTextField[]{
                 codiceVoloField, compagniaAereaField, aeroportoOrigineField,
-                aeroportoDestinazioneField, orarioField, ritardoField, gateField
+                aeroportoDestinazioneField, orarioField, ritardoField, gateField, dataVoloField
         }) {
             field.setFont(fieldFont);
             field.setBorder(BorderFactory.createCompoundBorder(
@@ -261,4 +282,5 @@ public class ModificaVolo {
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }}
+    }
+}

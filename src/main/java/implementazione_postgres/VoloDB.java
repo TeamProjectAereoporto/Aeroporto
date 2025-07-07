@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -22,7 +23,7 @@ public class VoloDB implements VoloDao {
         try {
             connection = ConnessioneDB.getInstance().connection;
         } catch (SQLException e) {
-           logger.info("Errore nella connessione al DB: " + e.getMessage());
+            logger.info("Errore nella connessione al DB: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -56,7 +57,8 @@ public class VoloDB implements VoloDao {
                         rs.getString("orario_partenza_arrivo"),
                         rs.getInt("ritardo"),
                         Volo.statoVolo.valueOf(rs.getString("stato")),
-                        rs.getString("id_gate")
+                        rs.getString("id_gate"),
+                        rs.getDate("data_volo") != null ? rs.getDate("data_volo").toLocalDate() : null
                 );
                 listaVoli.add(volo);
             }
@@ -68,7 +70,7 @@ public class VoloDB implements VoloDao {
     // Inserisce un volo nel DB
     @Override
     public void aggiungiVoloDB(Volo volo) throws SQLException {
-        String sql = "INSERT INTO volo (codice_volo, compagnia_aerea, aeroporto_origine, aeroporto_destinazione, orario_partenza_arrivo, ritardo, stato, id_gate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO volo (codice_volo, compagnia_aerea, aeroporto_origine, aeroporto_destinazione, orario_partenza_arrivo, ritardo, stato, id_gate, data_volo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnessioneDB.getInstance().connection;
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -81,6 +83,7 @@ public class VoloDB implements VoloDao {
             ps.setInt(6, volo.getRitardo());
             ps.setString(7, volo.getStato().toString());
             ps.setString(8, volo.getGate());
+            ps.setDate(9, java.sql.Date.valueOf(volo.getDataVolo()));
 
             int righeInserite = ps.executeUpdate();
             logger.info("Numero di righe aggiunte: " + righeInserite);
@@ -92,7 +95,7 @@ public class VoloDB implements VoloDao {
     // Modifica un volo esistente nel DB
     @Override
     public void modificaVoloDB(Volo volo) throws SQLException {
-        String sql = "UPDATE volo SET compagnia_aerea = ?, aeroporto_origine = ?, aeroporto_destinazione = ?, orario_partenza_arrivo = ?, ritardo = ?, stato = ?, id_gate = ? WHERE codice_volo = ?";
+        String sql = "UPDATE volo SET compagnia_aerea = ?, aeroporto_origine = ?, aeroporto_destinazione = ?, orario_partenza_arrivo = ?, ritardo = ?, stato = ?, id_gate = ?, data_volo = ? WHERE codice_volo = ?";
 
         try (Connection conn = ConnessioneDB.getInstance().connection;
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -104,7 +107,8 @@ public class VoloDB implements VoloDao {
             ps.setInt(5, volo.getRitardo());
             ps.setString(6, volo.getStato().toString());
             ps.setString(7, volo.getGate());
-            ps.setInt(8, volo.getCodiceVolo());
+            ps.setDate(8, java.sql.Date.valueOf(volo.getDataVolo()));
+            ps.setInt(9, volo.getCodiceVolo());
 
             int righeModificate = ps.executeUpdate();
             logger.info("Numero di righe modificate: " + righeModificate);
@@ -152,7 +156,8 @@ public class VoloDB implements VoloDao {
                             rs.getString("orario_partenza_arrivo"),
                             rs.getInt("ritardo"),
                             Volo.statoVolo.valueOf(rs.getString("stato")),
-                            rs.getString("id_gate")
+                            rs.getString("id_gate"),
+                            rs.getDate("data_volo") != null ? rs.getDate("data_volo").toLocalDate() : null
                     );
                 }
             }
@@ -183,13 +188,14 @@ public class VoloDB implements VoloDao {
                         rs.getString("orario_partenza_arrivo"),
                         rs.getInt("ritardo"),
                         Volo.statoVolo.valueOf(rs.getString("stato")),
-                        rs.getString("id_gate")
+                        rs.getString("id_gate"),
+                        rs.getDate("data_volo") != null ? rs.getDate("data_volo").toLocalDate() : null
                 );
                 listaVoli.add(volo);
             }
 
         } catch (SQLException e) {
-          logger.info("Errore durante il recupero dei voli: " + e.getMessage());
+            logger.info("Errore durante il recupero dei voli: " + e.getMessage());
         }
         return listaVoli;
     }

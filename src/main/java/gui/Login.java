@@ -69,7 +69,7 @@ public class Login {
 
                 // Creazione dei modelli di tabella
                 String[] colonne = {"Codice Volo", "Compagnia", "Origine",
-                        "Destinazione", "Orario", "Ritardo", "Stato del Volo", "Gate"};
+                        "Destinazione", "Orario","Data", "Ritardo", "Stato del Volo", "Gate"};
 
                 // Modello condiviso per l'utente
                 DefaultTableModel modelUtente = new DefaultTableModel(colonne, 0) {

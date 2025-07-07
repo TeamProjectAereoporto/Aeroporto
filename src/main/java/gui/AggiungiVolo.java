@@ -8,6 +8,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class AggiungiVolo {
     static Sistema sistema;
@@ -34,10 +38,13 @@ public class AggiungiVolo {
     private JRadioButton arrivoButton;
     private JRadioButton partenzaButton;
     private JLabel voloInLable;
+    private JLabel dataVoloLabel;
+    private JTextField dataVoloField;
     private DefaultTableModel tableModelArrivi;
     private DefaultTableModel tableModelPartenze;
     private static final JFrame frame = new JFrame("Aggiungi Volo");
     private AdminPage adminPage;
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public JPanel getPrincipale() {
         return principale;
@@ -56,6 +63,10 @@ public class AggiungiVolo {
         partenzaArrivo.add(partenzaButton);
         partenzaArrivo.add(arrivoButton);
         ritardoField.setText("0");
+
+        // Imposta la data corrente come default
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        dataVoloField.setText(sdf.format(new Date()));
 
         partenzaButton.setSelected(true);
         gateField.setEnabled(true);
@@ -96,13 +107,14 @@ public class AggiungiVolo {
         String orario = orarioFIeld.getText();
         String gate = gateField.getText();
         String stato = (String) statoVoloCombo.getSelectedItem();
+        String dataVoloStr = dataVoloField.getText().trim();
         Volo.statoVolo statoEnum = Volo.statoVolo.valueOf(stato);
         boolean partenzaButtonSelected = partenzaButton.isSelected();
 
         final String errore = "Errore";
 
         if (codiceVolo.isEmpty() || compagniaAerea.isEmpty() || aeroportoOrigine.isEmpty() ||
-                aeroportoDestinazione.isEmpty() || ritardo.isEmpty() ||
+                aeroportoDestinazione.isEmpty() || ritardo.isEmpty() || dataVoloStr.isEmpty() ||
                 (partenzaButtonSelected && gate.isEmpty()) || stato == null || stato.isEmpty()) {
             JOptionPane.showMessageDialog(principale, "Tutti i campi devono essere riempiti", errore, JOptionPane.ERROR_MESSAGE);
             return;
@@ -123,6 +135,11 @@ public class AggiungiVolo {
             return;
         }
 
+        if (!dataVoloStr.matches("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}")) {
+            JOptionPane.showMessageDialog(principale, "Inserire il formato corretto per la data DD/MM/YYYY", errore, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         // Controllo unicità codice volo in entrambe le tabelle
         if (codiceVoloEsiste(codiceVolo)) {
             JOptionPane.showMessageDialog(principale, "Il codice volo deve essere univoco", errore, JOptionPane.ERROR_MESSAGE);
@@ -132,7 +149,8 @@ public class AggiungiVolo {
         try {
             int codice = Integer.parseInt(codiceVolo);
             int ritardoInt = Integer.parseInt(ritardo);
-            Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, ritardoInt, statoEnum, gate);
+            LocalDate dataVolo = LocalDate.parse(dataVoloStr, dateFormatter);
+            Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, ritardoInt, statoEnum, gate, dataVolo);
 
             sistema.aggiungiVolo(v);
 
@@ -146,7 +164,8 @@ public class AggiungiVolo {
                         v.getOrarioArrivo(),
                         v.getRitardo(),
                         v.getStato().toString(),
-                        v.getGate()
+                        v.getGate(),
+                        v.getDataVolo()
                 });
             } else {
                 tableModelArrivi.addRow(new Object[]{
@@ -157,7 +176,8 @@ public class AggiungiVolo {
                         v.getOrarioArrivo(),
                         v.getRitardo(),
                         v.getStato().toString(),
-                        v.getGate()
+                        v.getGate(),
+                        v.getDataVolo()
                 });
             }
 
@@ -201,7 +221,7 @@ public class AggiungiVolo {
         for (JLabel label : new JLabel[]{
                 aggiungiVoloLable, codiceVoloLable, compagniaAereaLable,
                 aeroportoOrigineLable, destinazioneLable, orarioArrivoLable,
-                riatdoLable, statoVoloLable, gateLabel, voloInLable
+                riatdoLable, statoVoloLable, gateLabel, voloInLable, dataVoloLabel
         }) {
             label.setFont(labelFont);
             label.setForeground(primaryBlue);
@@ -209,7 +229,7 @@ public class AggiungiVolo {
 
         for (JTextField field : new JTextField[]{
                 codiceVoloField, compagniaAereaField, aeroportoOrigineField,
-                destinazioneField, orarioFIeld, ritardoField, gateField
+                destinazioneField, orarioFIeld, ritardoField, gateField, dataVoloField
         }) {
             field.setFont(fieldFont);
             field.setBorder(BorderFactory.createCompoundBorder(
