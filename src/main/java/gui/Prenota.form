@@ -131,7 +131,7 @@
             </constraints>
             <properties>
               <foreground color="-1"/>
-              <text value="Orario di Arrivo:"/>
+              <text value="Orario:"/>
             </properties>
           </component>
           <component id="6e58c" class="javax.swing.JLabel" binding="orarioField">

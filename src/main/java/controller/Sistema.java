@@ -105,8 +105,7 @@ public class Sistema {
                     biglietto.getPostoAssegnato(),
                     biglietto.getVolo(),
                     biglietto.getStato().toString(),
-                    biglietto.getAcquirente(),
-                    biglietto.getDataVolo());
+                    biglietto.getAcquirente());
             utente.prenotaVolo(biglietto);
             tuttiIBiglietti.add(biglietto);
         } else {

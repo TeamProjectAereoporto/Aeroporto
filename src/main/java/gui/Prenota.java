@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 public class Prenota {
@@ -34,10 +35,10 @@ public class Prenota {
         compagniaAereaField.setText((String) valori[1]);
         origineField.setText((String) valori[2]);
         arrivoField.setText((String) valori[3]);
-        orarioField.setText((valori[4].toString()));
-        ritardoField.setText((valori[5].toString()));
-        statoField.setText(valori[6].toString());
-        gateField.setText(valori[7].toString());
+        orarioField.setText((valori[4].toString()+" "+valori[5].toString()));
+        ritardoField.setText((valori[6].toString()));
+        statoField.setText(valori[7].toString());
+        gateField.setText(valori[8].toString());
         //caratteristiche essenziali frame
         frame.setContentPane(finestraPrincipale);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -76,7 +77,8 @@ public class Prenota {
                                                 orarioField.getText(),
                                                 Integer.parseInt(ritardoField.getText()),
                                                 Volo.statoVolo.valueOf(statoField.getText()),
-                                                gateField.getText()//si deve correggere
+                                                gateField.getText(),
+                                                LocalDate.now()//si deve correggere
                                         ),
                                         sistema.getUtente());
                                 sistema.aggiungiBiglietto(biglietto);

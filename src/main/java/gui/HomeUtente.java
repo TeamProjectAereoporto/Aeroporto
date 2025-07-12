@@ -6,10 +6,9 @@ import model.Volo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +28,12 @@ public class HomeUtente {
     private JComboBox comboBox1;
     private JButton visualizzaButton;
     private JPanel filterFly;
-
+    private JLabel frecciaSinistra;
+    private JLabel data;
+    private JPanel formData;
+    private JLabel frecciaDestra;
+    private LocalDate dataVolo;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     /**
      * The constant frame.
      */
@@ -45,6 +49,8 @@ public class HomeUtente {
      */
     public HomeUtente(JFrame frameChiamante, Sistema sistema, DefaultTableModel modelPartenza, DefaultTableModel modelArrivo) {
         this.sistema = sistema;
+        dataVolo = LocalDate.now();
+        data.setText(formatter.format(dataVolo));
 
         inizializzaFrame();        // Inizializza le impostazioni della finestra JFrame
         caricaVoli();              // Carica i dati dei voli nel modello della tabella
@@ -58,6 +64,22 @@ public class HomeUtente {
                     configuraTabella(modelPartenza);   // Configura la tabella per visualizzare i voli
                 }else{
                     configuraTabella(modelArrivo);
+                }
+            }
+        });
+        frecciaDestra.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dataVolo = dataVolo.plusDays(1);
+                data.setText(formatter.format(dataVolo));
+            }
+        });
+        frecciaSinistra.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(LocalDate.now().isBefore(dataVolo)){
+                dataVolo = dataVolo.minusDays(1);
+                    data.setText(formatter.format(dataVolo));
                 }
             }
         });
@@ -86,7 +108,6 @@ public class HomeUtente {
         // Ottiene la lista dei voli dal sistema e la aggiunge alla tabella
         ArrayList<Volo> voli = sistema.visualizzaVoli();
         DefaultTableModel model = (DefaultTableModel) tabellaVoli.getModel();
-
         if (voli != null) {
             for (Volo v : voli) {
                 model.addRow(new Object[]{
@@ -95,6 +116,7 @@ public class HomeUtente {
                         v.getAeroportoOrigine(),
                         v.getAeroportoDestinazione(),
                         v.getOrarioArrivo(),
+                        v.getDataVolo(),
                         v.getRitardo(),
                         v.getStato(),
                         v.getGate()

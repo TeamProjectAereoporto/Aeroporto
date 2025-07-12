@@ -102,6 +102,7 @@ public class Login {
                             volo.getAeroportoOrigine(),
                             volo.getAeroportoDestinazione(),
                             volo.getOrarioArrivo(),
+                            volo.getDataVolo(),
                             volo.getRitardo(),
                             volo.getStato().toString(),
                             volo.getGate()
@@ -115,6 +116,7 @@ public class Login {
                                 volo.getAeroportoOrigine(),
                                 volo.getAeroportoDestinazione(),
                                 volo.getOrarioArrivo(),
+                                volo.getDataVolo(),
                                 volo.getRitardo(),
                                 volo.getStato().toString(),
                                 volo.getGate()
@@ -126,6 +128,7 @@ public class Login {
                                 volo.getAeroportoOrigine(),
                                 volo.getAeroportoDestinazione(),
                                 volo.getOrarioArrivo(),
+                                volo.getDataVolo(),
                                 volo.getRitardo(),
                                 volo.getStato().toString(),
                                 volo.getGate()

@@ -81,6 +81,7 @@ public class AdminPage {
                 volo.getAeroportoOrigine(),
                 volo.getAeroportoDestinazione(),
                 volo.getOrarioArrivo(),
+                volo.getDataVolo(),
                 volo.getRitardo(),
                 volo.getStato().toString(),
                 volo.getGate()
@@ -99,9 +100,10 @@ public class AdminPage {
                 model.setValueAt(volo.getAeroportoOrigine(), i, 2);
                 model.setValueAt(volo.getAeroportoDestinazione(), i, 3);
                 model.setValueAt(volo.getOrarioArrivo(), i, 4);
-                model.setValueAt(volo.getRitardo(), i, 5);
-                model.setValueAt(volo.getStato().toString(), i, 6);
-                model.setValueAt(volo.getGate(), i, 7);
+                model.setValueAt(volo.getDataVolo(),i,5);
+                model.setValueAt(volo.getRitardo(), i, 6);
+                model.setValueAt(volo.getStato().toString(), i, 7);
+                model.setValueAt(volo.getGate(), i, 8);
                 break;
             }
         }
@@ -215,6 +217,7 @@ public class AdminPage {
                     v.getAeroportoOrigine(),
                     v.getAeroportoDestinazione(),
                     v.getOrarioArrivo(),
+                    v.getDataVolo(),
                     v.getRitardo(),
                     v.getStato().toString(),
                     v.getGate()
@@ -232,6 +235,7 @@ public class AdminPage {
                     v.getAeroportoOrigine(),
                     v.getAeroportoDestinazione(),
                     v.getOrarioArrivo(),
+                    v.getDataVolo(),
                     v.getRitardo(),
                     v.getStato().toString(),
                     v.getGate()
