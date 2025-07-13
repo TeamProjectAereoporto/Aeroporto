@@ -11,8 +11,8 @@ public interface VoloDao {
     public void modificaVoloDB(Volo volo) throws SQLException;
     public void eliminaVolo(int codiceVolo) throws SQLException;
     public Volo getVolo(int codiceVolo) throws SQLException;
-    public List<Volo> getTuttiVoli() throws SQLException;
+    public List<Volo> getTuttiVoli(String data) throws SQLException;
     public ArrayList<Volo> getVoliByQuery(String sql) throws SQLException;
-    public ArrayList<Volo> getVoliInArrivo() throws SQLException;
-    public ArrayList<Volo> getVoliInPartenza() throws SQLException;
+    public ArrayList<Volo> getVoliInArrivo(String data) throws SQLException;
+    public ArrayList<Volo> getVoliInPartenza(String data) throws SQLException;
 }

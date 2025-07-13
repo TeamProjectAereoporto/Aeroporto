@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
 public class Login {
@@ -95,7 +97,9 @@ public class Login {
                 };
 
                 // Popola i modelli
-                sistema.visualizzaVoli().forEach(volo -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                sistema.visualizzaVoli(formatter.format(LocalDate.now()).toString()).forEach(volo -> {
                     modelUtente.addRow(new Object[]{
                             volo.getCodiceVolo(),
                             volo.getCompagniaAerea(),

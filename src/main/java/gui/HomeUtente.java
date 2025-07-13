@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The type Home utente.
@@ -53,7 +54,8 @@ public class HomeUtente {
         data.setText(formatter.format(dataVolo));
 
         inizializzaFrame();        // Inizializza le impostazioni della finestra JFrame
-        caricaVoli();              // Carica i dati dei voli nel modello della tabella
+
+        caricaVoli(formatter.format(dataVolo).toString());              // Carica i dati dei voli nel modello della tabella
         impostaAzioni(frameChiamante);  // Imposta le azioni per i vari bottoni e componenti
         configuraTabella(modelArrivo);
         visualizzaButton.addActionListener(new ActionListener() {
@@ -72,6 +74,7 @@ public class HomeUtente {
             public void mouseClicked(MouseEvent e) {
                 dataVolo = dataVolo.plusDays(1);
                 data.setText(formatter.format(dataVolo));
+                caricaVoli(formatter.format(dataVolo).toString());
             }
         });
         frecciaSinistra.addMouseListener(new MouseAdapter() {
@@ -79,7 +82,8 @@ public class HomeUtente {
             public void mouseClicked(MouseEvent e) {
                 if(LocalDate.now().isBefore(dataVolo)){
                 dataVolo = dataVolo.minusDays(1);
-                    data.setText(formatter.format(dataVolo));
+                data.setText(formatter.format(dataVolo));
+                caricaVoli(formatter.format(dataVolo).toString());
                 }
             }
         });
@@ -104,12 +108,17 @@ public class HomeUtente {
         tabellaVoli.setRowHeight(20);                              // Imposta altezza riga a 20 pixel
     }
 
-    private void caricaVoli() {
+    private void caricaVoli(String dataVolo) {
         // Ottiene la lista dei voli dal sistema e la aggiunge alla tabella
-        ArrayList<Volo> voli = sistema.visualizzaVoli();
+        ArrayList<Volo> voli = sistema.visualizzaVoli(dataVolo);
+
         DefaultTableModel model = (DefaultTableModel) tabellaVoli.getModel();
-        if (voli != null) {
+        if (voli != null && model !=null) {
+            model.setRowCount(0); // 🧹 Pulisce righe precedenti
             for (Volo v : voli) {
+            System.out.println(v);
+                System.out.println("Aggiungo riga per volo: " + v);
+                System.out.println("Sto aggiungendo riga a model: " + model);
                 model.addRow(new Object[]{
                         v.getCodiceVolo(),
                         v.getCompagniaAerea(),
@@ -121,6 +130,18 @@ public class HomeUtente {
                         v.getStato(),
                         v.getGate()
                 });
+                System.out.println("Aggiungo riga: " + Arrays.toString(new Object[]{
+                        v.getCodiceVolo(),
+                        v.getCompagniaAerea(),
+                        v.getAeroportoOrigine(),
+                        v.getAeroportoDestinazione(),
+                        v.getOrarioArrivo(),
+                        v.getDataVolo(),
+                        v.getRitardo(),
+                        v.getStato(),
+                        v.getGate()
+                }));
+
             }
         }
 
@@ -216,4 +237,5 @@ public class HomeUtente {
             }
         });
     }
+    public String getData(){return formatter.format(dataVolo).toString();}
 }

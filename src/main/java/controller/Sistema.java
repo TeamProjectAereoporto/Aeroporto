@@ -73,9 +73,9 @@ public class Sistema {
         }
     }
 
-    public ArrayList<Volo> visualizzaVoli(){
+    public ArrayList<Volo> visualizzaVoli(String data){
         try {
-            return voloDB.getTuttiVoli();
+            return voloDB.getTuttiVoli(data);
         } catch (SQLException e) {
             logger.info("Errore nel recupero voli: " + e.getMessage());
             return new ArrayList<>();
@@ -201,18 +201,18 @@ public class Sistema {
         return null;
     }
 
-    public ArrayList<Volo> visualizzaVoliInPartenza() {
+    public ArrayList<Volo> visualizzaVoliInPartenza(String data) {
         try {
-            return voloDB.getVoliInPartenza();
+            return voloDB.getVoliInPartenza(data);
         } catch (SQLException e) {
             logger.info("Errore nel recupero voli in partenza: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
-    public ArrayList<Volo> visualizzaVoliInArrivo() {
+    public ArrayList<Volo> visualizzaVoliInArrivo(String data) {
         try {
-            return voloDB.getVoliInArrivo();
+            return voloDB.getVoliInArrivo( data);
         } catch (SQLException e) {
             logger.info("Errore nel recupero voli in arrivo: " + e.getMessage());
             return new ArrayList<>();

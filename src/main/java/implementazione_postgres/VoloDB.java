@@ -29,14 +29,14 @@ public class VoloDB implements VoloDao {
     }
     @Override
     // Metodo per ottenere voli in partenza (Capodichino = origine)
-    public ArrayList<Volo> getVoliInPartenza() throws SQLException {
-        String sql = "SELECT * FROM volo WHERE aeroporto_origine = 'Capodichino'";
+    public ArrayList<Volo> getVoliInPartenza(String data) throws SQLException {
+        String sql = "SELECT * FROM volo WHERE aeroporto_origine = 'Capodichino' AND data_volo = '" + data + "'";
         return getVoliByQuery(sql);
     }
     @Override
     // Metodo per ottenere voli in arrivo (Capodichino = destinazione)
-    public ArrayList<Volo> getVoliInArrivo() throws SQLException {
-        String sql = "SELECT * FROM volo WHERE aeroporto_destinazione = 'Capodichino'";
+    public ArrayList<Volo> getVoliInArrivo(String data) throws SQLException {
+        String sql = "SELECT * FROM volo WHERE aeroporto_destinazione = 'Capodichino' AND data_volo = '" + data + "'";
         return getVoliByQuery(sql);
     }
     @Override
@@ -170,9 +170,10 @@ public class VoloDB implements VoloDao {
 
     // Recupera tutti i voli dal DB
     @Override
-    public ArrayList<Volo> getTuttiVoli() throws SQLException {
-        String sql = "SELECT *" +
-                "FROM volo";
+    public ArrayList<Volo> getTuttiVoli(String data) throws SQLException {
+        String sql = "SELECT * " +
+                "FROM volo " +
+                "WHERE data_volo = '" + data + "'";
         ArrayList<Volo> listaVoli = new ArrayList<>();
 
         try (Connection conn = ConnessioneDB.getInstance().connection;

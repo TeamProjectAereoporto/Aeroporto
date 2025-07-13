@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.border.EmptyBorder;
 
@@ -25,13 +27,19 @@ public class AdminPage {
     private JPanel voliArrivoPanel;
     private JTable tabellaVoliPartenza;
     private JLabel voliPartenzaLabel;
+    private JLabel dataAdmin;
+    private JLabel frecciaSinistraAdmin;
+    private JLabel frecciaDestraAdmin;
     public static final JFrame frame = new JFrame("AdminDashboard");
     private final Sistema sistema;
     private static final String ERRORMESSAGE = "Errore";
+    private LocalDate dataVolo;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public AdminPage(JFrame chiamante, Sistema controller, DefaultTableModel modelArrivi, DefaultTableModel modelPartenze) {
         this.sistema = controller;
-
+        dataVolo = LocalDate.now();
+        dataAdmin.setText(formatter.format(dataVolo));
         // Popolamento tabelle
         popolaTabellaVoliArrivo(modelArrivi);
         popolaTabellaVoliPartenza(modelPartenze);
@@ -50,6 +58,26 @@ public class AdminPage {
         frame.setVisible(true);
 
         applyStyles(chiamante);
+        frecciaSinistraAdmin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(LocalDate.now().isBefore(dataVolo)){
+                    dataVolo = dataVolo.minusDays(1);
+                    dataAdmin.setText(formatter.format(dataVolo));
+                    popolaTabellaVoliArrivo(modelArrivi);
+                    popolaTabellaVoliPartenza(modelPartenze);
+                }
+            }
+        });
+        frecciaDestraAdmin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dataVolo = dataVolo.plusDays(1);
+                dataAdmin.setText(formatter.format(dataVolo));
+                popolaTabellaVoliArrivo(modelArrivi);
+                popolaTabellaVoliPartenza(modelPartenze);
+            }
+        });
     }
 
     // METODI HELPER PER GESTIONE TABELLE
@@ -209,7 +237,7 @@ public class AdminPage {
 
     private void popolaTabellaVoliArrivo(DefaultTableModel model) {
         model.setRowCount(0);
-        List<Volo> voliArrivo = sistema.visualizzaVoliInArrivo();
+        List<Volo> voliArrivo = sistema.visualizzaVoliInArrivo(dataAdmin.getText());
         for (Volo v : voliArrivo) {
             model.addRow(new Object[]{
                     v.getCodiceVolo(),
@@ -227,7 +255,7 @@ public class AdminPage {
 
     private void popolaTabellaVoliPartenza(DefaultTableModel model) {
         model.setRowCount(0);
-        List<Volo> voliPartenza = sistema.visualizzaVoliInPartenza();
+        List<Volo> voliPartenza = sistema.visualizzaVoliInPartenza(dataAdmin.getText());
         for (Volo v : voliPartenza) {
             model.addRow(new Object[]{
                     v.getCodiceVolo(),
@@ -351,7 +379,7 @@ public class AdminPage {
     public JTable getTabellaVoliArrivo() {
         return tabellaVolArrivo;
     }
-
+    public LocalDate getDataVolo(){return  dataVolo;}
     public JTable getTabellaVoliPartenza() {
         return tabellaVoliPartenza;
     }

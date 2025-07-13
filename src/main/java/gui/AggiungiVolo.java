@@ -151,36 +151,37 @@ public class AggiungiVolo {
             int ritardoInt = Integer.parseInt(ritardo);
             LocalDate dataVolo = LocalDate.parse(dataVoloStr, dateFormatter);
             Volo v = new Volo(codice, compagniaAerea, aeroportoOrigine, aeroportoDestinazione, orario, ritardoInt, statoEnum, gate, dataVolo);
-
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             sistema.aggiungiVolo(v);
-
-            // Aggiorna la tabella corretta in base al tipo di volo
-            if (partenzaButtonSelected) {
-                tableModelPartenze.addRow(new Object[]{
-                        v.getCodiceVolo(),
-                        v.getCompagniaAerea(),
-                        v.getAeroportoOrigine(),
-                        v.getAeroportoDestinazione(),
-                        v.getOrarioArrivo(),
-                        v.getRitardo(),
-                        v.getStato().toString(),
-                        v.getGate(),
-                        v.getDataVolo()
-                });
-            } else {
-                tableModelArrivi.addRow(new Object[]{
-                        v.getCodiceVolo(),
-                        v.getCompagniaAerea(),
-                        v.getAeroportoOrigine(),
-                        v.getAeroportoDestinazione(),
-                        v.getOrarioArrivo(),
-                        v.getRitardo(),
-                        v.getStato().toString(),
-                        v.getGate(),
-                        v.getDataVolo()
-                });
+            System.out.println("data: "+adminPage.getDataVolo().toString());
+            if(formatter.format(adminPage.getDataVolo()).toString().equalsIgnoreCase(dataVoloStr)) {
+                // Aggiorna la tabella corretta in base al tipo di volo
+                if (partenzaButtonSelected) {
+                    tableModelPartenze.addRow(new Object[]{
+                            v.getCodiceVolo(),
+                            v.getCompagniaAerea(),
+                            v.getAeroportoOrigine(),
+                            v.getAeroportoDestinazione(),
+                            v.getOrarioArrivo(),
+                            v.getDataVolo(),
+                            v.getRitardo(),
+                            v.getStato().toString(),
+                            v.getGate()
+                    });
+                } else {
+                    tableModelArrivi.addRow(new Object[]{
+                            v.getCodiceVolo(),
+                            v.getCompagniaAerea(),
+                            v.getAeroportoOrigine(),
+                            v.getAeroportoDestinazione(),
+                            v.getOrarioArrivo(),
+                            v.getRitardo(),
+                            v.getStato().toString(),
+                            v.getGate(),
+                            v.getDataVolo()
+                    });
+                }
             }
-
             ((JFrame) principale.getTopLevelAncestor()).dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(principale, "Errore: " + ex.getMessage(), errore, JOptionPane.ERROR_MESSAGE);
