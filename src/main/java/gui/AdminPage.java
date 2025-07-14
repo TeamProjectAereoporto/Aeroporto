@@ -30,6 +30,7 @@ public class AdminPage {
     private JLabel dataAdmin;
     private JLabel frecciaSinistraAdmin;
     private JLabel frecciaDestraAdmin;
+    private JPanel datePanel;
     public static final JFrame frame = new JFrame("AdminDashboard");
     private final Sistema sistema;
     private static final String ERRORMESSAGE = "Errore";

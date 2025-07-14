@@ -1,6 +1,6 @@
 # Sistema di Gestione Aeroportuale
 
-Questo documento descrive l'architettura e le funzionalità principali di un sistema di gestione aeroportuale, focalizzandosi su tre componenti chiave: la gestione dei voli, la gestione delle prenotazioni e l'interfaccia amministrativa. Il sistema è progettato per essere robusto, sicuro e facile da usare, impiegando pattern di design consolidati e best practice di programmazione.
+Questo documento descrive l'architettura e le funzionalità principali del sistema di gestione aeroportuale di Capodichino, focalizzandosi su tre componenti chiave: la gestione dei voli, la gestione delle prenotazioni e l'interfaccia amministrativa. Il sistema è progettato per essere robusto, sicuro e facile da usare, impiegando pattern DAO e best practice di programmazione.
 
 ---
 
@@ -10,7 +10,7 @@ La gestione dei voli è affidata a due classi principali: `Volo.java` e `VoloDB.
 
 ### Volo.java (Modello Dati)
 
-La classe `Volo` rappresenta un volo aeroportuale e incapsula tutti i suoi attributi e possibili stati.
+La classe `Volo` rappresenta un volo aeroportuale e contiene tutti i suoi attributi e possibili stati.
 
 * **Attributi Principali:**
     * `codiceVolo` (int): Identificativo univoco del volo.
@@ -54,7 +54,7 @@ La classe `VoloDB` gestisce tutte le interazioni con il database PostgreSQL per 
     * **DAO:** Separa la logica di accesso ai dati dalla business logic.
 
 * **Best Practices:**
-    * **Logging:** Le eccezioni SQL sono loggate dettagliatamente (`logger.severe`).
+    * **Logging:** Le eccezioni SQL sono loggate dettagliatamente.
     * **Resource Management:** Utilizza `try-with-resources` per garantire la corretta chiusura di `PreparedStatement` e `ResultSet`.
 
 ---
@@ -130,10 +130,6 @@ Questa classe implementa il **Pattern DAO** per le operazioni CRUD (Create, Read
     * **Gestione Voli:** Permette di aprire finestre di dialogo per aggiungere, modificare o eliminare voli.
     * **Stile e UX:** Utilizza una palette di colori aeroportuali e include effetti hover sui pulsanti.
 
-* **Pattern Utilizzati:**
-    * **MVC (Model-View-Controller):** Si collega al controller `Sistema` per le operazioni.
-    * **Observer Implicito:** La tabella viene aggiornata dopo ogni modifica.
-
 ### Sistema.java (Controller)
 
 La classe `Sistema` agisce come il controller principale del sistema, coordinando il modello (classi `Volo`, `Prenotazione`, ecc.) e la vista (`AdminPage`).
@@ -153,13 +149,13 @@ La classe `Sistema` agisce come il controller principale del sistema, coordinand
     * **Facade:** Offre un'interfaccia unificata per le operazioni sul modello.
     * **DAO Pattern:** Utilizza le classi *DB per l'astrazione del database.
 
-* **Best Practices Implementate:**
-    * **Gestione Errori:** Tutte le operazioni SQL sono avvolte in blocchi `try-catch` con logging dettagliato.
+* **Sicurezza e manutenibilità:**
+    * **Gestione Errori:** Tutte le operazioni SQL sono avvolte in blocchi `try-catch` con loggin fondamentale per il debugging.
     * **Sicurezza:** Validazione dell'input a livello del controller e uso di transazioni atomiche per le operazioni sul database.
 
 ---
 
-## Flusso Operativo Esempio: Amministratore Aggiunge un Volo
+##Esempio di utilizzo: Amministratore Aggiunge un Volo
 
 1.  **Interazione Utente (AdminPage):** L'amministratore fa clic sul pulsante "Aggiungi Volo" sull'interfaccia grafica.
 2.  **Controller (Sistema):** L'`AdminPage` invoca il metodo `aggiungiVolo(Volo v)` del controller `Sistema`.
@@ -169,7 +165,7 @@ La classe `Sistema` agisce come il controller principale del sistema, coordinand
 
 ---
 
-## Flusso Operativo Esempio: Utente Effettua una Prenotazione
+##Esempio di utilizzo: Utente Effettua una Prenotazione
 
 1.  **Interazione Utente:** L'utente seleziona un volo e inserisce i propri dati da una UI dedicata (non descritta in dettaglio qui).
 2.  **Generazione Biglietto (Sistema):** Il sistema, tramite il controller `Sistema`, chiama `creaNumBiglietto()` (eventualmente delegando a `Prenotazione`) per generare un numero di biglietto univoco.

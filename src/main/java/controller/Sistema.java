@@ -124,23 +124,6 @@ public class Sistema {
             return new ArrayList<>();
         }
     }
-
-    public int verificaUtenteP(String username, String psw) {
-        try {
-            Utente u = utenteDB.verificaCredenziali(username, psw);
-            if (u != null) {
-                if (u instanceof UtenteGenerico) {
-                    return 1;
-                } else if (u instanceof Admin) {
-                    return 2;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
     public int aggiungiPasseggero(Passeggero passeggero) throws SQLException {
         return passeggeroDB.aggiungiPasseggero(passeggero);
     }

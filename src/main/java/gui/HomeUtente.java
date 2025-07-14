@@ -12,9 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * The type Home utente.
- */
 public class HomeUtente {
     private final Sistema sistema;
     private JButton cercaBigliettoButton;
@@ -35,9 +32,7 @@ public class HomeUtente {
     private JLabel frecciaDestra;
     private LocalDate dataVolo;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    /**
-     * The constant frame.
-     */
+
     public final static JFrame frame = new JFrame("Home");
 
     public JPanel getPanel() {
@@ -45,9 +40,7 @@ public class HomeUtente {
         return finestraPrincipale;
     }
 
-    /**
-     * Instantiates a new Home utente.
-     */
+
     public HomeUtente(JFrame frameChiamante, Sistema sistema, DefaultTableModel modelPartenza, DefaultTableModel modelArrivo) {
         this.sistema = sistema;
         dataVolo = LocalDate.now();
@@ -62,9 +55,9 @@ public class HomeUtente {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String voliScelti = comboBox1.getSelectedItem().toString();
-                if(voliScelti.equalsIgnoreCase("Voli in Partenza")) {
+                if (voliScelti.equalsIgnoreCase("Voli in Partenza")) {
                     configuraTabella(modelPartenza);   // Configura la tabella per visualizzare i voli
-                }else{
+                } else {
                     configuraTabella(modelArrivo);
                 }
             }
@@ -80,10 +73,10 @@ public class HomeUtente {
         frecciaSinistra.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(LocalDate.now().isBefore(dataVolo)){
-                dataVolo = dataVolo.minusDays(1);
-                data.setText(formatter.format(dataVolo));
-                caricaVoli(formatter.format(dataVolo).toString());
+                if (LocalDate.now().isBefore(dataVolo)) {
+                    dataVolo = dataVolo.minusDays(1);
+                    data.setText(formatter.format(dataVolo));
+                    caricaVoli(formatter.format(dataVolo).toString());
                 }
             }
         });
@@ -109,16 +102,22 @@ public class HomeUtente {
     }
 
     private void caricaVoli(String dataVolo) {
-        // Ottiene la lista dei voli dal sistema e la aggiunge alla tabella
+        // Determina quale tipo di voli visualizzare in base alla selezione nella combobox
+        String tipoVolo = comboBox1.getSelectedItem().toString();
         ArrayList<Volo> voli = sistema.visualizzaVoli(dataVolo);
 
+        // Filtra i voli in base alla selezione
+        if (tipoVolo.equalsIgnoreCase("Voli in Partenza")) {
+            voli.removeIf(v -> !v.getAeroportoOrigine().equalsIgnoreCase("Capodichino"));//serve a rimuovere tutti i voli che non hanno come origine capodichino
+            //lo farebbe già in automatico però questa è diciamo una misura di sicureza in più
+        } else {
+            voli.removeIf(v -> !v.getAeroportoDestinazione().equalsIgnoreCase("Capodichino"));
+        }
+
         DefaultTableModel model = (DefaultTableModel) tabellaVoli.getModel();
-        if (voli != null && model !=null) {
-            model.setRowCount(0); // 🧹 Pulisce righe precedenti
+        if (voli != null && model != null) {
+            model.setRowCount(0);
             for (Volo v : voli) {
-            System.out.println(v);
-                System.out.println("Aggiungo riga per volo: " + v);
-                System.out.println("Sto aggiungendo riga a model: " + model);
                 model.addRow(new Object[]{
                         v.getCodiceVolo(),
                         v.getCompagniaAerea(),
@@ -130,20 +129,17 @@ public class HomeUtente {
                         v.getStato(),
                         v.getGate()
                 });
-                System.out.println("Aggiungo riga: " + Arrays.toString(new Object[]{
-                        v.getCodiceVolo(),
-                        v.getCompagniaAerea(),
-                        v.getAeroportoOrigine(),
-                        v.getAeroportoDestinazione(),
-                        v.getOrarioArrivo(),
-                        v.getDataVolo(),
-                        v.getRitardo(),
-                        v.getStato(),
-                        v.getGate()
-                }));
-
             }
         }
+
+        if (!(tabellaVoli.getParent() instanceof JViewport)) {
+            voliPanel.removeAll();
+            voliPanel.setLayout(new BorderLayout());
+            voliPanel.add(new JScrollPane(tabellaVoli), BorderLayout.CENTER);
+            voliPanel.revalidate();
+            voliPanel.repaint();
+        }
+
 
         // Aggiunge la tabella dentro uno JScrollPane se non già presente nel contenitore voliPanel
         if (!(tabellaVoli.getParent() instanceof JViewport)) {

@@ -191,7 +191,8 @@ public class Biglietto {
                 "Aeroporto Destinazione: " + prenotazione.getVolo().getAeroportoDestinazione() + "\n" +
                 "Orario di Arrivo: " + prenotazione.getVolo().getOrarioArrivo() + "\n" +
                 "Ritardo: " + prenotazione.getVolo().getRitardo() + " minuti\n" +
-                "Gate: " + prenotazione.getVolo().getGate();
+                "Gate: " + prenotazione.getVolo().getGate()  + "\n"+
+                "Data: " + prenotazione.getVolo().getDataVolo() + "\n";
         JOptionPane.showMessageDialog(frame, info, "Informazioni Volo", JOptionPane.INFORMATION_MESSAGE);
     }
 }
