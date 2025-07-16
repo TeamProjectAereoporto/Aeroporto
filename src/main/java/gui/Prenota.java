@@ -28,6 +28,8 @@ public class Prenota {
     private JLabel gateField;
     public final static JFrame frame = new JFrame("Prenota Biglietto");
     private final Sistema sistema;
+    private int contatorePosto = 1;
+    private char letteraPosto = 'A';
     public Prenota(JFrame chiamante, Object[] valori, Sistema sistema){
         this.sistema=sistema;
         //setting label informazioni volo
@@ -56,7 +58,7 @@ public class Prenota {
                         int id = 0;
                         try{
                         if (!sistema.controlloPasseggeroInVolo(ci, Integer.parseInt(codiceVoloField.getText()))) {
-                            Passeggero passeggero =  new Passeggero(nome, cognome, ci);
+                            Passeggero passeggero =  new Passeggero(nome.toLowerCase(), cognome.toLowerCase(), ci.toUpperCase());
                             id= sistema.aggiungiPasseggero(passeggero);
                             if(id==0){
                                 JOptionPane.showMessageDialog(finestraPrincipale,
@@ -65,8 +67,17 @@ public class Prenota {
                                         JOptionPane.ERROR_MESSAGE);
                             }else {
                                 passeggero.setId_passeggero(id);
+                                String posto = "";
+                                contatorePosto++;
+                                if(contatorePosto>6) {
+                                    letteraPosto++;
+                                    contatorePosto = 1;
+                                }
+                                posto = letteraPosto +""+ contatorePosto;
+                                System.out.println("DEBUG - Posto generato: " + posto);
+
                                 Prenotazione biglietto = new Prenotazione(numeroBiglietto,
-                                        "A5",
+                                        posto,
                                         Prenotazione.StatoPrenotazione.CONFERMATA,
                                         passeggero,
                                         new Volo(

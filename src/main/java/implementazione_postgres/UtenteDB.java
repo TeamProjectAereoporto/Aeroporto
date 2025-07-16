@@ -118,5 +118,23 @@ public class UtenteDB implements UtenteDao {
         return false;
     }
 
+    @Override
+    public Boolean verificaUtenteUnivoco(String username) throws SQLException {
+        String sql = "SELECT * FROM utente WHERE username = ?";
+        try (Connection conn = ConnessioneDB.getInstance().connection;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Se il campo ruolo è VARCHAR, metti "2" come stringa
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs!=null) {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }

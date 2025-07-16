@@ -137,10 +137,13 @@ public class Sistema {
     }
 
     public boolean verificaUtenteUnivoco(String username){
-        for(Utente u : utenti){
-            if(u.getNomeUtente().equals(username)){
+        try {
+            Utente u = utenteDB.getUtenteByUsername(username);
+            if(u!=null){
                 return false;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return true;
     }

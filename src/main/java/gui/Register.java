@@ -52,7 +52,7 @@ public class Register {
         // Azione al click del bottone invia
         inviaButton.addActionListener(e -> {
             // Legge e normalizza i dati inseriti
-            String username = usernameField.getText().trim();
+            String username = usernameField.getText().trim().toLowerCase();
             String password = passwordField.getText().trim();
             String confermaPassword = confermaPasswordField.getText().trim();
 

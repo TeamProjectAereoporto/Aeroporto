@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HomeUtente {
     private final Sistema sistema;
@@ -19,7 +18,7 @@ public class HomeUtente {
     private JPanel finestraPrincipale;
     private JTable tabellaVoli;
     private JPanel voliPanel;
-    private JTextField numeroBiglietto;
+    private JTextField codiceVolo;
     private JTextField nome;
     private JLabel titoloB;
     private JButton logout;
@@ -156,18 +155,18 @@ public class HomeUtente {
 
         // Azione per il bottone cerca biglietto: verifica input e apre la finestra Biglietto se valido
         cercaBigliettoButton.addActionListener(e -> {
-            if (!numeroBiglietto.getText().isEmpty() || !nome.getText().isEmpty()) {
+            if (!codiceVolo.getText().isEmpty() || !nome.getText().isEmpty()) {
                 int numero = -1;
-                if (!numeroBiglietto.getText().isEmpty()) {
-                    if (!numeroBiglietto.getText().trim().matches("\\d{4}")) {
+                if (!codiceVolo.getText().isEmpty()) {
+                    if (!codiceVolo.getText().trim().matches("\\d{4}")) {
                         // Mostra errore se il codice volo non è un numero di 4 cifre
                         JOptionPane.showMessageDialog(finestraPrincipale, "Il codice volo deve essere un numero intero di 4 cifre", "Errore", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    numero = Integer.parseInt(numeroBiglietto.getText().trim());
+                    numero = Integer.parseInt(codiceVolo.getText().trim());
                 }
                 // Crea e mostra la finestra Biglietto e nasconde quella attuale
-                Biglietto biglietto = new Biglietto(frame, sistema, nome.getText(), numero);
+                Biglietto biglietto = new Biglietto(frame, sistema, nome.getText().toLowerCase(), numero);
                 biglietto.frame.setVisible(true);
             }
         });
