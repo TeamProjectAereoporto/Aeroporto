@@ -28,8 +28,6 @@ public class Prenota {
     private JLabel gateField;
     public final static JFrame frame = new JFrame("Prenota Biglietto");
     private final Sistema sistema;
-    private int contatorePosto = 1;
-    private char letteraPosto = 'A';
     public Prenota(JFrame chiamante, Object[] valori, Sistema sistema){
         this.sistema=sistema;
         //setting label informazioni volo
@@ -62,22 +60,15 @@ public class Prenota {
                             id= sistema.aggiungiPasseggero(passeggero);
                             if(id==0){
                                 JOptionPane.showMessageDialog(finestraPrincipale,
-                                        "Errore gennerico inserimento del passeggero  ",
+                                        "Errore generico inserimento del passeggero  ",
                                         "Errore inserimento passeggero",
                                         JOptionPane.ERROR_MESSAGE);
                             }else {
+                                String postoAssegnato = sistema.assegnaPosto(Integer.parseInt(codiceVoloField.getText()));;
                                 passeggero.setId_passeggero(id);
-                                String posto = "";
-                                contatorePosto++;
-                                if(contatorePosto>6) {
-                                    letteraPosto++;
-                                    contatorePosto = 1;
-                                }
-                                posto = letteraPosto +""+ contatorePosto;
-                                System.out.println("DEBUG - Posto generato: " + posto);
-
                                 Prenotazione biglietto = new Prenotazione(numeroBiglietto,
-                                        posto,
+                                        postoAssegnato
+                                        ,
                                         Prenotazione.StatoPrenotazione.CONFERMATA,
                                         passeggero,
                                         new Volo(

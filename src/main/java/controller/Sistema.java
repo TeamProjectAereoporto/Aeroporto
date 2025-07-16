@@ -204,4 +204,34 @@ public class Sistema {
             return new ArrayList<>();
         }
     }
+    public String assegnaPosto(int codiceVolo) {
+        try {
+            // Ottieni tutti i posti già occupati per questo volo
+            List<String> postiOccupati = prenotazioneDB.getPostiOccupatiPerVolo(codiceVolo);
+
+            char lettera = 'A';
+            int numero = 1;
+            boolean postoAssegnato = false;
+            String posto = "";
+
+            // Cerca il primo posto disponibile
+            while (lettera <= 'Z' && !postoAssegnato) {
+                posto = lettera + String.valueOf(numero);
+
+                if (!postiOccupati.contains(posto)) {
+                    postoAssegnato = true;
+                } else {
+                    numero++;
+                    if (numero > 6) {
+                        numero = 1;
+                        lettera++;
+                    }
+                }
+            }
+            return posto;
+        } catch (SQLException e) {
+            logger.info("Errore durante l'assegnazione del posto: " + e.getMessage());
+            return null;
+        }
+    }
 }

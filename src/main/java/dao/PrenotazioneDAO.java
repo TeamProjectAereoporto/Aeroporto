@@ -12,4 +12,5 @@ public interface PrenotazioneDAO {
     public boolean deleteTicket(long numeroBiglietto);
     public boolean modifyTicket(long numeroBiglietto, String nuovoPosto,String nome,String cognome, String nuovoNumeroDocumento);
     public List<Prenotazione> getTickets(String username, String nome, int codiceVolo) throws SQLException;
+    public List<String> getPostiOccupatiPerVolo(int codiceVolo) throws SQLException;
 }
